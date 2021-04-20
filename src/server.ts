@@ -1,6 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
-import { Sequelize } from "sequelize";
+import { Sequelize } from "sequelize-typescript";
 
 dotenv.config();
 
