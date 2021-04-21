@@ -59,9 +59,13 @@ class PassportRoutes {
             // Send the Set-Cookie header with the jwt to the client
             res.cookie("jwt", token, JwtConfig.jwt.cookie);
             if (process.env.NODE_ENV === "local") {
-              res.redirect(`http://localhost:8000?token=${token}`);
+              res.redirect(
+                `http://localhost:8000/login/success?token=${token}`
+              );
             } else {
-              res.redirect(`https://my.sequence.so?token=${token}`);
+              res.redirect(
+                `https://my.sequence.so/login/success?token=${token}`
+              );
             }
           }
         );
