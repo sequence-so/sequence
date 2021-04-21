@@ -1,4 +1,5 @@
 import User from "./user";
+import AuthGoogle from "./auth_google";
 import sequelize from "../database";
 
 async function buildModels() {
