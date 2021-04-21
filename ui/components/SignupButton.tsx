@@ -9,7 +9,7 @@ interface Props {
 
 const SignupButton = React.forwardRef<{}, Props>(({ onClick, href }, ref) => {
   return (
-    <a className={styles.button} href={href} onClick={onClick} ref={ref}>
+    <a className={styles.button} href={href} onClick={onClick} ref={ref as any}>
       <img src={GoogleIcon} />
       <p>Signup or Login with Google</p>
     </a>
