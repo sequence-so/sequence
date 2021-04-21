@@ -1,4 +1,5 @@
 import { Application } from "express";
+import passport from "passport";
 
 class PassportRoutes {
   constructor(app: Application) {
