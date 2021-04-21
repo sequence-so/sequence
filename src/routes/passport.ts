@@ -1,5 +1,6 @@
 import { Application } from "express";
 import passport from "passport";
+require("../auth/google");
 
 class PassportRoutes {
   constructor(app: Application) {
@@ -11,7 +12,7 @@ class PassportRoutes {
     app.get(
       "/auth/google",
       passport.authenticate("google", {
-        scope: "https://www.google.com/m8/feeds",
+        scope: ["https://www.googleapis.com/auth/plus.login"],
       })
     );
 

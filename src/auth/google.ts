@@ -1,5 +1,5 @@
 var passport = require("passport");
-var GoogleStrategy = require("passport-google-oauth").OAuthStrategy;
+var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 
 // Use the GoogleStrategy within Passport.
 //   Strategies in passport require a `verify` function, which accept
@@ -8,8 +8,8 @@ var GoogleStrategy = require("passport-google-oauth").OAuthStrategy;
 passport.use(
   new GoogleStrategy(
     {
-      consumerKey: process.env.GOOGLE_CONSUMER_KEY,
-      consumerSecret: process.env.GOOGLE_CONSUMER_SECRET,
+      clientID: process.env.GOOGLE_CONSUMER_KEY,
+      clientSecret: process.env.GOOGLE_CONSUMER_SECRET,
       callbackURL: process.env.GOOGLE_CALLBACK_URL,
     },
     function (
