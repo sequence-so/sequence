@@ -1,10 +1,7 @@
 .container {
   min-height: 100vh;
-  padding: 0 0.5rem;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  flex-direction: row;
 }
 
 .main {
@@ -119,4 +116,58 @@
     width: 100%;
     flex-direction: column;
   }
+}
+
+.signup_left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 600px;
+  min-width: 450px;
+}
+
+.signup_right {
+  display: flex;
+  background-image: url("/login_backdrop.png");
+  background-repeat: no-repeat, no-repeat;
+
+  min-width: 100%;
+  min-height: 100%;
+}
+
+.signup_logo {
+  margin-top: -100px;
+}
+
+.signup_title {
+  font-family: IBM Plex Sans;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 36px;
+  margin-top: 60px;
+}
+
+.button {
+  display: flex;
+  border: 1px solid #C4C4C4;
+  padding-top: 17px;
+  padding-bottom: 14px;
+  border-radius: 4px;
+  min-width: 400px;
+  max-height: 60px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #1A60B2;
+  color: white;
+  box-shadow: 0px 0px 0px 1px rgba(15, 15, 15, 0.05), 0px 3px 6px rgba(15, 15, 15, 0.1), 0px 9px 24px rgba(15, 15, 15, 0.2);
+  border-color: none;
+}
+
+.button > p {
+  margin-left: 21px;
 }

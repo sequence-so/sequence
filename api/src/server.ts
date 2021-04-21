@@ -1,10 +1,13 @@
 import express from "express";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 dotenv.config();
 
 import buildModels from "./models/index";
 
 const app = express();
+
+app.use(cookieParser(process.env.JWT_SECRET_KEY));
 
 app.get("/", (req, res) => res.send("Hello World!"));
 
