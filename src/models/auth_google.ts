@@ -2,24 +2,27 @@ import { InitOptions, STRING, UUID } from "sequelize";
 import { Model } from "sequelize-typescript";
 import sequelize from "../database";
 import { v4 as uuidv4 } from "uuid";
+import User from "./user";
 
 const config: InitOptions = {
-  tableName: "user",
+  tableName: "auth_google",
   sequelize,
   paranoid: true,
 };
 
-class User extends Model {
-  public id!: string;
-  public firstName: string;
-  public lastName: string;
-  public email!: string;
+class AuthGoogle extends Model {
+  public id: string;
+  public accessToken: string;
+  public refreshToken: string;
+  public email: string;
   public photo: string;
+  public userId: string;
+  public googleId!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
 
-User.init(
+AuthGoogle.init(
   {
     id: {
       primaryKey: true,
@@ -28,17 +31,18 @@ User.init(
       allowNull: false,
       defaultValue: () => uuidv4(),
     },
-    firstName: {
+    googleId: {
+      type: STRING,
+      allowNull: false,
+    },
+    accessToken: {
       type: STRING,
     },
-    lastName: {
+    refreshToken: {
       type: STRING,
     },
     email: {
       type: STRING,
-      allowNull: false,
-      primaryKey: true,
-      unique: true,
     },
     photo: {
       type: STRING,
@@ -47,4 +51,8 @@ User.init(
   config
 );
 
-export default User;
+AuthGoogle.belongsTo(User, {
+  as: "user",
+});
+
+export default AuthGoogle;

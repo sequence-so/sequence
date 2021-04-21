@@ -4,6 +4,17 @@ require("../auth/google");
 
 class PassportRoutes {
   constructor(app: Application) {
+    app.use(passport.initialize());
+    app.use(passport.session());
+
+    passport.serializeUser(function (user, done) {
+      done(null, user);
+    });
+
+    passport.deserializeUser(function (user, done) {
+      done(null, user);
+    });
+
     // GET /auth/google
     //   Use passport.authenticate() as route middleware to authenticate the
     //   request.  The first step in Google authentication will involve redirecting
@@ -12,7 +23,11 @@ class PassportRoutes {
     app.get(
       "/auth/google",
       passport.authenticate("google", {
-        scope: ["https://www.googleapis.com/auth/plus.login"],
+        scope: [
+          "https://www.googleapis.com/auth/plus.login",
+          "https://www.googleapis.com/auth/userinfo.email",
+          "https://www.googleapis.com/auth/userinfo.profile",
+        ],
       })
     );
 
