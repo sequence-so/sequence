@@ -9,12 +9,19 @@
     "build-ts": "tsc --skipLibCheck",
     "start": "npm run serve",
     "serve": "node dist/server.js",
+    "test": "mocha",
     "watch-node": "nodemon dist/server.js",
     "watch-ts": "tsc -w"
+  },
+  "directories": {
+    "src": "./src",
+    "test": "./src"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/jest": "^26.0.22",
+    "@types/mocha": "^8.2.2",
     "@types/node": "^14.14.41",
     "@types/qs": "^6.9.6",
     "@types/validator": "^13.1.3",
@@ -30,6 +37,7 @@
     "concurrently": "^6.0.2",
     "dotenv": "^8.2.0",
     "express": "^4.16.3",
+    "mocha": "^8.3.2",
     "passport-google-oauth": "^2.0.0",
     "pg": "^8.6.0",
     "pg-hstore": "^2.3.3",
