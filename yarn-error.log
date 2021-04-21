@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/Cellar/node/15.14.0/bin/node /usr/local/Cellar/yarn/1.22.10/libexec/bin/yarn.js add @types/passport-jwt-cookiecombo
+  /usr/local/Cellar/node/15.14.0/bin/node /usr/local/Cellar/yarn/1.22.10/libexec/bin/yarn.js add @types/passport-jwt-cookiecombo -D
 
 PATH: 
   /Users/helson/Library/Android/sdk/platform-tools:/Users/helson/Library/Android/sdk:/Users/helson/.cargo/bin:/Users/helson/.rvm/gems/ruby-2.6.5/bin:/Users/helson/.rvm/gems/ruby-2.6.5@global/bin:/Users/helson/.rvm/rubies/ruby-2.6.5/bin:/Users/helson/torch/install/bin:/Users/helson/Development/chromedriver:/Users/helson/.composer/vendor/bin:/usr/local/mysql/bin:/usr/local/git/bin:/Applications/SnowSQL.app/Contents/MacOS:/Users/helson/.cargo/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Library/Apple/usr/bin:/Users/helson/.nvm/versions/node/v14.8.0/bin:/Users/helson/.go/bin:/usr/local/opt/go/libexec/bin:/Users/helson/.rvm/bin:/Users/helson/.rvm/bin:/Users/helson/Development/depot_tools
@@ -33,7 +33,11 @@ npm manifest:
       "@types/jsonwebtoken": "^8.5.1",
       "cookie-parser": "^1.4.5",
       "jsonwebtoken": "^8.5.1",
-      "passport-jwt-cookiecombo": "^1.0.5"
+      "passport-jwt-cookiecombo": "^1.0.5",
+      "passport-local": "^1.0.0"
+    },
+    "devDependencies": {
+      "@types/passport-local": "^1.0.33"
     }
   }
 
@@ -102,6 +106,30 @@ Lockfile:
     version "14.14.41"
     resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.41.tgz#d0b939d94c1d7bd53d04824af45f1139b8c45615"
     integrity sha512-dueRKfaJL4RTtSa7bWeTK1M+VH+Gns73oCgzvYfHZywRCoPSd8EkXBL0mZ9unPTveBn+D9phZBaxuzpwjWkW0g==
+  
+  "@types/passport-local@^1.0.33":
+    version "1.0.33"
+    resolved "https://registry.yarnpkg.com/@types/passport-local/-/passport-local-1.0.33.tgz#d245b60c5b801cb3aeca1ffab557d5fe1534260d"
+    integrity sha512-+rn6ZIxje0jZ2+DAiWFI8vGG7ZFKB0hXx2cUdMmudSWsigSq6ES7Emso46r4HJk0qCgrZVfI8sJiM7HIYf4SbA==
+    dependencies:
+      "@types/express" "*"
+      "@types/passport" "*"
+      "@types/passport-strategy" "*"
+  
+  "@types/passport-strategy@*":
+    version "0.2.35"
+    resolved "https://registry.yarnpkg.com/@types/passport-strategy/-/passport-strategy-0.2.35.tgz#e52f5212279ea73f02d9b06af67efe9cefce2d0c"
+    integrity sha512-o5D19Jy2XPFoX2rKApykY15et3Apgax00RRLf0RUotPDUsYrQa7x4howLYr9El2mlUApHmCMv5CZ1IXqKFQ2+g==
+    dependencies:
+      "@types/express" "*"
+      "@types/passport" "*"
+  
+  "@types/passport@*":
+    version "1.0.6"
+    resolved "https://registry.yarnpkg.com/@types/passport/-/passport-1.0.6.tgz#72343e49d65efa98cb328163cff5f127981947d7"
+    integrity sha512-9oKfrJXuAxvyxdrtMCxKkHgmd6DMO8NDOLvMJ1LvIWd6/xP+i81PAkpTaEca7VhJX9S009RciwZL/j6dsLsHrA==
+    dependencies:
+      "@types/express" "*"
   
   "@types/qs@*":
     version "6.9.6"
@@ -268,7 +296,14 @@ Lockfile:
       jsonwebtoken "^7.0.1"
       passport-strategy "^1.0.0"
   
-  passport-strategy@^1.0.0:
+  passport-local@^1.0.0:
+    version "1.0.0"
+    resolved "https://registry.yarnpkg.com/passport-local/-/passport-local-1.0.0.tgz#1fe63268c92e75606626437e3b906662c15ba6ee"
+    integrity sha1-H+YyaMkudWBmJkN+O5BmYsFbpu4=
+    dependencies:
+      passport-strategy "1.x.x"
+  
+  passport-strategy@1.x.x, passport-strategy@^1.0.0:
     version "1.0.0"
     resolved "https://registry.yarnpkg.com/passport-strategy/-/passport-strategy-1.0.0.tgz#b5539aa8fc225a3d1ad179476ddf236b440f52e4"
     integrity sha1-tVOaqPwiWj0a0XlHbd8ja0QPUuQ=

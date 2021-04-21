@@ -6,5 +6,8 @@
     "jsonwebtoken": "^8.5.1",
     "passport-jwt-cookiecombo": "^1.0.5",
     "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/passport-local": "^1.0.33"
   }
 }
