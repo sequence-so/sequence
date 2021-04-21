@@ -3,7 +3,7 @@ import passport from "passport";
 import jwt from "jsonwebtoken";
 require("../auth/google");
 require("../auth/jwt");
-import JwtConfig from "../auth/jwtConfig";
+import JwtConfig from "../config/jwt";
 
 class PassportRoutes {
   constructor(app: Application) {

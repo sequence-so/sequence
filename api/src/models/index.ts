@@ -6,7 +6,10 @@ async function buildModels() {
   try {
     console.log("syncing models");
     await sequelize.sync({ force: true });
-    // await sequelize.sync({});
+    return {
+      User,
+      AuthGoogle,
+    };
   } catch (error) {
     console.error(error);
   }

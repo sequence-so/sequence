@@ -2,7 +2,7 @@ import passport from "passport";
 import JwtCookieComboStrategy from "passport-jwt-cookiecombo";
 import { Strategy as LocalStrategy } from "passport-local";
 import User from "../models/user";
-import JwtConfig from "./jwtConfig";
+import JwtConfig from "../config/jwt";
 
 passport.use(
   new JwtCookieComboStrategy(
