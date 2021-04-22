@@ -50,6 +50,9 @@ export default function Login() {
         <Link href={domain + "/auth/google"} passHref>
           <SignupButton />
         </Link>
+        <p className={styles.login_footer}>
+          Copyright © 2021 Sequence Technologies
+        </p>
       </div>
       <div className={styles.signup_right}></div>
     </div>
