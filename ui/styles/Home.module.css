@@ -208,6 +208,8 @@
   flex-basis: 0;
   flex-grow: 999;
   min-width: calc(50% - var(--s1));
+  overflow-y: scroll;
+  max-height: 100vh;
 }
 
 .sidebar {
@@ -433,4 +435,30 @@
 .not_ready_text >span:hover {
   cursor: pointer;
   color: hsla(212, 74%, 60%, 1);
+}
+
+.token_block {
+  display: inline-flex;
+  padding: 5px 10px ;
+  background-color: #EBEBEB;
+  border-radius: 8px;
+  text-overflow: clip;
+}
+
+.token_block > img {
+  margin-left: 8px;
+  padding-left: 4px;
+  padding-right: 4px;
+  cursor: pointer;
+}
+
+.token_block > img:hover {
+  background: #C4C4C4;
+}
+
+.segment_container {
+  border: 1px solid #C4C4C4;
+  padding: 5px 15px;
+  border-radius: 8px;
+  margin-bottom: 80px;
 }

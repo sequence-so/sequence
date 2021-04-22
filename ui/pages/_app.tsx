@@ -1,9 +1,15 @@
 import "../styles/globals.css";
 import ApolloClient from "../services/apollo";
 import { ApolloProvider } from "@apollo/client";
+import { useEffect } from "react";
 import Head from "next/head";
+import { install } from "../services/analytics";
 
 function MyApp({ Component, pageProps }) {
+  useEffect(() => {
+    install();
+  }, []);
+
   return (
     <>
       <Head>

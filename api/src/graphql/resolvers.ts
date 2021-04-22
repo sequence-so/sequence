@@ -2,6 +2,9 @@ import { GraphQLScalarType, Kind } from "graphql";
 import fetch from "node-fetch";
 import AuthIntercom from "src/models/auth_intercom";
 import FormData from "form-data";
+import crypto from "crypto";
+import { promisify } from "util";
+const randomBytes = promisify(crypto.randomBytes);
 
 const resolvers = {
   Query: {
@@ -43,6 +46,28 @@ const resolvers = {
       { models, user }: { models: any; user: any }
     ) {
       const intercom = await models.AuthIntercom.findOne({
+        where: {
+          userId: user.id,
+        },
+      });
+      const segmentWebhook = await models.SegmentWebhook.findOne({
+        where: {
+          userId: user.id,
+        },
+      });
+      let integrations: any = {
+        intercom: intercom ? true : false,
+        segment: segmentWebhook ? true : false,
+      };
+
+      return integrations;
+    },
+    async getSegmentWebhook(
+      root: any,
+      _: any,
+      { models, user }: { models: any; user: any }
+    ) {
+      const intercom = await models.SegmentWebhook.findOne({
         where: {
           userId: user.id,
         },
@@ -89,15 +114,28 @@ const resolvers = {
         updatedAt: intercom.updatedAt,
       };
     },
-    // async createStudent(root, { firstName, email }, { models }) {
-    //   return models.Student.create({
-    //     firstName,
-    //     email,
-    //   });
-    // },
-    // async createHobbies(root, { studentId, title }, { models }) {
-    //   return models.Hobbies.create({ studentId, title });
-    // },
+    async createSegmentWebhook(
+      root: any,
+      _: any,
+      { models, user }: { models: any; user: any }
+    ) {
+      let webhook = await models.SegmentWebhook.findOne({
+        userId: user.id,
+      });
+
+      if (webhook) {
+        return webhook;
+      }
+
+      const token = (await randomBytes(18)).toString("hex");
+
+      webhook = await models.SegmentWebhook.create({
+        token: token,
+        userId: user.id,
+      });
+
+      return webhook;
+    },
   },
   Date: new GraphQLScalarType({
     name: "Date",

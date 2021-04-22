@@ -7,6 +7,7 @@ import DownArrow from "../public/down_arrow.svg";
 import Logo from "../public/main_logo.svg";
 import classnames from "classnames";
 import BlueButton from "../components/BlueButton";
+import { install } from "../services/analytics";
 
 const initialState = { token: "" };
 const { useGlobalState } = createGlobalState(initialState);
@@ -36,6 +37,16 @@ const Dashboard = () => {
     }
   }, []);
   const { loading, error, data } = useQuery(GET_USER);
+
+  useEffect(() => {
+    if (data && data.getUser) {
+      const analytics = install();
+      analytics.identify(data.getUser.id, {
+        firstName: data.getUser.firstName,
+        lastName: data.getUser.lastName,
+      });
+    }
+  }, [data]);
 
   const RenderUser = data && (
     <div className={styles.profile}>

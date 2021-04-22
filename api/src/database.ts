@@ -1,12 +1,13 @@
-import { Sequelize } from "sequelize-typescript";
+import { Sequelize, SequelizeOptions } from "sequelize-typescript";
 
-const sequelizeOpts = {
+const sequelizeOpts: SequelizeOptions = {
   dialectOptions: {
     ssl: {
       require: true,
       rejectUnauthorized: false,
     },
   },
+  logging: process.env.NODE_ENV === "local" ? true : false,
 };
 
 const sequelize = new Sequelize(

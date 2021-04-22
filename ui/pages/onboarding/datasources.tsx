@@ -82,7 +82,9 @@ const Dashboard = () => {
 
             <div className={styles.integrations_grid}>
               <div className={styles.integration_box}>Postgres</div>
-              <div className={styles.integration_box}>Segment</div>
+              <Link href="/onboarding/segment">
+                <div className={styles.integration_box}>Segment</div>
+              </Link>
 
               {integrations && integrations.getIntegrations.intercom && (
                 <div className={styles.integration_box_done}>

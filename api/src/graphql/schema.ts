@@ -8,6 +8,12 @@ const typeDefs = gql`
     createdAt: Date
     updatedAt: Date
   }
+  type SegmentWebhook {
+    id: ID
+    token: String
+    createdAt: Date
+    updatedAt: Date
+  }
   type User {
     id: ID!
     firstName: String
@@ -19,14 +25,17 @@ const typeDefs = gql`
   }
   type Integrations {
     intercom: Boolean
+    segment: Boolean
   }
   type Query {
     getIntercom: AuthIntercom
     getUser: User
     getIntegrations: Integrations
+    getSegmentWebhook: SegmentWebhook
   }
   type Mutation {
     saveIntercomCode(code: String!): AuthIntercom
+    createSegmentWebhook: SegmentWebhook
   }
 `;
 
