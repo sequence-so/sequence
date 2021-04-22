@@ -28,14 +28,11 @@ passport.use(
       done: CallableFunction
     ) {
       console.log({ accessToken, refreshToken, profile });
-      console.log({ photos: profile.photos });
-      console.log({ emails: profile.emails });
       const firstName = profile.name.givenName;
       const lastName = profile.name.familyName;
       const photo = profile.photos ? profile.photos[0].value : null;
       const email = profile.emails ? profile.emails[0].value : null;
 
-      console.log({ photo });
       let authGoogle = await AuthGoogle.findOne({
         where: {
           googleId: profile.id,

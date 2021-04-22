@@ -15,7 +15,6 @@ class PassportRoutes {
     });
 
     passport.deserializeUser(function (user, done) {
-      console.log(user);
       done(null, user);
     });
 
@@ -55,7 +54,6 @@ class PassportRoutes {
             token = _token;
             if (err) return res.status(500).json(err);
 
-            console.log({ token });
             // Send the Set-Cookie header with the jwt to the client
             res.cookie("jwt", token, JwtConfig.jwt.cookie);
             if (process.env.NODE_ENV === "local") {

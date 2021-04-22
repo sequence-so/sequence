@@ -15,8 +15,6 @@ interface UserAttributes {
   lastName: string;
   email: string;
   photo: string;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 interface UserCreationAttributes extends Optional<UserAttributes, "id"> {}
