@@ -367,6 +367,19 @@
   transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
+.integration_box_done {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #B6B6B8;
+  border-radius: 3px;
+  width: 140px;
+  height: 140px;
+  background: #E7E7E7;
+}
+
 /* https://tobiasahlin.com/blog/how-to-animate-box-shadow/ */
 .integration_box::after {
   opacity: 0;

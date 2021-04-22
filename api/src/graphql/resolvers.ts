@@ -1,5 +1,7 @@
 import { GraphQLScalarType, Kind } from "graphql";
+import fetch from "node-fetch";
 import AuthIntercom from "src/models/auth_intercom";
+import FormData from "form-data";
 
 const resolvers = {
   Query: {
@@ -10,20 +12,82 @@ const resolvers = {
     ) {
       return user;
     },
-    // async getAllStudents(root, args, { models }) {
-    //   return models.Student.findAll();
-    // },
-    // async getHobbies(root, { id }, { models }) {
-    //   return models.Hobbies.findByPk(id);
-    // },
+    async getIntercom(
+      root: any,
+      _: any,
+      { models, user }: { models: any; user: any }
+    ) {
+      const intercom = await models.AuthIntercom.findOne({
+        where: {
+          userId: user.id,
+        },
+      });
+      if (intercom) {
+        return {
+          id: intercom.id,
+          isEnabled: true,
+          createdAt: intercom.createdAt,
+          updatedAt: intercom.updatedAt,
+        };
+      }
+      return {
+        id: null,
+        isEnabled: false,
+        createdAt: null,
+        updatedAt: null,
+      };
+    },
+    async getIntegrations(
+      root: any,
+      _: any,
+      { models, user }: { models: any; user: any }
+    ) {
+      const intercom = await models.AuthIntercom.findOne({
+        where: {
+          userId: user.id,
+        },
+      });
+      let integrations: any = {
+        intercom: intercom ? true : false,
+      };
+
+      return integrations;
+    },
   },
   Mutation: {
     async saveIntercomCode(
       root: any,
       { code }: { code: string },
-      { models }: { models: any }
+      { models, user }: { models: any; user: any }
     ) {
-      models.AuthIntercom.create({});
+      const intercom = await models.AuthIntercom.create({
+        userId: user.id,
+        code,
+      });
+
+      const formData = new FormData();
+      formData.append("code", code);
+      formData.append("client_id", process.env.INTERCOM_CLIENT_ID);
+      formData.append("client_secret", process.env.INTERCOM_CLIENT_SECRET);
+      const fetchResult = await fetch(
+        "https://api.intercom.io/auth/eagle/token",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      const json = (await fetchResult.json()) as { token: string };
+
+      console.log(json);
+      intercom.token = json.token;
+      intercom.save();
+
+      return {
+        id: intercom.id,
+        isEnabled: true,
+        createdAt: intercom.createdAt,
+        updatedAt: intercom.updatedAt,
+      };
     },
     // async createStudent(root, { firstName, email }, { models }) {
     //   return models.Student.create({

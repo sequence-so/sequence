@@ -8,6 +8,7 @@ import Logo from "../../public/main_logo.svg";
 import classnames from "classnames";
 import BlueButton from "../../components/BlueButton";
 import Link from "next/link";
+import GreenCheckmark from "../../public/green_check.svg";
 
 const initialState = { token: "" };
 const { useGlobalState } = createGlobalState(initialState);
@@ -20,6 +21,14 @@ const GET_USER = gql`
       lastName
       email
       photo
+    }
+  }
+`;
+
+const GET_INTEGRATIONS = gql`
+  {
+    getIntegrations {
+      intercom
     }
   }
 `;
@@ -37,6 +46,11 @@ const Dashboard = () => {
     }
   }, []);
   const { loading, error, data } = useQuery(GET_USER);
+  const {
+    loading: loadingIntegrations,
+    error: errorIntegrations,
+    data: integrations,
+  } = useQuery(GET_INTEGRATIONS);
 
   const RenderUser = data && (
     <div className={styles.profile}>
@@ -69,9 +83,18 @@ const Dashboard = () => {
             <div className={styles.integrations_grid}>
               <div className={styles.integration_box}>Postgres</div>
               <div className={styles.integration_box}>Segment</div>
-              <Link href="/onboarding/intercom">
-                <div className={styles.integration_box}>Intercom</div>
-              </Link>
+
+              {integrations && integrations.getIntegrations.intercom && (
+                <div className={styles.integration_box_done}>
+                  <img src={GreenCheckmark} />
+                  Intercom
+                </div>
+              )}
+              {integrations && !integrations.getIntegrations.intercom && (
+                <Link href="/onboarding/intercom">
+                  <div className={styles.integration_box}>Intercom</div>
+                </Link>
+              )}
             </div>
 
             <p className={styles.not_ready_text}>

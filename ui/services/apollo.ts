@@ -17,7 +17,6 @@ type ServerParseError = Error & {
 const httpLink = createHttpLink({
   fetch: (_, options) => {
     let url = process.env.NEXT_PUBLIC_API_URL;
-    console.log({ url });
     return fetch(url, options);
   },
 });

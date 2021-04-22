@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import { useQuery, gql } from "@apollo/client";
 import { useRouter } from "next/router";
-import styles from "../../styles/Home.module.css";
+import styles from "../../../styles/Home.module.css";
 import { createGlobalState } from "react-hooks-global-state";
-import DownArrow from "../../public/down_arrow.svg";
-import Logo from "../../public/main_logo.svg";
+import DownArrow from "../../../public/down_arrow.svg";
+import Logo from "../../../public/main_logo.svg";
 import classnames from "classnames";
-import BlueButton from "../../components/BlueButton";
+import BlueButton from "../../../components/BlueButton";
 import Link from "next/link";
-import AuthIntercom from "../../components/AuthIntercom";
+import AuthIntercom from "../../../components/AuthIntercom";
 
 const initialState = { token: "" };
 const { useGlobalState } = createGlobalState(initialState);
@@ -25,7 +25,7 @@ const GET_USER = gql`
   }
 `;
 
-const Dashboard = () => {
+const IntercomPage = () => {
   const [token, setToken] = useGlobalState("token");
   const router = useRouter();
   useEffect(() => {
@@ -79,4 +79,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default IntercomPage;

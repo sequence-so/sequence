@@ -13,6 +13,8 @@ const config: InitOptions = {
 class AuthIntercom extends Model {
   public id: string;
   public code: string;
+  public token: string;
+  public user_id: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -27,6 +29,9 @@ AuthIntercom.init(
       defaultValue: () => uuidv4(),
     },
     code: {
+      type: STRING,
+    },
+    token: {
       type: STRING,
     },
   },

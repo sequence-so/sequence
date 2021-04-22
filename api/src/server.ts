@@ -22,9 +22,20 @@ app.listen(process.env.PORT, () =>
   console.log("Example app listening on port 3000!")
 );
 
+import IntercomService from "./services/intercom";
 let models: any;
 (async () => {
   models = await buildModels();
+
+  let user = await models.User.findOne({
+    where: {
+      id: "41ca3ac5-0c63-4249-a96c-b25fd972fcb0",
+    },
+  });
+  console.log({ user });
+  let service = new IntercomService();
+  service = await service.getFromUser(user);
+  service.fetchAllContacts();
 })();
 
 import Routes from "./routes";

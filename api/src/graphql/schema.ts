@@ -3,7 +3,7 @@ const typeDefs = gql`
   scalar Date
 
   type AuthIntercom {
-    id: ID!
+    id: ID
     isEnabled: Boolean
     createdAt: Date
     updatedAt: Date
@@ -17,9 +17,13 @@ const typeDefs = gql`
     createdAt: Date
     updatedAt: Date
   }
+  type Integrations {
+    intercom: Boolean
+  }
   type Query {
     getIntercom: AuthIntercom
     getUser: User
+    getIntegrations: Integrations
   }
   type Mutation {
     saveIntercomCode(code: String!): AuthIntercom
