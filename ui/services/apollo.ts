@@ -16,11 +16,9 @@ type ServerParseError = Error & {
 
 const httpLink = createHttpLink({
   fetch: (_, options) => {
-    if ((options?.headers as any).authorization) {
-      // return fetch(`${publicRuntimeConfig.apiEndpoint}/graphql`, options);
-      return fetch(`http://localhost:3000/graphql`, options);
-    }
-    return fetch(`http://localhost:3000/graphql`, options);
+    let url = process.env.NEXT_PUBLIC_API_URL;
+    console.log({ url });
+    return fetch(url, options);
   },
 });
 

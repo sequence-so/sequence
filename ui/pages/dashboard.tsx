@@ -49,7 +49,7 @@ const Dashboard = () => {
     <h1>
       We are in the dashboard
       {loading ? <p>Loading...</p> : null}
-      {error ? <p>{error}</p> : null}
+      {error ? <p>{JSON.stringify(error)}</p> : null}
       {RenderUser}
     </h1>
   );
