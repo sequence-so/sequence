@@ -50,7 +50,7 @@ class PassportRoutes {
           },
           JwtConfig.jwt.secret,
           JwtConfig.jwt.options,
-          (err, _token) => {
+          (err: any, _token: string) => {
             token = _token;
             if (err) return res.status(500).json(err);
 
@@ -114,7 +114,7 @@ class PassportRoutes {
           },
           JwtConfig.jwt.secret,
           JwtConfig.jwt.options,
-          (err, token) => {
+          (err: any, token: string) => {
             if (err) return res.status(500).json(err);
 
             // Send the Set-Cookie header with the jwt to the client

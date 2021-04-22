@@ -3,7 +3,11 @@ import AuthIntercom from "src/models/auth_intercom";
 
 const resolvers = {
   Query: {
-    async getUser(root: any, { id }, { models, user }) {
+    async getUser(
+      root: any,
+      _: any,
+      { models, user }: { models: any; user: any }
+    ) {
       return user;
     },
     // async getAllStudents(root, args, { models }) {
@@ -14,7 +18,11 @@ const resolvers = {
     // },
   },
   Mutation: {
-    async saveIntercomCode(root: any, { code }: { code: string }, { models }) {
+    async saveIntercomCode(
+      root: any,
+      { code }: { code: string },
+      { models }: { models: any }
+    ) {
       models.AuthIntercom.create({});
     },
     // async createStudent(root, { firstName, email }, { models }) {
