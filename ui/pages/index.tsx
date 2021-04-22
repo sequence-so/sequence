@@ -29,7 +29,7 @@ export default function Login() {
   }, [router.isReady]);
 
   return (
-    <div className={styles.container}>
+    <div className={styles.login_container}>
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
