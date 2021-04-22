@@ -172,10 +172,96 @@
   margin-left: 21px;
 }
 
+.with_sidebar {
+  overflow: hidden;
+  --s1: 1px;
+}
+
+.with_sidebar > * {
+  display: flex;
+  flex-wrap: wrap;
+  margin: calc(var(--s1) / 2 * -1);
+}
+
+.with_sidebar > * > * {
+  margin: calc(var(--s1) / 2);
+  flex-grow: 1;
+  flex-basis: 300px;
+}
+
+.with_sidebar > * > :last-child {
+  flex-basis: 0;
+  flex-grow: 999;
+  min-width: calc(50% - var(--s1));
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-right: 1px solid #D0D0D0;
+  box-sizing: border-box;
+  height: 100vh;
+  width: var(--s1);
+}
+
+.sidebar_logo {
+  margin-top: 29px;
+  margin-bottom: 29px;
+}
+
+.sidebar_link {
+  align-self: flex-start;
+  padding: 8px;
+  width: 100%;
+  font-weight: 500;
+  padding-left: 28px;
+}
+
+.sidebar_link_active {
+  align-self: flex-start;
+  padding: 9px;
+  padding-left: 28px;
+  background-color: #5296E6;
+  width: 100%;
+  color: white;
+  font-weight: 600;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.container_content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.container_content > p {
+  color: #4E4F55;
+  font-size: 1rem;
+}
+
 .profile {
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: flex-start;
+  border: 1px solid #F0F0F0;
+  box-sizing: border-box;
+  border-radius: 4px;
+  align-self: flex-end;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-top: 20px;
+  margin-right: 20px;
+}
+
+.profile:hover {
+  cursor: pointer;
 }
 
 .profile > img {
@@ -186,4 +272,137 @@
   font-size: 18px;
   font-weight: 500;
   margin-left: 8px;
+  letter-spacing: -0.04em;
+  margin-block-start: 0.5em;
+  margin-block-end: 0.5em;
+}
+
+.profile_arrow {
+  margin-left: 8px;
+}
+
+.onboarding_box {
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  width: 240px;
+  height: 240px;
+  color: white;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 28px;
+  line-height: 36px;
+  padding: 15px 18px 22px 15px;
+}
+
+.onboarding_box_red {
+  background: #FF6969;
+  box-shadow: 12px 10px 0px #FFCCCC;
+}
+.onboarding_box_blue {
+  background: #08ADD1;
+  box-shadow: 12px 10px 0px #CEF5FD;
+}
+
+.onboarding_box_purple {
+  background: #9008D1;
+  box-shadow: 12px 10px 0px #EECEFD;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.row > * + * {
+  margin-left: 30px;
+}
+
+.onboarding_box_content {
+  display: flex;
+  margin-top: auto;
+}
+
+.blue_button {
+  background: #4E94E5;
+  border: 1px solid #1A60B2;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  min-width: 200px;
+  margin: 20px;
+  cursor: pointer;
+}
+
+.blue_button:hover {
+  background: #7AAEEB;
+  border-color: #7AAEEB;
+}
+
+.integrations_grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 20px;
+  row-gap: 20px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.integration_box {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #B6B6B8;
+  border-radius: 3px;
+  width: 140px;
+  height: 140px;
+  cursor: pointer;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.12);
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* https://tobiasahlin.com/blog/how-to-animate-box-shadow/ */
+.integration_box::after {
+  opacity: 0;
+  content: "";
+  border-radius: 3px;
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0px 0px 0px 1px rgba(15, 15, 15, 0.05), 0px 3px 6px rgba(15, 15, 15, 0.1), 0px 9px 24px rgba(15, 15, 15, 0.2);
+}
+
+.integration_box:hover::after {
+  opacity: 1;
+}
+
+.bold_text {
+  font-weight: bold;
+}
+
+.not_ready_text {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 23px;
+  text-align: center;
+  color: #787878;
+}
+
+.not_ready_text >span:hover {
+  cursor: pointer;
+  color: hsla(212, 74%, 60%, 1);
 }
