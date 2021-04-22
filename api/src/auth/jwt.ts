@@ -7,7 +7,7 @@ import JwtConfig from "../config/jwt";
 passport.use(
   new JwtCookieComboStrategy(
     {
-      secretOrPublicKey: process.env.JWT_SECRET_KEY,
+      secretOrPublicKey: JwtConfig.jwt.secret,
       jwtVerifyOptions: JwtConfig.jwt.options,
       passReqToCallback: false,
     },

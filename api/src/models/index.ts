@@ -1,5 +1,6 @@
 import User from "./user";
 import AuthGoogle from "./auth_google";
+import AuthIntercom from "./auth_intercom";
 import sequelize from "../database";
 
 async function buildModels() {
@@ -9,6 +10,7 @@ async function buildModels() {
     return {
       User,
       AuthGoogle,
+      AuthIntercom,
     };
   } catch (error) {
     console.error(error);

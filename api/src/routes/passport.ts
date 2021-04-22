@@ -49,7 +49,7 @@ class PassportRoutes {
           {
             user: req.user,
           },
-          process.env.JWT_SECRET_KEY,
+          JwtConfig.jwt.secret,
           JwtConfig.jwt.options,
           (err, _token) => {
             token = _token;
@@ -76,7 +76,7 @@ class PassportRoutes {
       console.log(req.user);
       jwt.sign(
         { user: req.user },
-        process.env.JWT_SECRET_KEY,
+        JwtConfig.jwt.secret,
         (err: any, token: string) => {
           if (err) return res.json(err);
 
@@ -101,16 +101,6 @@ class PassportRoutes {
       }
     );
 
-    app.use(
-      "/api/v1/test",
-      passport.authenticate("jwt-cookiecombo", {
-        session: false,
-      }),
-      (req, res, next) => {
-        return next("yessir");
-      }
-    );
-
     app.get(
       "/login",
       passport.authenticate("local", {
@@ -124,7 +114,7 @@ class PassportRoutes {
           {
             user: req.user,
           },
-          process.env.JWT_SECRET_KEY,
+          JwtConfig.jwt.secret,
           JwtConfig.jwt.options,
           (err, token) => {
             if (err) return res.status(500).json(err);

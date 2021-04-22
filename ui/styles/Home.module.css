@@ -171,3 +171,19 @@
 .button > p {
   margin-left: 21px;
 }
+
+.profile {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.profile > img {
+  border-radius: 30px;
+}
+
+.profile > p {
+  font-size: 18px;
+  font-weight: 500;
+  margin-left: 8px;
+}

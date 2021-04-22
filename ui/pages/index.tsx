@@ -4,9 +4,11 @@ import styles from "../styles/Home.module.css";
 import LogoColor from "../public/logo_color.svg";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 export default function Login() {
   const [domain, setDomain] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     const href = window.location.href;
@@ -16,6 +18,15 @@ export default function Login() {
       setDomain("https://api-dev.sequence.so");
     }
   }, []);
+
+  useEffect(() => {
+    if (!router.isReady) {
+      return;
+    }
+    if (localStorage.token) {
+      router.push("/dashboard");
+    }
+  }, [router.isReady]);
 
   return (
     <div className={styles.container}>

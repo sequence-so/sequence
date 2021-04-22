@@ -1,4 +1,4 @@
-import { InitOptions, STRING, UUID } from "sequelize";
+import { InitOptions, Optional, STRING, UUID } from "sequelize";
 import { Model } from "sequelize-typescript";
 import sequelize from "../database";
 import { v4 as uuidv4 } from "uuid";
@@ -9,7 +9,19 @@ const config: InitOptions = {
   paranoid: true,
 };
 
-class User extends Model {
+interface UserAttributes {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  photo: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface UserCreationAttributes extends Optional<UserAttributes, "id"> {}
+
+class User extends Model<UserAttributes, UserCreationAttributes> {
   public id!: string;
   public firstName: string;
   public lastName: string;

@@ -12,12 +12,13 @@ const Success = () => {
     if (!router.isReady) {
       return;
     }
-    if (!router.query.token) {
+    if (!router.query.code) {
       router.push("/");
       return;
     }
-    localStorage.token = router.query.token;
-    setToken(router.query.token as string);
+    localStorage.token = router.query.code;
+    setToken(router.query.code as string);
+    // TODO: save intercom code via mutation
     router.push("/dashboard");
   }, [router.isReady]);
 

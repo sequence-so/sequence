@@ -1,11 +1,14 @@
 import express from "express";
 import dotenv from "dotenv";
+dotenv.config();
+
 import cookieParser from "cookie-parser";
 import { ApolloServer } from "apollo-server-express";
 import schema from "./graphql/schema";
 import resolvers from "./graphql/resolvers";
+import jwt from "jsonwebtoken";
 
-dotenv.config();
+import JwtConfig from "./config/jwt";
 
 import buildModels from "./models/index";
 
@@ -19,7 +22,10 @@ app.listen(process.env.PORT, () =>
   console.log("Example app listening on port 3000!")
 );
 
-const models = buildModels();
+let models: any;
+(async () => {
+  models = await buildModels();
+})();
 
 import Routes from "./routes";
 
@@ -28,7 +34,12 @@ new Routes(app);
 const server = new ApolloServer({
   typeDefs: schema,
   resolvers,
-  context: { models },
+  context: ({ req }) => {
+    const token = req.headers.authorization;
+    const result = jwt.verify(token, JwtConfig.jwt.secret);
+    const user = (result as any).user;
+    return { models, user };
+  },
 });
 server.applyMiddleware({ app });
 

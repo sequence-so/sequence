@@ -1,24 +1,28 @@
 const { gql } = require("apollo-server-express");
 const typeDefs = gql`
-  type Student {
-    id: Int!
-    firstname: String!
-    email: String!
-    hobbies: [Hobbies!]!
+  scalar Date
+
+  type AuthIntercom {
+    id: ID!
+    isEnabled: Boolean
+    createdAt: Date
+    updatedAt: Date
   }
-  type Hobbies {
-    id: Int!
-    title: String!
-    student: Student!
+  type User {
+    id: ID!
+    firstName: String
+    lastName: String
+    email: String
+    photo: String
+    createdAt: Date
+    updatedAt: Date
   }
   type Query {
-    getStudent(id: Int!): Student
-    getAllStudents: [Student!]!
-    getHobbies(id: Int!): Hobbies
+    getIntercom: AuthIntercom
+    getUser: User
   }
   type Mutation {
-    createStudent(name: String!, email: String!, password: String!): Student!
-    createHobbies(studentId: Int!, title: String!): Hobbies!
+    saveIntercomCode(code: String!): AuthIntercom
   }
 `;
 
