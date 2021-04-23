@@ -12,10 +12,12 @@ import AuthIntercom from "../../../components/AuthIntercom";
 import SegmentFirstGIF from "../../../public/segment_first.gif";
 import SegmentSecondGIF from "../../../public/segment_second.gif";
 import SegmentThirdGIF from "../../../public/segment_third.gif";
+import SegmentFourthGIF from "../../../public/segment_fourth.gif";
 import CopyDefault from "../../../public/copy_default.svg";
 import CopySuccess from "../../../public/copy_success.svg";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import useTimeout from "@rooks/use-timeout";
+import ReactModalImage from "react-modal-image";
 
 const initialState = { token: "" };
 const { useGlobalState } = createGlobalState(initialState);
@@ -98,22 +100,42 @@ const IntercomPage = () => {
               In the Segment dashboard, select your Javascript or backend API
               source.
             </p>
-            <img src={SegmentFirstGIF} width={600} />
+            <ReactModalImage
+              className={styles.segment_tutorial_image}
+              small={SegmentFirstGIF}
+              large={SegmentFirstGIF}
+              hideDownload={true}
+              hideZoom={true}
+            />
+
             <h2>2. Add "Webhook" As a Destination</h2>
             <p>
               In the Segment dashboard, select your Javascript or backend API
               source.
             </p>
-            <img src={SegmentSecondGIF} width={600} />
+            <ReactModalImage
+              className={styles.segment_tutorial_image}
+              small={SegmentSecondGIF}
+              large={SegmentSecondGIF}
+              hideDownload={true}
+              hideZoom={true}
+            />
+
             <h2>3. Configure the webhook</h2>
             <p>
               In the Destination Settings, add the Sequence API URL and
               Authorization token.
             </p>
-            <img src={SegmentThirdGIF} width={600} />
+            <ReactModalImage
+              className={styles.segment_tutorial_image}
+              small={SegmentThirdGIF}
+              large={SegmentThirdGIF}
+              hideDownload={true}
+              hideZoom={true}
+            />
 
             <div className={styles.segment_container}>
-              <p>URL:</p>
+              <p className={styles.subtitle}>URL:</p>
               <code className={styles.token_block}>
                 <p>https://api.sequence.so/api/segment</p>
                 <CopyToClipboard
@@ -130,7 +152,7 @@ const IntercomPage = () => {
                   )}
                 </CopyToClipboard>
               </code>
-              <p>Authorization token:</p>
+              <p className={styles.subtitle}>Authorization token:</p>
               <code className={styles.token_block}>
                 <p>{segmentData && segmentData.createSegmentWebhook.token}</p>
                 <CopyToClipboard
@@ -148,6 +170,15 @@ const IntercomPage = () => {
                 </CopyToClipboard>
               </code>
             </div>
+            <h2>4. Turn the Webhook On</h2>
+            <p>Turn the webhook toggle on.</p>
+            <ReactModalImage
+              className={styles.segment_tutorial_image}
+              small={SegmentFourthGIF}
+              large={SegmentFourthGIF}
+              hideDownload={true}
+              hideZoom={true}
+            />
           </div>
         </div>
       </div>
