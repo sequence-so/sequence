@@ -8,6 +8,7 @@ import schema from "./graphql/schema";
 import resolvers from "./graphql/resolvers";
 import jwt from "jsonwebtoken";
 import JwtConfig from "./config/jwt";
+import cors from "cors";
 
 import buildModels from "./models/index";
 
@@ -15,6 +16,7 @@ const app = express();
 
 app.disable("x-powered-by");
 
+app.use(cors());
 app.use(cookieParser(process.env.JWT_SECRET_KEY));
 app.use(express.json());
 app.use(
