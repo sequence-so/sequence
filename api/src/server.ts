@@ -16,7 +16,12 @@ const app = express();
 
 app.disable("x-powered-by");
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://my.sequence.so",
+  })
+);
+
 app.use(cookieParser(process.env.JWT_SECRET_KEY));
 app.use(express.json());
 app.use(
