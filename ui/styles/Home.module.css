@@ -475,4 +475,7 @@
 
 .segment_tutorial_image {
   width: 600px;
+  border-radius: 18px;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.18);
+
 }
