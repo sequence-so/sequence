@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useQuery, gql } from "@apollo/client";
 import { useRouter } from "next/router";
 import styles from "../../styles/Home.module.css";
+import onboardingStyles from "./onboarding.module.css";
 import { createGlobalState } from "react-hooks-global-state";
 import DownArrow from "../../public/down_arrow.svg";
 import Logo from "../../public/main_logo.svg";
@@ -35,7 +36,7 @@ const GET_INTEGRATIONS = gql`
   }
 `;
 
-const Dashboard = () => {
+const DonePage = () => {
   const [token, setToken] = useGlobalState("token");
   const router = useRouter();
   useEffect(() => {
@@ -78,59 +79,24 @@ const Dashboard = () => {
         </div>
         <div className={styles.container}>
           {RenderUser}
-          <div className={styles.container_content}>
-            <h1>Integrations</h1>
-            <p>Click to setup your first integration.</p>
-
-            <div className={styles.integrations_grid}>
-              {/* Postgres */}
-              {integrations && integrations.getIntegrations.postgres && (
-                <div className={styles.integration_box_done}>
-                  <img src={GreenCheckmark} />
-                  Postgres
-                </div>
-              )}
-              {integrations && !integrations.getIntegrations.postgres && (
-                <Link href="/onboarding/postgres">
-                  <div className={styles.integration_box}>Postgres</div>
-                </Link>
-              )}
-
-              {/* Segment */}
-              {integrations && integrations.getIntegrations.segment && (
-                <div className={styles.integration_box_done}>
-                  <img src={GreenCheckmark} />
-                  Segment
-                </div>
-              )}
-              {integrations && !integrations.getIntegrations.segment && (
-                <Link href="/onboarding/segment">
-                  <div className={styles.integration_box}>Segment</div>
-                </Link>
-              )}
-
-              {/* Intercom */}
-              {integrations && integrations.getIntegrations.intercom && (
-                <div className={styles.integration_box_done}>
-                  <img src={GreenCheckmark} />
-                  Intercom
-                </div>
-              )}
-              {integrations && !integrations.getIntegrations.intercom && (
-                <Link href="/onboarding/intercom">
-                  <div className={styles.integration_box}>Intercom</div>
-                </Link>
-              )}
-            </div>
-
-            <p className={styles.not_ready_text}>
-              Not ready?{" "}
-              <Link href="/onboarding/done">
-                <span className={styles.bold_text}>Click here to Skip</span>
-              </Link>
+          <div
+            className={styles.container_content}
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              height: "calc(100% - 100px)",
+            }}
+          >
+            <img src={GreenCheckmark} style={{ width: 60 }} />
+            <h1>You’re All Set!</h1>
+            <p>You’ve configured your alerts successfully.</p>
+            <p>
+              Click below to explore your dashboard and see how else Hoco can
+              help you improve.{" "}
             </p>
+
             <BlueButton
-              text="Next"
+              text="View Dashboard"
               onClick={(): void => {
                 router.push("/onboarding/alert");
               }}
@@ -142,4 +108,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default DonePage;

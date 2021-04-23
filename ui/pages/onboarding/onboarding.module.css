@@ -1,0 +1,149 @@
+.actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 15px;
+  row-gap: 15px;
+}
+
+.trigger {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  border: 1px solid #B6B6B8;
+  border-radius: 4px;
+  cursor: pointer;
+  /* box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.12); */
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* https://tobiasahlin.com/blog/how-to-animate-box-shadow/ */
+.trigger::after {
+  opacity: 0;
+  content: " ";
+  border-radius: 4px;
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0px 0px 0px 1px rgba(15, 15, 15, 0.05), 0px 3px 6px rgba(15, 15, 15, 0.1), 0px 9px 24px rgba(15, 15, 15, 0.2);
+}
+
+.trigger:hover::after {
+  opacity: 1;
+}
+
+.trigger_active {
+  background: #4E94E5;
+  border-color: #1A60B2;
+}
+
+.trigger_active > .icon {
+  border-right: 1px solid #1A60B2 !important;
+  color: white;
+}
+
+.trigger.trigger_active > .content > * {
+  color: white;
+}
+
+.trigger > .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-right: 1px solid #B6B6B8;
+}
+
+.trigger > .content {
+  display: flex;
+  flex-direction: column;
+  padding: 15px 13px;
+}
+
+.trigger > .content > * {
+  margin-block-start: 0px;
+  margin-block-end: 5px;
+}
+
+.trigger > .content > h4 {
+  font-size: 16px;
+}
+
+.trigger > .content > p {
+  color: #4E4F55;
+}
+
+.well {
+  padding: 10px 20px;
+  border: 1px solid #B6B6B8;
+  border-radius: 4px;
+  background: #F8F8F8;
+}
+
+.message_well {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 4px 8px;
+  box-shadow: 0px 0px 0px 1px rgba(15, 15, 15, 0.05), 0px 3px 6px rgba(15, 15, 15, 0.1), 0px 9px 24px rgba(15, 15, 15, 0.2);
+  border-radius: 8px;
+  font-family: 'Lato';
+  max-width: 600px;
+}
+
+.message_well_inner {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.message_title {
+  display: flex;
+  flex-direction: row;
+  margin-top: 4px;
+}
+
+.message_well_right {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.message_well_inner > img {
+  padding-top: 5px;
+}
+
+.message_title > p {
+  margin-block-start: 0px;
+  margin-block-end: 0px;
+  margin-right: 5px;
+}
+
+.message_text_area {
+  border: 2px solid #ACC0D7;
+  padding: 6px 8px;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+.message_app_bubble {
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  background: #E2E2E2;
+  color: #575757;
+  border-radius: 2px;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.message_title {
+  color: #616061;
+}

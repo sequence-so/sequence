@@ -15,3 +15,23 @@ a {
 * {
   box-sizing: border-box;
 }
+
+input {
+  border: 1px solid #E4E4E4;
+  padding: 8px 8px;
+  border-radius: 4px;
+}
+
+
+input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #A3A3A3;
+  opacity: 1; /* Firefox */
+}
+
+input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: #A3A3A3;
+}
+
+input::-ms-input-placeholder { /* Microsoft Edge */
+  color: #A3A3A3;
+}

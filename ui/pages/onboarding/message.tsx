@@ -2,13 +2,14 @@ import { useEffect } from "react";
 import { useQuery, gql } from "@apollo/client";
 import { useRouter } from "next/router";
 import styles from "../../styles/Home.module.css";
+import onboardingStyles from "./onboarding.module.css";
 import { createGlobalState } from "react-hooks-global-state";
 import DownArrow from "../../public/down_arrow.svg";
 import Logo from "../../public/main_logo.svg";
 import classnames from "classnames";
 import BlueButton from "../../components/BlueButton";
 import Link from "next/link";
-import GreenCheckmark from "../../public/green_check.svg";
+import LogoSquare from "../../public/logo_square.svg";
 
 const initialState = { token: "" };
 const { useGlobalState } = createGlobalState(initialState);
@@ -35,7 +36,7 @@ const GET_INTEGRATIONS = gql`
   }
 `;
 
-const Dashboard = () => {
+const MessagePage = () => {
   const [token, setToken] = useGlobalState("token");
   const router = useRouter();
   useEffect(() => {
@@ -79,62 +80,51 @@ const Dashboard = () => {
         <div className={styles.container}>
           {RenderUser}
           <div className={styles.container_content}>
-            <h1>Integrations</h1>
-            <p>Click to setup your first integration.</p>
+            <h1>Configure the Message</h1>
+            <p>Customize your message by editing the text below.</p>
 
-            <div className={styles.integrations_grid}>
-              {/* Postgres */}
-              {integrations && integrations.getIntegrations.postgres && (
-                <div className={styles.integration_box_done}>
-                  <img src={GreenCheckmark} />
-                  Postgres
+            <div className={onboardingStyles.message_well}>
+              <div className={onboardingStyles.message_well_inner}>
+                <img src={LogoSquare} />
+                <div className={onboardingStyles.message_well_right}>
+                  <div className={onboardingStyles.message_title}>
+                    <p
+                      style={{
+                        color: "#1D1C1D",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Tooldash
+                    </p>
+                    <p className={onboardingStyles.message_app_bubble}>APP</p>
+                    <p className={onboardingStyles.message_title}>6:48 PM</p>
+                  </div>
+                  <div
+                    className={onboardingStyles.message_text_area}
+                    contentEditable={true}
+                  >
+                    We’ve detected a change in one of your metrics for user_id
+                    13349 from <b>{"{{ old_value }}"}</b> to{" "}
+                    <b>{"{{ new_value }}"}</b>.
+                  </div>
                 </div>
-              )}
-              {integrations && !integrations.getIntegrations.postgres && (
-                <Link href="/onboarding/postgres">
-                  <div className={styles.integration_box}>Postgres</div>
-                </Link>
-              )}
-
-              {/* Segment */}
-              {integrations && integrations.getIntegrations.segment && (
-                <div className={styles.integration_box_done}>
-                  <img src={GreenCheckmark} />
-                  Segment
-                </div>
-              )}
-              {integrations && !integrations.getIntegrations.segment && (
-                <Link href="/onboarding/segment">
-                  <div className={styles.integration_box}>Segment</div>
-                </Link>
-              )}
-
-              {/* Intercom */}
-              {integrations && integrations.getIntegrations.intercom && (
-                <div className={styles.integration_box_done}>
-                  <img src={GreenCheckmark} />
-                  Intercom
-                </div>
-              )}
-              {integrations && !integrations.getIntegrations.intercom && (
-                <Link href="/onboarding/intercom">
-                  <div className={styles.integration_box}>Intercom</div>
-                </Link>
-              )}
+              </div>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <BlueButton
+                  text="Next"
+                  onClick={(): void => {
+                    router.push("/onboarding/done");
+                  }}
+                  style={{ marginRight: 0, marginTop: 10, marginBottom: 10 }}
+                />
+              </div>
             </div>
-
-            <p className={styles.not_ready_text}>
-              Not ready?{" "}
-              <Link href="/onboarding/done">
-                <span className={styles.bold_text}>Click here to Skip</span>
-              </Link>
-            </p>
-            <BlueButton
-              text="Next"
-              onClick={(): void => {
-                router.push("/onboarding/alert");
-              }}
-            />
           </div>
         </div>
       </div>
@@ -142,4 +132,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default MessagePage;
