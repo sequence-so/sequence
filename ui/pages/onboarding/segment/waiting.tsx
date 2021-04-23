@@ -111,7 +111,7 @@ const SegmentWaitingPage = () => {
             <BlueButton
               text="Done"
               onClick={(): void => {
-                router.push("/onboarding/segment/waiting");
+                router.push("/onboarding/datasources");
               }}
             />
           </div>

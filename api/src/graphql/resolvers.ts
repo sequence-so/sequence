@@ -4,6 +4,7 @@ import AuthIntercom from "src/models/auth_intercom";
 import FormData from "form-data";
 import crypto from "crypto";
 import { promisify } from "util";
+import pg from "pg";
 const randomBytes = promisify(crypto.randomBytes);
 
 const resolvers = {
@@ -55,9 +56,22 @@ const resolvers = {
           userId: user.id,
         },
       });
+      const segmentExecution = await models.WebhookExecution.findOne({
+        where: {
+          userId: user.id,
+        },
+        order: [["createdAt", "DESC"]],
+      });
+
+      const postgres = await models.AuthDatabase.findOne({
+        where: {
+          userId: user.id,
+        },
+      });
       let integrations: any = {
         intercom: intercom ? true : false,
-        segment: segmentWebhook ? true : false,
+        segment: segmentExecution ? true : false,
+        postgres: postgres ? true : false,
       };
 
       return integrations;
@@ -126,6 +140,55 @@ const resolvers = {
         createdAt: intercom.createdAt,
         updatedAt: intercom.updatedAt,
       };
+    },
+    async createPostgresDatabase(
+      root: any,
+      {
+        username,
+        password,
+        port,
+        hostname,
+        schema,
+        ssl,
+      }: {
+        username: string;
+        password: string;
+        port: number;
+        hostname: string;
+        schema: string;
+        ssl: boolean;
+      },
+      { models, user }: { models: any; user: any }
+    ) {
+      const client = new pg.Client({
+        user: username,
+        password: password,
+        port,
+        ssl,
+        host: hostname,
+      });
+      try {
+        console.log("attempting to connect...");
+        await client.connect();
+        console.log("connected successfully.");
+        await client.end();
+      } catch (error) {
+        console.error(error);
+        return new Error(error);
+      }
+
+      const database = await models.AuthDatabase.create({
+        type: "postgres",
+        userId: user.id,
+        username,
+        password,
+        port,
+        hostname,
+        schema,
+        ssl,
+      });
+
+      return database;
     },
     async createSegmentWebhook(
       root: any,

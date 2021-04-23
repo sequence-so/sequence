@@ -491,3 +491,49 @@
   margin-block-end: 0px;
   margin-block-start: 3rem;
 }
+
+.form_box {
+  padding: 25px 25px;
+  background: #F7F7F7;
+  border: 1px solid #C4C4C4;
+  box-sizing: border-box;
+  border-radius: 16px;
+}
+
+.form_box > form {
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+}
+
+.form_box > form > label {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 29px;
+  /* identical to box height */
+
+
+  /* Body Text */
+
+  color: #4E4F55;
+}
+
+.form_box > form > input {
+  padding: 8px 8px;
+  border: 1px solid #C4C4C4;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.form_box > form > input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #A3A3A3;
+  opacity: 1; /* Firefox */
+}
+
+.form_box > form > input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: #A3A3A3;
+}
+
+.form_box > form > input::-ms-input-placeholder { /* Microsoft Edge */
+  color: #A3A3A3;
+}

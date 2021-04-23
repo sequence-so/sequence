@@ -2,7 +2,11 @@ import React, { MouseEventHandler } from "react";
 import { defaultProp } from "../services/defaultProp";
 import styles from "../styles/Home.module.css";
 
-interface Props {
+interface Props
+  extends React.DetailedHTMLProps<
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  > {
   text: string;
   onClick?: MouseEventHandler;
   href?: string;
@@ -12,9 +16,9 @@ const BlueButton = (props: Props) => {
   const onClick = defaultProp(props.onClick, () => {});
 
   return (
-    <div className={styles.blue_button} onClick={onClick}>
+    <button className={styles.blue_button} onClick={onClick} {...props}>
       <p>{props.text}</p>
-    </div>
+    </button>
   );
 };
 

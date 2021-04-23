@@ -30,6 +30,7 @@ app.listen(process.env.PORT, () =>
 );
 
 import IntercomService from "./services/intercom";
+import PostgresService from "./services/postgres";
 let models: any;
 (async () => {
   models = await buildModels();
@@ -39,10 +40,12 @@ let models: any;
       id: "41ca3ac5-0c63-4249-a96c-b25fd972fcb0",
     },
   });
-  console.log({ user });
-  let service = new IntercomService();
-  service = await service.getFromUser(user);
-  service.fetchAllContacts();
+  let pService = new PostgresService(user);
+  await pService.connect();
+  // console.log({ user });
+  // let service = new IntercomService();
+  // service = await service.getFromUser(user);
+  // service.fetchAllContacts();
 })();
 
 import Routes from "./routes";

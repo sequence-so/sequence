@@ -15,6 +15,14 @@ const typeDefs = gql`
     createdAt: Date
     updatedAt: Date
   }
+  type PostgresDatabase {
+    id: ID
+    username: String
+    password: String
+    port: Int
+    hostname: String
+    schema: String
+  }
   type User {
     id: ID!
     firstName: String
@@ -27,6 +35,7 @@ const typeDefs = gql`
   type Integrations {
     intercom: Boolean
     segment: Boolean
+    postgres: Boolean
   }
   type Query {
     getIntercom: AuthIntercom
@@ -37,6 +46,14 @@ const typeDefs = gql`
   type Mutation {
     saveIntercomCode(code: String!): AuthIntercom
     createSegmentWebhook: SegmentWebhook
+    createPostgresDatabase(
+      username: String
+      password: String
+      port: Int
+      hostname: String
+      schema: String
+      ssl: Boolean
+    ): PostgresDatabase
   }
 `;
 

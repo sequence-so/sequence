@@ -29,6 +29,7 @@ const GET_INTEGRATIONS = gql`
   {
     getIntegrations {
       intercom
+      segment
     }
   }
 `;
@@ -81,11 +82,24 @@ const Dashboard = () => {
             <p>Click to setup your first integration.</p>
 
             <div className={styles.integrations_grid}>
-              <div className={styles.integration_box}>Postgres</div>
-              <Link href="/onboarding/segment">
-                <div className={styles.integration_box}>Segment</div>
+              <Link href="/onboarding/postgres">
+                <div className={styles.integration_box}>Postgres</div>
               </Link>
 
+              {/* Segment */}
+              {integrations && integrations.getIntegrations.segment && (
+                <div className={styles.integration_box_done}>
+                  <img src={GreenCheckmark} />
+                  Segment
+                </div>
+              )}
+              {integrations && !integrations.getIntegrations.segment && (
+                <Link href="/onboarding/segment">
+                  <div className={styles.integration_box}>Segment</div>
+                </Link>
+              )}
+
+              {/* Intercom */}
               {integrations && integrations.getIntegrations.intercom && (
                 <div className={styles.integration_box_done}>
                   <img src={GreenCheckmark} />
