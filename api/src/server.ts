@@ -7,7 +7,6 @@ import { ApolloServer } from "apollo-server-express";
 import schema from "./graphql/schema";
 import resolvers from "./graphql/resolvers";
 import jwt from "jsonwebtoken";
-
 import JwtConfig from "./config/jwt";
 
 import buildModels from "./models/index";
@@ -15,6 +14,7 @@ import buildModels from "./models/index";
 const app = express();
 
 app.use(cookieParser(process.env.JWT_SECRET_KEY));
+app.use(express.json());
 
 app.get("/", (req, res) => res.send("Hello World!"));
 

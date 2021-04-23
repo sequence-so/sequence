@@ -88,7 +88,12 @@ const IntercomPage = () => {
         </div>
         <div className={styles.container}>
           {RenderUser}
-          <div className={styles.container_content}>
+          <div
+            className={classnames(
+              styles.container_content,
+              styles.segment_container_wrapper
+            )}
+          >
             <h1>Connect Segment</h1>
             <p className={styles.not_ready_text}>
               <Link href="/onboarding/datasources">
@@ -135,6 +140,7 @@ const IntercomPage = () => {
             />
 
             <div className={styles.segment_container}>
+              <h3>Webhook Settings</h3>
               <p className={styles.subtitle}>URL:</p>
               <code className={styles.token_block}>
                 <p>https://api.sequence.so/api/segment</p>
