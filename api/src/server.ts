@@ -13,8 +13,15 @@ import buildModels from "./models/index";
 
 const app = express();
 
+app.disable("x-powered-by");
+
 app.use(cookieParser(process.env.JWT_SECRET_KEY));
 app.use(express.json());
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
 
 app.get("/", (req, res) => res.send("Hello World!"));
 

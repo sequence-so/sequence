@@ -11,6 +11,7 @@ const typeDefs = gql`
   type SegmentWebhook {
     id: ID
     token: String
+    receivedDataAt: Date
     createdAt: Date
     updatedAt: Date
   }

@@ -43,7 +43,7 @@ const CREATE_SEGMENT_WEBHOOK = gql`
   }
 `;
 
-const IntercomPage = () => {
+const SegmentPage = () => {
   const [copied1, setCopied1] = useState(false);
   const [copied2, setCopied2] = useState(false);
   const { start: start1 } = useTimeout((): void => {
@@ -143,9 +143,9 @@ const IntercomPage = () => {
               <h3>Webhook Settings</h3>
               <p className={styles.subtitle}>URL:</p>
               <code className={styles.token_block}>
-                <p>https://api.sequence.so/api/segment</p>
+                <p>https://api.sequence.so/event/segment</p>
                 <CopyToClipboard
-                  text={"https://api.sequence.so/api/segment"}
+                  text={"https://api.sequence.so/event/segment"}
                   onCopy={(): void => {
                     setCopied1(true);
                     start1();
@@ -185,6 +185,13 @@ const IntercomPage = () => {
               hideDownload={true}
               hideZoom={true}
             />
+
+            <BlueButton
+              text="Next"
+              onClick={(): void => {
+                router.push("/onboarding/segment/waiting");
+              }}
+            />
           </div>
         </div>
       </div>
@@ -192,4 +199,4 @@ const IntercomPage = () => {
   );
 };
 
-export default IntercomPage;
+export default SegmentPage;

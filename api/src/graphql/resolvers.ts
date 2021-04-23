@@ -67,16 +67,29 @@ const resolvers = {
       _: any,
       { models, user }: { models: any; user: any }
     ) {
-      const intercom = await models.SegmentWebhook.findOne({
+      const webhook = await models.SegmentWebhook.findOne({
         where: {
           userId: user.id,
         },
       });
-      let integrations: any = {
-        intercom: intercom ? true : false,
-      };
+      if (!webhook) {
+        return null;
+      }
 
-      return integrations;
+      const execution = await models.WebhookExecution.findOne({
+        where: {
+          userId: user.id,
+        },
+        order: [["createdAt", "DESC"]],
+      });
+
+      return {
+        id: webhook.id,
+        token: webhook.token,
+        receivedDataAt: execution ? execution.createdAt : null,
+        createdAt: webhook.createdAt,
+        updatedAt: webhook.updatedAt,
+      };
     },
   },
   Mutation: {
@@ -132,6 +145,7 @@ const resolvers = {
       webhook = await models.SegmentWebhook.create({
         token: token,
         userId: user.id,
+        receivedDataAt: null,
       });
 
       return webhook;
@@ -144,7 +158,7 @@ const resolvers = {
       return new Date(value); // value from the client
     },
     serialize(value) {
-      return value.getTime(); // value sent to the client
+      return value.toISOString(); // value sent to the client
     },
     parseLiteral(ast) {
       if (ast.kind === Kind.INT) {
