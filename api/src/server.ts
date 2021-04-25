@@ -16,9 +16,19 @@ const app = express();
 
 app.disable("x-powered-by");
 
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
+
 app.use(
   cors({
-    origin: "https://my.sequence.so",
+    origin: ["https://my.sequence.so", "https://api-dev.sequence.so"],
+    credentials: true,
   })
 );
 
