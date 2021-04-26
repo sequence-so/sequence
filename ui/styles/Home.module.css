@@ -554,6 +554,19 @@
   min-width: 300px;
 }
 
+.settings_form { 
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+}
+
+.settings_form > label {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 29px;
+  color: #4E4F55;
+}
+
 .form_box > * > label {
   font-weight: 600;
   font-size: 16px;
@@ -566,6 +579,26 @@
   font-size: 16px;
   line-height: 29px;
   color: #4E4F55;
+}
+
+.settings_form > input {
+  padding: 8px 8px;
+  border: 1px solid #C4C4C4;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.settings_form > input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #A3A3A3;
+  opacity: 1; /* Firefox */
+}
+
+.settings_form > input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: #A3A3A3;
+}
+
+.settings_form > input::-ms-input-placeholder { /* Microsoft Edge */
+  color: #A3A3A3;
 }
 
 .form_box > form > input {
@@ -665,11 +698,11 @@
 
 .title_text > h1 {
   font-weight: 500;
-  font-size: 36px;
+  font-size: 1.75rem;
 }
 
 .title_text > p {
-  font-size: 18px;
+  font-size: 1rem;
   color: #4E4F55;
 }
 
@@ -723,4 +756,18 @@
   margin-block-start: 0px;
   margin-block-end: 6px;
   color: #4E4F55;
+}
+
+.initials_circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #6F74E7;
+  border-radius: 4rem;
+  height: 1.5rem;
+  width:1.5rem;
+  background: #6F74E7;
+  color: white;
+  font-family: 'IBM Plex Sans Condensed';
+  margin-right: 8px;
 }

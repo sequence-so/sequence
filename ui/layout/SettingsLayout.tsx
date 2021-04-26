@@ -14,7 +14,7 @@ interface Props {
 const initialState = { navigationIndex: 0 };
 const { useGlobalState } = createGlobalState(initialState);
 
-const DashboardLayout = (props: Props) => {
+const SettingsLayout = (props: Props) => {
   const [index, setIndex] = useGlobalState("navigationIndex");
   const router = useRouter();
 
@@ -46,7 +46,6 @@ const DashboardLayout = (props: Props) => {
           }}
         />
         <div className={styles.container}>
-          <ProfileDropdown />
           <div
             className={styles.container_content}
             style={{
@@ -63,4 +62,4 @@ const DashboardLayout = (props: Props) => {
   );
 };
 
-export default DashboardLayout;
+export default SettingsLayout;
