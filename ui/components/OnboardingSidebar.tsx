@@ -36,6 +36,8 @@ const ITEMS = [
   },
 ];
 
-export default ({ index }: { index: number }) => (
+const OnboardingSiebar = ({ index }: { index: number }) => (
   <Sidebar items={ITEMS} index={index} />
 );
+
+export default OnboardingSiebar;

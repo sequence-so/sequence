@@ -104,7 +104,7 @@ const SegmentPage = () => {
 
         <div className={styles.segment_container}>
           <h3>
-            <center>Webhook Settings</center>
+            <span style={{ textAlign: "center" }}>Webhook Settings</span>
           </h3>
           <p className={styles.subtitle}>URL:</p>
           <code className={styles.token_block}>

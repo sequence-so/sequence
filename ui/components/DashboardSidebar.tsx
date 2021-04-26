@@ -31,6 +31,8 @@ const ITEMS = [
   },
 ];
 
-export default ({ index }: { index: number }) => (
+const DashboardSidebar = ({ index }: { index: number }) => (
   <Sidebar items={ITEMS} index={index} />
 );
+
+export default DashboardSidebar;
