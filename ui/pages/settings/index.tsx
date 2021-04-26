@@ -58,7 +58,7 @@ const AntTab = withStyles((theme) => ({
     },
   },
   selected: {},
-}))((props) => <Tab disableRipple {...props} />);
+}))((props) => <Tab disableRipple {...props} />) as typeof Tab;
 
 const useStyles = makeStyles((theme) => ({
   root: {
