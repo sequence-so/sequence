@@ -1,7 +1,12 @@
+const withPlugins = require("next-compose-plugins");
 const withImages = require("next-images");
-
-module.exports = withImages({
-  future: {
-    webpack5: true,
-  },
-});
+module.exports = withPlugins([
+  [
+    withImages,
+    {
+      future: {
+        webpack5: true,
+      },
+    },
+  ],
+]);

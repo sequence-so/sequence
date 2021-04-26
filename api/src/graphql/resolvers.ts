@@ -1,10 +1,10 @@
 import { GraphQLScalarType, Kind } from "graphql";
 import fetch from "node-fetch";
-import AuthIntercom from "src/models/auth_intercom";
 import FormData from "form-data";
 import crypto from "crypto";
 import { promisify } from "util";
 import pg from "pg";
+import PostgresService from "../services/postgres";
 const randomBytes = promisify(crypto.randomBytes);
 
 const resolvers = {
@@ -148,6 +148,7 @@ const resolvers = {
         password,
         port,
         hostname,
+        database,
         schema,
         ssl,
       }: {
@@ -155,6 +156,7 @@ const resolvers = {
         password: string;
         port: number;
         hostname: string;
+        database: string;
         schema: string;
         ssl: boolean;
       },
@@ -165,6 +167,7 @@ const resolvers = {
         password: password,
         port,
         ssl,
+        database,
         host: hostname,
       });
       try {
@@ -177,18 +180,23 @@ const resolvers = {
         return new Error(error);
       }
 
-      const database = await models.AuthDatabase.create({
-        type: "postgres",
-        userId: user.id,
-        username,
-        password,
-        port,
-        hostname,
-        schema,
-        ssl,
-      });
-
-      return database;
+      try {
+        const created = await models.AuthDatabase.create({
+          type: "postgres",
+          userId: user.id,
+          username,
+          password,
+          port,
+          hostname,
+          database,
+          schema,
+          ssl,
+        });
+        return created;
+      } catch (error) {
+        console.error("error creating auth_database", error);
+        return error;
+      }
     },
     async createSegmentWebhook(
       root: any,
@@ -212,6 +220,22 @@ const resolvers = {
       });
 
       return webhook;
+    },
+    async executeDatabaseQuery(
+      root: any,
+      { query }: { query: string },
+      { models, user }: { models: any; user: any }
+    ) {
+      const service = new PostgresService(user);
+
+      let db = await service.getPostgres();
+      if (!db) {
+        return new Error("No database found");
+      }
+
+      const result = await service.query(query);
+
+      return { result: JSON.stringify(result) };
     },
   },
   Date: new GraphQLScalarType({

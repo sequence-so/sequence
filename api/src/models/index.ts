@@ -10,7 +10,7 @@ import sequelize from "../database";
 async function buildModels() {
   try {
     console.log("syncing models");
-    await sequelize.sync();
+    await sequelize.sync({ force: true });
     return {
       User,
       AuthDatabase,

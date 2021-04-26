@@ -37,6 +37,9 @@ const typeDefs = gql`
     segment: Boolean
     postgres: Boolean
   }
+  type QueryResult {
+    result: String
+  }
   type Query {
     getIntercom: AuthIntercom
     getUser: User
@@ -52,8 +55,10 @@ const typeDefs = gql`
       port: Int
       hostname: String
       schema: String
+      database: String
       ssl: Boolean
     ): PostgresDatabase
+    executeDatabaseQuery(query: String): QueryResult
   }
 `;
 

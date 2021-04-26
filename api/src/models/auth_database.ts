@@ -19,6 +19,7 @@ class AuthDatabase extends Model {
   public username: string;
   public hostname: string;
   public schema: string;
+  public database: string;
   public password: string;
   public port: number;
   public ssl: boolean;
@@ -48,6 +49,9 @@ AuthDatabase.init(
     schema: {
       type: STRING,
     },
+    database: {
+      type: STRING,
+    },
     password: {
       type: STRING,
     },
@@ -66,16 +70,18 @@ AuthDatabase.belongsTo(User, {
 });
 
 AuthDatabase.beforeCreate((instance: AuthDatabase) => {
-  const { username, password, hostname, schema } = instance;
+  const { username, password, hostname, database, schema } = instance;
 
   const usernameEncrypted = cryptr.encrypt(username);
   const passwordEncrypted = cryptr.encrypt(password);
   const hostnameEncrypted = cryptr.encrypt(hostname);
+  const databaseEncrypted = cryptr.encrypt(database);
   const schemaEncrypted = cryptr.encrypt(schema);
 
   instance.username = usernameEncrypted;
   instance.password = passwordEncrypted;
   instance.hostname = hostnameEncrypted;
+  instance.database = databaseEncrypted;
   instance.schema = schemaEncrypted;
 });
 

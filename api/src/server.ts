@@ -52,13 +52,13 @@ let models: any;
 (async () => {
   models = await buildModels();
 
-  let user = await models.User.findOne({
-    where: {
-      id: "41ca3ac5-0c63-4249-a96c-b25fd972fcb0",
-    },
-  });
-  let pService = new PostgresService(user);
-  await pService.connect();
+  // let user = await models.User.findOne({
+  //   where: {
+  //     id: "41ca3ac5-0c63-4249-a96c-b25fd972fcb0",
+  //   },
+  // });
+  // let pService = new PostgresService(user);
+  // await pService.connect();
   // console.log({ user });
   // let service = new IntercomService();
   // service = await service.getFromUser(user);

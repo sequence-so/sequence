@@ -1,0 +1,36 @@
+import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBell,
+  faUsers,
+  faSitemap,
+  faCog,
+} from "@fortawesome/free-solid-svg-icons";
+import Sidebar from "./Sidebar";
+
+const iconStyle: React.CSSProperties = {
+  width: 15,
+};
+
+const ITEMS = [
+  {
+    section: "My Alerts",
+    icon: <FontAwesomeIcon icon={faBell} style={iconStyle} />,
+  },
+  {
+    section: "User Explorer",
+    icon: <FontAwesomeIcon icon={faUsers} style={iconStyle} />,
+  },
+  {
+    section: "Integrations",
+    icon: <FontAwesomeIcon icon={faSitemap} style={iconStyle} />,
+  },
+  {
+    section: "Settings",
+    icon: <FontAwesomeIcon icon={faCog} style={iconStyle} />,
+  },
+];
+
+export default ({ index }: { index: number }) => (
+  <Sidebar items={ITEMS} index={index} />
+);
