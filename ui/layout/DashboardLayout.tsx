@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import styles from "../styles/Home.module.css";
 import DashboardSidebar from "../components/DashboardSidebar";
-import ProfileDropdown from "../components/ProfileDropdown";
+import Navbar from "../components/Navbar";
 import classNames from "classnames";
 import { createGlobalState } from "react-hooks-global-state";
 import { useRouter } from "next/router";
@@ -46,7 +46,7 @@ const DashboardLayout = (props: Props) => {
           }}
         />
         <div className={styles.container}>
-          <ProfileDropdown />
+          <Navbar />
           <div
             className={styles.container_content}
             style={{

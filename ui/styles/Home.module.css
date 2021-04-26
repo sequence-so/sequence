@@ -321,6 +321,9 @@
   border-radius: 30px;
 }
 
+.profile_circle {
+  border-radius: 30px;
+}
 .profile > p {
   font-size: 18px;
   font-weight: 500;
