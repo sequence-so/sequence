@@ -16,23 +16,39 @@ const ITEMS = [
   {
     section: "My Alerts",
     icon: <FontAwesomeIcon icon={faBell} style={iconStyle} />,
+    route: "/",
   },
   {
     section: "User Explorer",
     icon: <FontAwesomeIcon icon={faUsers} style={iconStyle} />,
+    route: "/explorer",
   },
   {
     section: "Integrations",
     icon: <FontAwesomeIcon icon={faSitemap} style={iconStyle} />,
+    route: "/integrations",
   },
   {
     section: "Settings",
     icon: <FontAwesomeIcon icon={faCog} style={iconStyle} />,
+    route: "/settings",
   },
 ];
 
-const DashboardSidebar = ({ index }: { index: number }) => (
-  <Sidebar items={ITEMS} index={index} />
+interface Props {
+  index: number;
+  onClick: ({ index: number, route: string }) => void;
+}
+
+const DashboardSidebar = (props: Props) => (
+  <Sidebar
+    items={ITEMS}
+    index={props.index}
+    onClick={(index: number) => {
+      const route = ITEMS[index].route;
+      props.onClick({ index, route });
+    }}
+  />
 );
 
 export default DashboardSidebar;

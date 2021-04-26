@@ -85,10 +85,7 @@ const Dashboard = () => {
   return (
     <DashboardLayout index={0}>
       <>
-        <TitleBar
-          title="My Alerts"
-          subtitle="Manage your alerts and view your history."
-        ></TitleBar>
+        <TitleBar title="User Explorer" subtitle="View your users."></TitleBar>
 
         <AntTabs value={value} onChange={handleChange} aria-label="ant example">
           <AntTab label="Alerts" />

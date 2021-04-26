@@ -86,30 +86,9 @@ const Dashboard = () => {
     <DashboardLayout index={0}>
       <>
         <TitleBar
-          title="My Alerts"
-          subtitle="Manage your alerts and view your history."
+          title="Integrations"
+          subtitle="Update integrations."
         ></TitleBar>
-
-        <AntTabs value={value} onChange={handleChange} aria-label="ant example">
-          <AntTab label="Alerts" />
-          <AntTab label="History" />
-        </AntTabs>
-        <div style={{ marginTop: 8, height: 1 }}></div>
-        <div
-          style={{ display: "flex", width: "100%", flexDirection: "column" }}
-        >
-          {value === 0 ? (
-            <>
-              <AlertRow />
-              <AlertRow />
-              <AlertRow />
-              <AlertRow />
-              <AlertRow />
-            </>
-          ) : (
-            <p>Other page</p>
-          )}
-        </div>
       </>
     </DashboardLayout>
   );
