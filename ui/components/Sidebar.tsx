@@ -19,6 +19,7 @@ const Sidebar = (props: SidebarProps) => {
             active={idx === props.index}
             name={section}
             icon={icon}
+            onClick={() => {}}
           />
         );
       })}
