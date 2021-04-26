@@ -39,7 +39,6 @@ import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
     fontFamily: "IBM Plex Sans",
     color: "#4E4F55",
   },
