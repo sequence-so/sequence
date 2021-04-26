@@ -15,6 +15,6 @@ export const install = (): AnalyticsInstance => {
       }),
     ],
   });
-
+  analytics.page();
   return analytics;
 };

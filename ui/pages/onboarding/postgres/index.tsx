@@ -52,14 +52,23 @@ const PostgresPage = () => {
         <div className={styles.form_box}>
           <Formik
             initialValues={{
-              hostname: "localhost",
-              username: "helson",
-              database: "sequence_dev",
+              hostname: "",
+              username: "",
+              database: "",
               password: "",
               port: "5432",
               schema: "public",
               ssl: "false",
             }}
+            // initialValues={{
+            //   hostname: "localhost",
+            //   username: "helson",
+            //   database: "sequence_dev",
+            //   password: "",
+            //   port: "5432",
+            //   schema: "public",
+            //   ssl: "false",
+            // }}
             onSubmit={(values, { setSubmitting }): void => {
               if (didSucceed) {
                 router.push("/onboarding/integrations");
