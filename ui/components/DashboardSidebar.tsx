@@ -6,7 +6,7 @@ import {
   faSitemap,
   faCog,
 } from "@fortawesome/free-solid-svg-icons";
-import Sidebar from "./Sidebar";
+import Sidebar from "./Sidebar2";
 
 const iconStyle: React.CSSProperties = {
   width: 15,
