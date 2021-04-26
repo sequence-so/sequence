@@ -1,4 +1,4 @@
-import DashboardLayout from "../../layout/OnboardingLayout";
+import DashboardLayout from "../../layout/DashboardLayout";
 import TitleBar from "../../layout/TitleBar";
 
 const Dashboard = () => {
