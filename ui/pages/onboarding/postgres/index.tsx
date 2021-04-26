@@ -7,6 +7,9 @@ import { Formik, ErrorMessage } from "formik";
 import OnboardingLayout from "../../../layout/OnboardingLayout";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { useState } from "react";
+import classnames from "classnames";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
 const CREATE_POSTGRES_DATABASE = gql`
   mutation CreatePostgresDatabase(
@@ -46,7 +49,13 @@ const PostgresPage = () => {
 
   return (
     <OnboardingLayout index={1}>
-      <>
+      <div className={classnames(styles.container_content)}>
+        <Link href="/onboarding/integrations">
+          <p className={classnames(styles.go_back, styles.bold_text)}>
+            <FontAwesomeIcon icon={faChevronLeft} width={10} />
+            <span>Go back</span>
+          </p>
+        </Link>
         <h1>Postgres Connection</h1>
         <p>Provides secure access to your Postgres database.</p>
         <div className={styles.form_box}>
@@ -209,7 +218,7 @@ const PostgresPage = () => {
             </>
           </Link>
         </p>
-      </>
+      </div>
     </OnboardingLayout>
   );
 };
