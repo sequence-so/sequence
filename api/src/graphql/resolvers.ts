@@ -4,6 +4,8 @@ import FormData from "form-data";
 import crypto from "crypto";
 import { promisify } from "util";
 import pg from "pg";
+import path from "path";
+import fs from "fs";
 import PostgresService from "../services/postgres";
 const randomBytes = promisify(crypto.randomBytes);
 
@@ -162,11 +164,17 @@ const resolvers = {
       },
       { models, user }: { models: any; user: any }
     ) {
+      const sslConfig = ssl
+        ? {
+            require: true,
+            rejectUnauthorized: false,
+          }
+        : null;
       const client = new pg.Client({
         user: username,
         password: password,
         port,
-        ssl,
+        ssl: sslConfig,
         database,
         host: hostname,
       });

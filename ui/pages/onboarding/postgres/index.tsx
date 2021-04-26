@@ -153,17 +153,21 @@ const PostgresPage = () => {
                   placeholder="Schema"
                 />
                 {errors.schema && touched.schema && errors.schema}
-                <input
-                  type="checkbox"
-                  name="ssl"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.ssl}
-                  style={{ display: "inline-flex" }}
-                ></input>
-                <label htmlFor="ssl" style={{ display: "inline-flex" }}>
-                  Use SSL
-                </label>
+                <div style={{ display: "inline-flex", alignItems: "center" }}>
+                  <input
+                    type="checkbox"
+                    name="ssl"
+                    onChange={(value) => {
+                      handleChange("ssl")(
+                        value.target.checked ? "true" : "false"
+                      );
+                    }}
+                    onBlur={handleBlur}
+                    value={values.ssl}
+                    style={{ marginLeft: 4 }}
+                  ></input>
+                  <label htmlFor="ssl">Use SSL</label>
+                </div>
                 {error && <p style={{ color: "red" }}>{error.message}</p>}
                 {dataPostgres && dataPostgres.createPostgresDatabase && (
                   <p>Successfully saved database</p>
@@ -174,7 +178,7 @@ const PostgresPage = () => {
                     loading ? (
                       <CircularProgress />
                     ) : error ? (
-                      error.message
+                      "Error connecting to database"
                     ) : dataPostgres && dataPostgres.createPostgresDatabase ? (
                       "Next"
                     ) : (

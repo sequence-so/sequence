@@ -5,6 +5,7 @@ import sequelize from "../database";
 import { v4 as uuidv4 } from "uuid";
 import User from "./user";
 import { BOOLEAN } from "sequelize";
+import { TEXT } from "sequelize";
 const cryptr = new Cryptr(process.env.ENCRYPTION_KEY);
 
 const config: InitOptions = {
@@ -41,19 +42,19 @@ AuthDatabase.init(
       type: STRING,
     },
     username: {
-      type: STRING,
+      type: TEXT,
     },
     hostname: {
-      type: STRING,
+      type: TEXT,
     },
     schema: {
-      type: STRING,
+      type: TEXT,
     },
     database: {
-      type: STRING,
+      type: TEXT,
     },
     password: {
-      type: STRING,
+      type: TEXT,
     },
     port: {
       type: INTEGER,

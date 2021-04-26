@@ -527,15 +527,17 @@
   min-width: 300px;
 }
 
-.form_box > form > label {
+.form_box > * > label {
   font-weight: 600;
   font-size: 16px;
   line-height: 29px;
-  /* identical to box height */
+  color: #4E4F55;
+}
 
-
-  /* Body Text */
-
+.form_box > * > * > label {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 29px;
   color: #4E4F55;
 }
 
