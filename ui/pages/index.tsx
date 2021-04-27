@@ -14,8 +14,10 @@ export default function Login() {
     const href = window.location.href;
     if (href.includes("localhost")) {
       setDomain("http://localhost:3000");
-    } else {
+    } else if (href.includes("dev.sequence")) {
       setDomain("https://api-dev.sequence.so");
+    } else {
+      setDomain("https://api.sequence.so");
     }
   }, []);
 
@@ -31,6 +33,32 @@ export default function Login() {
   return (
     <div className={styles.login_container}>
       <Head>
+        <meta charSet="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+
+        <meta
+          name="description"
+          content="Sequence lets you monitor your user's behavior and create alerts based off of events that you specify as important. "
+        />
+        <meta property="og:title" content="Sequence" />
+        <meta
+          property="og:description"
+          content="Sequence lets you monitor your user's behavior and create alerts based off of events that you specify as important. "
+        />
+        <meta
+          property="og:image"
+          content="https://my.sequence.so/big_logo_color.png"
+        />
+        <meta
+          property="og:image:alt"
+          content="Alerts for product led growth companies"
+        />
+        <meta property="og:locale" content="en_GB" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="og:url" content="https://www.mywebsite.com/page" />
+        <link rel="canonical" href="https://www.mywebsite.com/page" />
+
         <title>Sequence</title>
         <link rel="icon" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
