@@ -32,7 +32,11 @@ if (process.env.USE_SSL) {
 
 app.use(
   cors({
-    origin: ["https://my.sequence.so", "https://api-dev.sequence.so"],
+    origin: [
+      "https://my.sequence.so",
+      "https://api-dev.sequence.so",
+      "https://api.sequence.so",
+    ],
     credentials: true,
   })
 );
