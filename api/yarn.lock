@@ -232,6 +232,13 @@
     "@types/qs" "*"
     "@types/range-parser" "*"
 
+"@types/express-sslify@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@types/express-sslify/-/express-sslify-1.2.1.tgz#5b218dc70e9a024bd635b195251e86d0fbb68870"
+  integrity sha512-pJUI5VPNNyAvm2Hv25TlI+USrTHqZqrTRg0/3K5rw16rJbLC09V2VPF4jO5SemlzkQQzeAPh5QPzbKYypTHaVQ==
+  dependencies:
+    "@types/express" "*"
+
 "@types/express@*", "@types/express@4.17.11":
   version "4.17.11"
   resolved "https://registry.yarnpkg.com/@types/express/-/express-4.17.11.tgz#debe3caa6f8e5fcda96b47bd54e2f40c4ee59545"

@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "@types/express": "^4.16.0",
+    "@types/express-sslify": "^1.2.1",
     "@types/intercom-client": "^2.11.10",
     "@types/pg": "^7.14.11",
     "@types/sequelize": "^4.28.9",
