@@ -78,6 +78,16 @@ const server = new ApolloServer({
   },
 });
 
-server.applyMiddleware({ app, cors: false });
+server.applyMiddleware({
+  app,
+  cors: {
+    origin: [
+      "https://my.sequence.so",
+      "https://dev.sequence.so",
+      "http://localhost:8000",
+    ],
+    credentials: true,
+  },
+});
 
 export default app;
