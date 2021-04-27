@@ -17,8 +17,8 @@ const typeDefs = gql`
   }
   type PostgresDatabase {
     id: ID
+    type: String
     username: String
-    password: String
     port: Int
     hostname: String
     schema: String
@@ -40,11 +40,19 @@ const typeDefs = gql`
   type QueryResult {
     result: String
   }
+  type PostgresSchema {
+    schema: String
+    name: String
+    type: String
+    owner: String
+  }
   type Query {
     getIntercom: AuthIntercom
     getUser: User
     getIntegrations: Integrations
     getSegmentWebhook: SegmentWebhook
+    getDatabases: [PostgresDatabase]
+    getPostgresSchema: [PostgresSchema]
   }
   type Mutation {
     saveIntercomCode(code: String!): AuthIntercom
@@ -58,7 +66,7 @@ const typeDefs = gql`
       database: String
       ssl: Boolean
     ): PostgresDatabase
-    executeDatabaseQuery(query: String): QueryResult
+    executeDatabaseQuery(query: String, databaseId: String): QueryResult
   }
 `;
 

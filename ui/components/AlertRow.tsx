@@ -2,7 +2,13 @@ import styles from "../styles/Home.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 
-const AlertRow = () => {
+interface Props {
+  title: string;
+  subtitle: string;
+  executions: number;
+}
+
+const AlertRow = (props: Props) => {
   return (
     <div className={styles.alert_row}>
       <div className={styles.alert_row_icon}>
@@ -29,8 +35,8 @@ const AlertRow = () => {
       </div>
 
       <div className={styles.alert_row_content}>
-        <h4>New Teammate Added</h4>
-        <p>Sends a Slack notification based on product activity.</p>
+        <h4>{props.title}</h4>
+        <p>{props.subtitle} </p>
         <p style={{ marginBlockStart: 8 }}>
           <FontAwesomeIcon
             icon={faPlay}
@@ -38,7 +44,7 @@ const AlertRow = () => {
             color="#9FA1A4"
             style={{ marginRight: 2 }}
           />{" "}
-          5 executions
+          {props.executions} execution{props.executions > 1 ?? "s"}
         </p>
       </div>
     </div>

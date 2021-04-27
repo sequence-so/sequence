@@ -336,11 +336,31 @@ const HistoryPage = () => {
         >
           {value === 0 ? (
             <>
-              <AlertRow />
-              <AlertRow />
-              <AlertRow />
-              <AlertRow />
-              <AlertRow />
+              <AlertRow
+                title="New Teammate Added"
+                subtitle="Sends a Slack notification based on product activity."
+                executions={3}
+              />
+              <AlertRow
+                title="New Signup"
+                subtitle="Sends a Slack notification based on product activity."
+                executions={2}
+              />
+              <AlertRow
+                title="Alert Created"
+                subtitle="Sends a Slack notification based on product activity."
+                executions={10}
+              />
+              <AlertRow
+                title="Credit Card Added"
+                subtitle="Sends a Slack notification based on product activity."
+                executions={5}
+              />
+              <AlertRow
+                title="Support Ticket Created"
+                subtitle="Sends a Slack notification based on product activity."
+                executions={8}
+              />
             </>
           ) : (
             <div

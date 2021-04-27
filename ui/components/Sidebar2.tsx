@@ -18,7 +18,6 @@ interface SidebarProps {
 const Sidebar = (props: SidebarProps) => {
   const [isSidebarOpen, setSidebarOpen] = useGlobalState("isSidebarOpen");
 
-  console.log({ isSidebarOpen });
   return (
     <div
       className={classNames(

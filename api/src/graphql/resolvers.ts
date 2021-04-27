@@ -4,10 +4,10 @@ import FormData from "form-data";
 import crypto from "crypto";
 import { promisify } from "util";
 import pg from "pg";
-import path from "path";
-import fs from "fs";
 import PostgresService from "../services/postgres";
 const randomBytes = promisify(crypto.randomBytes);
+import Cryptr from "cryptr";
+const cryptr = new Cryptr(process.env.ENCRYPTION_KEY);
 
 const resolvers = {
   Query: {
@@ -106,6 +106,38 @@ const resolvers = {
         createdAt: webhook.createdAt,
         updatedAt: webhook.updatedAt,
       };
+    },
+    async getDatabases(
+      root: any,
+      _: any,
+      { models, user }: { models: any; user: any }
+    ) {
+      const databases = await models.AuthDatabase.findAll({
+        where: {
+          userId: user.id,
+        },
+      });
+      const cryptr = new Cryptr(process.env.ENCRYPTION_KEY);
+      databases.map((database) => {
+        database.hostname = cryptr.decrypt(database.hostname);
+      });
+      return databases;
+    },
+    async getPostgresSchema(
+      root: any,
+      { databaseId }: { databaseId: string },
+      { models, user }: { models: any; user: any }
+    ) {
+      const service = new PostgresService(user);
+
+      let db = await service.getPostgres(databaseId);
+      if (!db) {
+        return new Error("No database found");
+      }
+
+      const result = await service.query("\\dt");
+
+      return { result: JSON.stringify(result) };
     },
   },
   Mutation: {
@@ -231,12 +263,12 @@ const resolvers = {
     },
     async executeDatabaseQuery(
       root: any,
-      { query }: { query: string },
+      { query, databaseId }: { query: string; databaseId: string },
       { models, user }: { models: any; user: any }
     ) {
       const service = new PostgresService(user);
 
-      let db = await service.getPostgres();
+      let db = await service.getPostgres(databaseId);
       if (!db) {
         return new Error("No database found");
       }

@@ -12,11 +12,12 @@ class PostgresService {
     this.user = user;
     this.db = null;
   }
-  async getPostgres() {
+  async getPostgres(databaseId: string) {
     const db = await AuthDatabase.findOne({
       where: {
         userId: this.user.id,
         type: "postgres",
+        id: databaseId,
       },
     });
 
@@ -87,14 +88,15 @@ class PostgresService {
     const username = cryptr.decrypt(db.username);
     const password = cryptr.decrypt(db.password);
     const hostname = cryptr.decrypt(db.hostname);
+    const database = cryptr.decrypt(db.database);
 
     const client = new pg.Client({
       user: username,
-      password: password,
+      password,
       port: db.port,
       ssl: db.ssl,
       host: hostname,
-      database: db.database,
+      database,
     });
 
     try {
