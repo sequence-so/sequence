@@ -11,6 +11,7 @@ import JwtConfig from "./config/jwt";
 import cors from "cors";
 
 import buildModels from "./models/index";
+import enforce from "express-sslify";
 
 const app = express();
 
@@ -24,6 +25,10 @@ app.use(function (req, res, next) {
   );
   next();
 });
+
+if (process.env.USE_SSL) {
+  app.use(enforce.HTTPS({ trustProtoHeader: true }));
+}
 
 app.use(
   cors({
