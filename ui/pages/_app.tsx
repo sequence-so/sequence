@@ -4,9 +4,11 @@ import { ApolloProvider } from "@apollo/client";
 import { useEffect } from "react";
 import Head from "next/head";
 import { install } from "../services/analytics";
-import { createMuiTheme, CssBaseline } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "../layout/theme";
+import { IntercomProvider, useIntercom } from "react-use-intercom";
+
+const INTERCOM_APP_ID = "idhc7omi";
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
@@ -14,7 +16,6 @@ function MyApp({ Component, pageProps }) {
     const jssStyles = document.querySelector("#jss-server-side");
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles);
-      console.log("removing SSR");
     }
     install();
   }, []);
@@ -40,7 +41,9 @@ function MyApp({ Component, pageProps }) {
       </Head>
       <ApolloProvider client={ApolloClient}>
         <ThemeProvider theme={theme}>
-          <Component {...pageProps} />
+          <IntercomProvider appId={INTERCOM_APP_ID}>
+            <Component {...pageProps} />
+          </IntercomProvider>
         </ThemeProvider>
       </ApolloProvider>
     </>

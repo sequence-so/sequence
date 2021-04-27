@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { useQuery, gql } from "@apollo/client";
 import styles from "../styles/Home.module.css";
 import DownArrow from "../public/down_arrow.svg";
@@ -5,9 +6,18 @@ import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Fade from "@material-ui/core/Fade";
-
+import { useIntercom } from "react-use-intercom";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import { makeStyles } from "@material-ui/core/styles";
+import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCog, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCog,
+  faSignOutAlt,
+  faQuestionCircle,
+} from "@fortawesome/free-solid-svg-icons";
 const iconStyle: React.CSSProperties = {
   width: 15,
   marginRight: 8,
@@ -25,17 +35,6 @@ const GET_USER = gql`
     }
   }
 `;
-
-import React from "react";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
-import MoreIcon from "@material-ui/icons/MoreVert";
-import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -87,15 +86,40 @@ export default function ProminentAppBar() {
   const classes = useStyles();
   const router = useRouter();
   const { loading, error, data } = useQuery(GET_USER);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-
+  const [showingIntercom, setShowingIntercom] = useState(false);
+  const [didBootIntercom, setDidBootIntercom] = useState(false);
+  const { show, hide, boot } = useIntercom();
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleHelp = () => {
+    if (!didBootIntercom) {
+      if (data && data.getUser) {
+        boot({
+          name: `${data.getUser.firstName} ${data.getUser.lastName}`,
+          email: data.getUser.email,
+          avatar: data.getUser.logo,
+          userId: data.getUser.id,
+        });
+        hide();
+      }
+      setDidBootIntercom(true);
+      show();
+      return;
+    }
+    setShowingIntercom(!showingIntercom);
+    if (showingIntercom) {
+      hide();
+    } else {
+      show();
+    }
   };
 
   const handleSettings = () => {
@@ -115,6 +139,9 @@ export default function ProminentAppBar() {
         <Toolbar className={classes.toolbar}>
           <div className={classes.grow} />
 
+          <IconButton aria-label="search" color="inherit" onClick={handleHelp}>
+            <FontAwesomeIcon icon={faQuestionCircle} />
+          </IconButton>
           <IconButton aria-label="search" color="inherit">
             <NotificationIcon />
           </IconButton>

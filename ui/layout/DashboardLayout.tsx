@@ -5,7 +5,6 @@ import Navbar from "../components/Navbar";
 import classNames from "classnames";
 import { createGlobalState } from "react-hooks-global-state";
 import { useRouter } from "next/router";
-
 interface Props {
   children: React.ReactElement;
   index: number;
