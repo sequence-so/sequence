@@ -8,7 +8,6 @@ import { JSON } from "sequelize";
 const config: InitOptions = {
   tableName: "webhook_execution",
   sequelize,
-  paranoid: true,
 };
 
 class WebhookExecution extends Model {

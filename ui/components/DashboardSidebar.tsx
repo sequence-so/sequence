@@ -31,17 +31,17 @@ const ITEMS = [
     section: "History",
     icon: <FontAwesomeIcon icon={faHistory} style={iconStyle} />,
     route: "/alerts/history",
-    style: {
-      fontSize: 14,
-    },
+    // style: {
+    //   fontSize: 14,
+    // },
   },
   {
     section: "Create an Alert",
     icon: <FontAwesomeIcon icon={faPlusSquare} style={iconStyle} />,
     route: "/alerts/create",
-    style: {
-      fontSize: 14,
-    },
+    // style: {
+    //   fontSize: 14,
+    // },
   },
   {
     section: "User Explorer",

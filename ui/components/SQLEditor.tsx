@@ -122,7 +122,7 @@ const SQLEditor = (props: Props) => {
       </div>
       <BlueButton
         text={
-          !loading ? "Execute" : <CircularProgress size={14} color="white" />
+          !loading ? "Execute" : <CircularProgress size={14} color="primary" />
         }
         disabled={databaseId === null || loading}
         onClick={(): void => {

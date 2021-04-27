@@ -106,6 +106,13 @@ const SegmentPage = () => {
           <h3>
             <span style={{ textAlign: "center" }}>Webhook Settings</span>
           </h3>
+          <a
+            href="https://app.segment.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Open Segment
+          </a>
           <p className={styles.subtitle}>URL:</p>
           <code className={styles.token_block}>
             <p>https://api.sequence.so/event/segment</p>

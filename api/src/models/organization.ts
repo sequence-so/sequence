@@ -2,34 +2,37 @@ import { InitOptions, Optional, STRING, UUID } from "sequelize";
 import { Model } from "sequelize-typescript";
 import sequelize from "../database";
 import { v4 as uuidv4 } from "uuid";
+import User from "./user";
 
 const config: InitOptions = {
-  tableName: "users",
+  tableName: "organizations",
   sequelize,
   paranoid: true,
 };
 
-interface UserAttributes {
+interface OrganizationAttributes {
   id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
+  name: string;
   photo: string;
+  ownerId: string;
 }
 
-interface UserCreationAttributes extends Optional<UserAttributes, "id"> {}
+interface OrganizationCreationAttributes
+  extends Optional<OrganizationAttributes, "id"> {}
 
-class User extends Model<UserAttributes, UserCreationAttributes> {
+class Organization extends Model<
+  OrganizationAttributes,
+  OrganizationCreationAttributes
+> {
   public id!: string;
-  public firstName: string;
-  public lastName: string;
-  public email!: string;
+  public name: string;
   public photo: string;
+  public ownerId: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
 
-User.init(
+Organization.init(
   {
     id: {
       primaryKey: true,
@@ -38,17 +41,8 @@ User.init(
       allowNull: false,
       defaultValue: () => uuidv4(),
     },
-    firstName: {
+    name: {
       type: STRING,
-    },
-    lastName: {
-      type: STRING,
-    },
-    email: {
-      type: STRING,
-      allowNull: false,
-      primaryKey: true,
-      unique: true,
     },
     photo: {
       type: STRING,
@@ -57,4 +51,8 @@ User.init(
   config
 );
 
-export default User;
+Organization.belongsTo(User, {
+  as: "owner",
+});
+
+export default Organization;

@@ -95,6 +95,8 @@ const SegmentWaitingPage = () => {
             Waiting for data to flow from Segment...
             <br />
             <br /> Try triggering an event in your app now.
+            <br />
+            Make sure the webhook is turned on.
           </p>
         ) : (
           <p>

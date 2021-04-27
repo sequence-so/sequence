@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import User from "./user";
 
 const config: InitOptions = {
-  tableName: "auth_google",
+  tableName: "auth_googles",
   sequelize,
   paranoid: true,
 };

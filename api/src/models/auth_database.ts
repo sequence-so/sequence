@@ -9,7 +9,7 @@ import { TEXT } from "sequelize";
 const cryptr = new Cryptr(process.env.ENCRYPTION_KEY);
 
 const config: InitOptions = {
-  tableName: "auth_database",
+  tableName: "auth_databases",
   sequelize,
   paranoid: true,
 };

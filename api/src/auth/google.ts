@@ -2,6 +2,7 @@ var passport = require("passport");
 var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 import AuthGoogle from "../models/auth_google";
 import User from "../models/user";
+import Organization from "../models/organization";
 
 interface GoogleProfile {
   id: string;
@@ -45,6 +46,11 @@ passport.use(
           lastName,
           email,
           photo,
+        });
+        await Organization.create({
+          name: "",
+          photo: "",
+          ownerId: user.id,
         });
         await AuthGoogle.create({
           googleId: profile.id,

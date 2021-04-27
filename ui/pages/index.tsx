@@ -31,7 +31,7 @@ export default function Login() {
   return (
     <div className={styles.login_container}>
       <Head>
-        <title>Create Next App</title>
+        <title>Sequence</title>
         <link rel="icon" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link

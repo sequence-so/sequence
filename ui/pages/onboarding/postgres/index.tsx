@@ -32,7 +32,6 @@ const CREATE_POSTGRES_DATABASE = gql`
     ) {
       id
       username
-      password
       port
       hostname
       schema

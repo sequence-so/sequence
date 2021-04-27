@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import User from "./user";
 
 const config: InitOptions = {
-  tableName: "auth_intercom",
+  tableName: "auth_intercoms",
   sequelize,
   paranoid: true,
 };

@@ -113,14 +113,6 @@ export default function ProminentAppBar() {
     <div className={classes.root}>
       <AppBar position="static" className={classes.appbar}>
         <Toolbar className={classes.toolbar}>
-          {/* <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="open drawer"
-          >
-            <MenuIcon />
-          </IconButton> */}
           <div className={classes.grow} />
 
           <IconButton aria-label="search" color="inherit">
@@ -155,6 +147,14 @@ export default function ProminentAppBar() {
             onClose={handleClose}
             TransitionComponent={Fade}
             className={classes.menu}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "center",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "center",
+            }}
           >
             <div
               style={{

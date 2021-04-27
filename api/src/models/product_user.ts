@@ -3,6 +3,7 @@ import { Model } from "sequelize-typescript";
 import sequelize from "../database";
 import { v4 as uuidv4 } from "uuid";
 import { DATE } from "sequelize";
+import User from "./user";
 
 const config: InitOptions = {
   tableName: "product_user",
@@ -80,5 +81,9 @@ ProductUser.init(
   },
   config
 );
+
+ProductUser.belongsTo(User, {
+  as: "user",
+});
 
 export default ProductUser;

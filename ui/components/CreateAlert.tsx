@@ -281,9 +281,7 @@ const CreateAlertContent = (props: Props) => {
                     id="demo-simple-select"
                     value={selectedAggKey}
                     onChange={({ target: { value } }): void => {
-                      setPrimaryKey(
-                        columns.find((elem) => elem.field === value)
-                      );
+                      setAggKey(columns.find((elem) => elem.field === value));
                     }}
                   >
                     {columns.map(({ field }) => (
@@ -326,13 +324,15 @@ const CreateAlertContent = (props: Props) => {
           </Link>
         </p>
       )}
-
       <BlueButton
         text="Next"
         onClick={(): void => {
           router.push(props.nextRoute);
         }}
-        style={{ display: !selectedAggKey ? "none" : "initial" }}
+        style={{
+          display:
+            state === "sql" ? (!selectedAggKey ? "none" : "flex") : "initial",
+        }}
       />
     </>
   );
