@@ -5,6 +5,8 @@ import {
   faUsers,
   faSitemap,
   faCog,
+  faHistory,
+  faPlusSquare,
 } from "@fortawesome/free-solid-svg-icons";
 import Sidebar from "./Sidebar2";
 
@@ -27,19 +29,17 @@ const ITEMS = [
   },
   {
     section: "History",
-    icon: null,
+    icon: <FontAwesomeIcon icon={faHistory} style={iconStyle} />,
     route: "/alerts/history",
     style: {
-      paddingLeft: 44,
       fontSize: 14,
     },
   },
   {
     section: "Create an Alert",
-    icon: null,
+    icon: <FontAwesomeIcon icon={faPlusSquare} style={iconStyle} />,
     route: "/alerts/create",
     style: {
-      paddingLeft: 44,
       fontSize: 14,
     },
   },

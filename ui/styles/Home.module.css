@@ -206,7 +206,6 @@
 .with_sidebar > * > * {
   margin: calc(var(--s1) / 2);
   flex-grow: 1;
-  flex-basis: var(--sidebar-width);
 }
 
 .with_sidebar > * > :last-child {
@@ -224,7 +223,11 @@
   border-right: 1px solid #D0D0D0;
   box-sizing: border-box;
   height: 100vh;
-  width: var(--s1);
+  width: 250px;
+}
+
+.collapsed_sidebar {
+  width: 60px;
 }
 
 .dashboard_sidebar {
@@ -241,7 +244,7 @@
   align-self: flex-start;
   padding: 12px 8px;
   width: 100%;
-  padding-left: 28px;
+  padding-left: 24px;
   font-size: 1rem;
   color: #505256;
   cursor: pointer;
@@ -258,7 +261,7 @@
 .sidebar_link_active {
   position: relative;
   align-self: flex-start;
-  padding-left: 28px;
+  padding-left: 24px;
   background-color: #3974B9;
   width: 100%;
   color: white;
@@ -315,6 +318,7 @@
 .container {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .container_content {

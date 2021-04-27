@@ -20,6 +20,7 @@ const Sidebar = (props: SidebarProps) => {
             name={section}
             icon={icon}
             onClick={() => {}}
+            isSidebarOpen={true}
           />
         );
       })}

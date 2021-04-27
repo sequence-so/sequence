@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "../styles/Home.module.css";
 import DashboardSidebar from "../components/DashboardSidebar";
 import Navbar from "../components/Navbar";
@@ -11,12 +11,30 @@ interface Props {
   index: number;
 }
 
-const initialState = { navigationIndex: 0 };
-const { useGlobalState } = createGlobalState(initialState);
+const initialState = { navigationIndex: 0, isSidebarOpen: true };
+export const { useGlobalState } = createGlobalState(initialState);
 
 const DashboardLayout = (props: Props) => {
   const [index, setIndex] = useGlobalState("navigationIndex");
+  const [isSidebarOpen, setSidebarOpen] = useGlobalState("isSidebarOpen");
   const router = useRouter();
+  const contentPaneRef = useRef<HTMLDivElement | null>(null);
+  const [contentPaneWidth, setContentPaneWidth] = useState(0);
+
+  // if sidebar minimized/maximize, update content pane width
+  useEffect(() => {
+    if (contentPaneRef.current?.clientWidth) {
+      setContentPaneWidth(contentPaneRef.current?.clientWidth);
+    }
+  }, [isSidebarOpen]);
+
+  // once we get a ref for the content pane, update content pane width
+  useEffect(() => {
+    const width = contentPaneRef.current?.clientWidth;
+    if (width) {
+      setContentPaneWidth(width);
+    }
+  }, [contentPaneRef.current]);
 
   useEffect(() => {
     if (!router.isReady) {
@@ -56,10 +74,8 @@ const DashboardLayout = (props: Props) => {
     }
   }, [router.isReady]);
   return (
-    <div
-      className={classNames(styles.with_sidebar, styles.with_dashboard_sidebar)}
-    >
-      <div>
+    <div className={classNames(styles.with_dashboard_sidebar)}>
+      <div style={{ display: "flex" }}>
         <DashboardSidebar
           index={index}
           onClick={({ index, route }: { index: number; route: string }) => {
@@ -75,6 +91,10 @@ const DashboardLayout = (props: Props) => {
               paddingLeft: 40,
               paddingRight: 40,
               paddingBottom: 40,
+              width: "100%",
+            }}
+            ref={(ref): void => {
+              contentPaneRef.current = ref;
             }}
           >
             {props.children}

@@ -8,9 +8,17 @@ interface Props {
   icon: JSX.Element;
   onClick: () => void;
   style?: React.CSSProperties;
+  isSidebarOpen: boolean;
 }
 
-const SidebarItem = ({ active, name, icon, onClick, style }: Props) => {
+const SidebarItem = ({
+  active,
+  name,
+  icon,
+  onClick,
+  style,
+  isSidebarOpen,
+}: Props) => {
   return (
     <div
       className={classNames(
@@ -22,7 +30,7 @@ const SidebarItem = ({ active, name, icon, onClick, style }: Props) => {
     >
       {active && <div className={styles.sidebar_link_box}></div>}
       <div>{icon}</div>
-      <span>{name}</span>
+      {isSidebarOpen && <span>{name}</span>}
     </div>
   );
 };
