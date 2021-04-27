@@ -1,5 +1,16 @@
 require("dotenv").config();
 
+const useSSL = process.env.DB_SSL === "true";
+
+const dialectOptions = useSSL
+  ? {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    }
+  : {};
+
 module.exports = {
   development: {
     username: process.env.DB_USERNAME,
@@ -7,6 +18,7 @@ module.exports = {
     database: process.env.DB_DATABASE,
     host: process.env.DB_HOST,
     dialect: "postgres",
+    dialectOptions,
     migrationStorageTableName: "sequelize_meta",
   },
   test: {
@@ -14,6 +26,8 @@ module.exports = {
     password: process.env.DB_TEST_PASSWORD,
     database: process.env.DB_TEST_DATABASE,
     host: process.env.DB_HOST,
+    dialect: "postgres",
+    dialectOptions,
     migrationStorageTableName: "sequelize_meta",
   },
   production: {
@@ -21,6 +35,8 @@ module.exports = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     host: process.env.DB_HOST,
+    dialect: "postgres",
+    dialectOptions,
     migrationStorageTableName: "sequelize_meta",
   },
 };
