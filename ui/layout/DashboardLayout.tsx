@@ -74,30 +74,32 @@ const DashboardLayout = (props: Props) => {
     }
   }, [router.isReady]);
   return (
-    <div className={classNames(styles.with_dashboard_sidebar)}>
-      <div style={{ display: "flex" }}>
-        <DashboardSidebar
-          index={index}
-          onClick={({ index, route }: { index: number; route: string }) => {
-            setIndex(index);
-            router.push(route);
-          }}
-        />
-        <div className={styles.container}>
-          <Navbar />
-          <div
-            className={styles.container_content}
-            style={{
-              paddingLeft: 40,
-              paddingRight: 40,
-              paddingBottom: 40,
-              width: "100%",
+    <div className={classNames(styles.page)}>
+      <div className={styles.with_dashboard_sidebar}>
+        <div style={{ display: "flex" }}>
+          <DashboardSidebar
+            index={index}
+            onClick={({ index, route }: { index: number; route: string }) => {
+              setIndex(index);
+              router.push(route);
             }}
-            ref={(ref): void => {
-              contentPaneRef.current = ref;
-            }}
-          >
-            {props.children}
+          />
+          <div className={styles.container}>
+            <Navbar />
+            <div
+              className={styles.container_content}
+              style={{
+                paddingLeft: 40,
+                paddingRight: 40,
+                paddingBottom: 40,
+                width: "100%",
+              }}
+              ref={(ref): void => {
+                contentPaneRef.current = ref;
+              }}
+            >
+              {props.children}
+            </div>
           </div>
         </div>
       </div>
