@@ -32,14 +32,12 @@ if (process.env.USE_SSL) {
 
 app.use(
   cors({
-    origin: [
-      "https://my.sequence.so",
-      "https://api-dev.sequence.so",
-      "https://api.sequence.so",
-    ],
+    origin: true,
     credentials: true,
   })
 );
+
+app.options("*", cors());
 
 app.use(cookieParser(process.env.JWT_SECRET_KEY));
 app.use(express.json());
