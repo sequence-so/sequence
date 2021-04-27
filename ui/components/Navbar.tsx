@@ -113,14 +113,14 @@ export default function ProminentAppBar() {
     <div className={classes.root}>
       <AppBar position="static" className={classes.appbar}>
         <Toolbar className={classes.toolbar}>
-          <IconButton
+          {/* <IconButton
             edge="start"
             className={classes.menuButton}
             color="inherit"
             aria-label="open drawer"
           >
             <MenuIcon />
-          </IconButton>
+          </IconButton> */}
           <div className={classes.grow} />
 
           <IconButton aria-label="search" color="inherit">

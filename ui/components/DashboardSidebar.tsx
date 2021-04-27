@@ -12,11 +12,36 @@ const iconStyle: React.CSSProperties = {
   width: 15,
 };
 
+export interface SidebarItemProp {
+  section: string;
+  icon: JSX.Element | null;
+  route: string;
+  style?: React.CSSProperties;
+}
+
 const ITEMS = [
   {
     section: "My Alerts",
     icon: <FontAwesomeIcon icon={faBell} style={iconStyle} />,
-    route: "/",
+    route: "/alerts",
+  },
+  {
+    section: "History",
+    icon: null,
+    route: "/alerts/history",
+    style: {
+      paddingLeft: 44,
+      fontSize: 14,
+    },
+  },
+  {
+    section: "Create an Alert",
+    icon: null,
+    route: "/alerts/create",
+    style: {
+      paddingLeft: 44,
+      fontSize: 14,
+    },
   },
   {
     section: "User Explorer",

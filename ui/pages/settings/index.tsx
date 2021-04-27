@@ -85,7 +85,7 @@ const SettingsPage = () => {
   };
 
   return (
-    <SettingsLayout index={0}>
+    <SettingsLayout index={5}>
       <>
         <TitleBar
           renderCreateAlert={false}

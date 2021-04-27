@@ -22,15 +22,8 @@ const SettingsLayout = (props: Props) => {
     if (!router.isReady) {
       return;
     }
-    if (router.pathname.indexOf("explorer") > -1) {
-      setIndex(1);
-      return;
-    }
-    if (router.pathname.indexOf("integrations") > -1) {
-      setIndex(2);
-    }
     if (router.pathname.indexOf("settings") > -1) {
-      setIndex(3);
+      setIndex(5);
     }
   }, [router.isReady]);
   return (

@@ -22,7 +22,7 @@ const IntegrationsPage = () => {
   const content = <IntegrationsContent />;
 
   return (
-    <OnboardingLayout index={1}>
+    <OnboardingLayout index={4}>
       <>
         <h1>Integrations</h1>
         <p>Click to setup your first integration.</p>

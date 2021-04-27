@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import React from "react";
 import styles from "../styles/Home.module.css";
 
 interface Props {
@@ -6,9 +7,10 @@ interface Props {
   name: string;
   icon: JSX.Element;
   onClick: () => void;
+  style?: React.CSSProperties;
 }
 
-const SidebarItem = ({ active, name, icon, onClick }: Props) => {
+const SidebarItem = ({ active, name, icon, onClick, style }: Props) => {
   return (
     <div
       className={classNames(
@@ -16,6 +18,7 @@ const SidebarItem = ({ active, name, icon, onClick }: Props) => {
         active ? styles.sidebar_link_active : ""
       )}
       onClick={onClick}
+      style={style}
     >
       {active && <div className={styles.sidebar_link_box}></div>}
       <div>{icon}</div>

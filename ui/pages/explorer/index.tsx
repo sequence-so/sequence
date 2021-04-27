@@ -199,7 +199,7 @@ const UserExplorerPage = () => {
   const classes = useStyles();
 
   return (
-    <DashboardLayout index={0}>
+    <DashboardLayout index={3}>
       <>
         <TitleBar title="User Explorer" subtitle="View your users."></TitleBar>
         <div

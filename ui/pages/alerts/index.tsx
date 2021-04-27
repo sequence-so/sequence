@@ -4,7 +4,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, withStyles } from "@material-ui/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AlertRow from "../../components/AlertRow";
 import { useRouter } from "next/router";
 
@@ -79,6 +79,17 @@ const Dashboard = () => {
   const [value, setValue] = useState(0);
   const classes = useStyles();
   const router = useRouter();
+
+  useEffect(() => {
+    if (!router.isReady) {
+      return;
+    }
+    if (router.pathname.indexOf("/alerts/history") > -1) {
+      setValue(1);
+    } else {
+      setValue(0);
+    }
+  }, [router.isReady]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);

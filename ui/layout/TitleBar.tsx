@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import BlueButton from "../components/BlueButton";
 import { defaultProp } from "../services/defaultProp";
 import styles from "../styles/Home.module.css";
@@ -10,6 +11,8 @@ interface Props {
 
 const TitleBar = (props: Props) => {
   const renderCreateAlert = defaultProp(props.renderCreateAlert, true);
+  const router = useRouter();
+
   return (
     <div className={styles.title_bar_container}>
       <div className={styles.title_text}>
@@ -20,6 +23,9 @@ const TitleBar = (props: Props) => {
         <BlueButton
           className={styles.title_action_button}
           text="+ Create Alert"
+          onClick={(): void => {
+            router.push("/alerts/create");
+          }}
         />
       )}
       <div className={styles.title_bar_line}></div>

@@ -189,7 +189,7 @@
 
 .with_sidebar {
   overflow: hidden;
-  --s1: 1px;
+  --s1: 0px;
   --sidebar-width: 300px;
 }
 
@@ -268,9 +268,9 @@
 .sidebar_link_box {
   content: ' ';
   position: absolute;
-  background: #163F56;
-  border: 2px solid #163F56;
-  width: 8px;
+  background: #1c4f6d;
+  border: 2px solid #1c4f6d;
+  width: 6px;
   left: 0px;
   height: 100%;
   top: 0px;
@@ -280,6 +280,37 @@
 .sidebar_link_active:hover {
   background-color: #3974B9;
 }
+
+/* Collapse */
+.sidebar_collapse {
+  display: flex;
+  align-self: flex-start;
+  padding: 12px 8px;
+  width: 100%;
+  padding-left: 28px;
+  font-size: 1rem;
+  color: #505256;
+  cursor: pointer;
+}
+
+.sidebar_collapse:hover {
+  background: #E4E4E7;
+}
+
+.sidebar_collapse > span {
+  margin-left: 8px;
+}
+
+.sidebar_collapse_active {
+  position: relative;
+  align-self: flex-start;
+  padding-left: 28px;
+  background-color: #3974B9;
+  width: 100%;
+  color: white;
+  font-weight: 600;
+}
+
 
 .container {
   display: flex;
@@ -711,7 +742,7 @@
 
 .title_action_button  {
   align-self: flex-start;
-  font-size: 20px;
+  font-size: 16px;
   margin-right: 0px;
 }
 

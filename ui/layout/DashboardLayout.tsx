@@ -23,14 +23,36 @@ const DashboardLayout = (props: Props) => {
       return;
     }
     if (router.pathname.indexOf("explorer") > -1) {
-      setIndex(1);
+      setIndex(3);
       return;
     }
     if (router.pathname.indexOf("integrations") > -1) {
-      setIndex(2);
+      setIndex(4);
+      return;
     }
     if (router.pathname.indexOf("settings") > -1) {
-      setIndex(3);
+      setIndex(5);
+      return;
+    }
+    if (router.pathname.indexOf("alerts/history") > -1) {
+      setIndex(1);
+      return;
+    }
+    if (router.pathname.indexOf("alerts/create") > -1) {
+      setIndex(2);
+      return;
+    }
+    if (router.pathname.indexOf("alerts/message") > -1) {
+      setIndex(2);
+      return;
+    }
+    if (router.pathname.indexOf("alerts/success") > -1) {
+      setIndex(2);
+      return;
+    }
+    if (router.pathname.indexOf("alerts") > -1) {
+      setIndex(0);
+      return;
     }
   }, [router.isReady]);
   return (
