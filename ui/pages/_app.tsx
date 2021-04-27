@@ -20,6 +20,15 @@ function MyApp({ Component, pageProps }) {
     install();
   }, []);
 
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_USE_SSL) {
+      var httpTokens = /^http:\/\/(.*)$/.exec(window.location.href);
+      if (httpTokens) {
+        window.location.replace("https://" + httpTokens[1]);
+      }
+    }
+  }, []);
+
   return (
     <>
       <Head>
