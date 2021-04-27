@@ -118,7 +118,7 @@ const resolvers = {
         },
       });
       const cryptr = new Cryptr(process.env.ENCRYPTION_KEY);
-      databases.map((database) => {
+      databases.map((database: any) => {
         database.hostname = cryptr.decrypt(database.hostname);
       });
       return databases;
