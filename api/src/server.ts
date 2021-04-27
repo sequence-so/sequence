@@ -23,7 +23,11 @@ if (process.env.USE_SSL) {
 
 app.use(
   cors({
-    origin: true,
+    origin: [
+      "https://my.sequence.so",
+      "https://dev.sequence.so",
+      "http://localhost:8000",
+    ],
     credentials: true,
   })
 );
