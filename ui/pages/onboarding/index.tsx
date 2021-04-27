@@ -9,9 +9,9 @@ const OnboardingPage = () => {
   return (
     <OnboardingLayout index={0}>
       <>
-        <h1>Welcome to Hoco!</h1>
+        <h1>Welcome to Sequence!</h1>
         <p>
-          Hoco alerts you of important user behavior so you can convert your
+          Sequence alerts you of important user behavior so you can convert your
           free trials more effectively.
         </p>
         <p>Setup is simple:</p>

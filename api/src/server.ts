@@ -40,10 +40,10 @@ app.use(
   })
 );
 
-app.get("/", (req, res) => res.send("Hello World!"));
+app.get("/", (req, res) => res.json({ success: true }));
 
 app.listen(process.env.PORT, () =>
-  console.log("Example app listening on port 3000!")
+  console.log(`Application listening on port ${process.env.PORT}!`)
 );
 
 import IntercomService from "./services/intercom";
