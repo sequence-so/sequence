@@ -13,5 +13,12 @@ module.exports = withPlugins(
   ],
   {
     poweredByHeader: false,
+    webpack: (config, options) => {
+      config.optimization = {
+        minimize: false,
+      };
+
+      return config;
+    },
   }
 );
