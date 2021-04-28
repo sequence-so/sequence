@@ -97,6 +97,7 @@ const SQLEditor = (props: Props) => {
             display: "inline-block",
             marginLeft: 10,
             marginRight: 10,
+            marginBottom: 10,
           }),
         }}
       ></Select>

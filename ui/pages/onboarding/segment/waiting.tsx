@@ -3,7 +3,10 @@ import { useRouter } from "next/router";
 import classnames from "classnames";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronLeft,
+  faExclamationTriangle,
+} from "@fortawesome/free-solid-svg-icons";
 import styles from "../../../styles/Home.module.css";
 import { createGlobalState } from "react-hooks-global-state";
 import DownArrow from "../../../public/down_arrow.svg";
@@ -57,64 +60,60 @@ const SegmentWaitingPage = () => {
     fetchPolicy: "no-cache",
   });
 
-  console.log(dataSegment);
-
-  const RenderUser = data && (
-    <div className={styles.profile}>
-      <img
-        className={styles.profile_image}
-        width={30}
-        height={30}
-        src={data.getUser.photo}
-      />
-      <p>Hi, {data.getUser.firstName}</p>
-      <img className={styles.profile_arrow} src={DownArrow} />
-    </div>
-  );
   return (
     <OnboardingLayout index={1}>
-      <div
-        className={classnames(
-          styles.container_content,
-          styles.segment_container_wrapper
-        )}
-      >
-        <Link href="/onboarding/segment">
-          <p className={classnames(styles.go_back, styles.bold_text)}>
-            <FontAwesomeIcon icon={faChevronLeft} width={10} />
-            <span>Go back</span>
-          </p>
-        </Link>
-        <h1>
-          {!dataSegment?.getSegmentWebhook?.receivedDataAt
-            ? "Waiting for Segment Data..."
-            : "Got Segment Data!"}{" "}
-        </h1>
-        {!dataSegment?.getSegmentWebhook?.receivedDataAt ? (
-          <p>
-            Waiting for data to flow from Segment...
-            <br />
-            <br /> Try triggering an event in your app now.
-            <br />
-            Make sure the webhook is turned on.
-          </p>
-        ) : (
-          <p>
-            Received an event from Segment. Your webhook is configured properly.
-          </p>
-        )}
-
+      <>
         <div
-          className={styles.segment_container}
-          style={{
-            minWidth: 250,
-            minHeight: 130,
-            display: "flex",
-            alignItems: "center",
-          }}
+          className={classnames(
+            styles.container_content,
+            styles.segment_container_wrapper
+          )}
+          style={{ width: "100%" }}
         >
-          <h3>Webhook Settings</h3>
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <Link href="/onboarding/segment">
+            <p className={classnames(styles.go_back, styles.bold_text)}>
+              <FontAwesomeIcon icon={faChevronLeft} width={10} />
+              <span>Go back</span>
+            </p>
+          </Link>
+          <h1>
+            {!dataSegment?.getSegmentWebhook?.receivedDataAt
+              ? "Waiting for Segment Data..."
+              : "Got Segment Data!"}{" "}
+          </h1>
+          {!dataSegment?.getSegmentWebhook?.receivedDataAt ? (
+            <>
+              {/* <p>Waiting for data to flow from Segment...</p> */}
+              <div className="exclaim-well">
+                <div className="exclaim-well-left">
+                  <FontAwesomeIcon
+                    icon={faExclamationTriangle}
+                    style={{ color: "#D1B72E" }}
+                  ></FontAwesomeIcon>
+                </div>
+                <div className="exclaim-well-text">
+                  <p>Try triggering an event in your app now.</p>
+                  <p>Make sure the webhook is turned on.</p>
+                </div>
+              </div>
+            </>
+          ) : (
+            <p>
+              Received an event from Segment. Your webhook is configured
+              properly.
+            </p>
+          )}
+
+          <hr />
+
+          <h3>Webhook Status</h3>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginBottom: "2rem",
+            }}
+          >
             <div
               className={classNames(
                 !dataSegment?.getSegmentWebhook?.receivedDataAt
@@ -131,16 +130,46 @@ const SegmentWaitingPage = () => {
                 : "Waiting on data..."}
             </span>
           </div>
-        </div>
 
-        <BlueButton
-          text="Done"
-          onClick={(): void => {
-            router.push("/onboarding/integrations");
-          }}
-          disabled={!dataSegment?.getSegmentWebhook?.receivedDataAt}
-        />
-      </div>
+          <BlueButton
+            text="Done"
+            onClick={(): void => {
+              router.push("/onboarding/integrations");
+            }}
+            disabled={!dataSegment?.getSegmentWebhook?.receivedDataAt}
+          />
+        </div>
+        <style jsx>{`
+          .exclaim-well {
+            border: 2px solid #dfcc6b;
+            background: #f5edc3;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            border-radius: 8px;
+          }
+
+          .exclaim-well-left {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 16px;
+          }
+
+          .exclaim-well > .exclaim-well-text {
+            display: flex;
+            flex-direction: column;
+            padding: 8px 16px;
+            padding-left: 4px;
+          }
+
+          .exclaim-well > .exclaim-well-text > p {
+            margin-block-start: 4px;
+            margin-block-end: 4px;
+          }
+        `}</style>
+      </>
     </OnboardingLayout>
   );
 };

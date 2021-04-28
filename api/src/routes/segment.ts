@@ -7,13 +7,23 @@ class Segment {
     app.post("/event/segment", async (req, res, next) => {
       console.log(req.body);
       const authorization = req.headers.authorization;
+      const passwordString = authorization.split("Basic ")[1];
+
+      const parsedString = Buffer.from(passwordString, "base64").toString(
+        "utf8"
+      );
+      const finalToken = parsedString.substr(0, parsedString.length - 1);
+
       const webhook = await SegmentWebook.findOne({
         where: {
-          token: authorization,
+          token: finalToken,
         },
       });
       if (!webhook) {
-        return next(new Error("No webhook found for this token"));
+        res
+          .status(401)
+          .json({ success: false, error: "No webhook found for this token" });
+        return;
       }
 
       webhook.executions += 1;

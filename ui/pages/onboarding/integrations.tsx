@@ -22,25 +22,37 @@ const IntegrationsPage = () => {
   const content = <IntegrationsContent />;
 
   return (
-    <OnboardingLayout index={1}>
-      <>
-        <h1>Integrations</h1>
-        <p>Click to setup your first integration.</p>
-        {content}
-        <p className={styles.not_ready_text}>
-          Not ready?{" "}
-          <Link href="/onboarding/done">
-            <span className={styles.bold_text}>Click here to Skip</span>
-          </Link>
-        </p>
-        <BlueButton
-          text="Next"
-          onClick={(): void => {
-            router.push("/onboarding/alert");
-          }}
-        />
-      </>
-    </OnboardingLayout>
+    <>
+      <OnboardingLayout index={1}>
+        <div className={"content"}>
+          <h1>Integrations</h1>
+          <p>Click to setup your first integration.</p>
+          {content}
+          <p className={styles.not_ready_text}>
+            Not ready?{" "}
+            <Link href="/onboarding/done">
+              <span className={styles.bold_text}>Click here to Skip</span>
+            </Link>
+          </p>
+          <BlueButton
+            text="Next"
+            onClick={(): void => {
+              router.push("/onboarding/alert");
+            }}
+          />
+        </div>
+      </OnboardingLayout>
+      <style jsx>{`
+        .content {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 100%;
+          height: 100%;
+          padding: 1rem;
+        }
+      `}</style>
+    </>
   );
 };
 

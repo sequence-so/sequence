@@ -1,0 +1,29 @@
+<svg width="1112" height="554" viewBox="0 0 1112 554" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 0V571H1134.5V227.5C1040.5 74 282.344 11.8823 0 0Z" fill="url(#pattern0)" fill-opacity="0.5"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 0V571H1134.5V227.5C1040.5 74 282.344 11.8823 0 0Z" fill="url(#paint0_linear)"/>
+<rect x="466" y="568.746" width="763.492" height="75.1853" transform="rotate(-30 466 568.746)" fill="#73A9FB"/>
+<g filter="url(#filter0_d)">
+<rect x="533.335" y="701.888" width="763.492" height="75.1853" transform="rotate(-30 533.335 701.888)" fill="#D6E5FD"/>
+</g>
+<rect x="495.742" y="637.443" width="763.492" height="75.1853" transform="rotate(-30 495.742 637.443)" fill="#B3CDF3"/>
+<defs>
+<pattern id="pattern0" patternContentUnits="objectBoundingBox" width="0.0449537" height="0.089317">
+<use xlink:href="#image0" transform="scale(0.000374614 0.000744308)"/>
+</pattern>
+<filter id="filter0_d" x="510.335" y="301.142" width="744.796" height="492.859" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+<feMorphology radius="1" operator="dilate" in="SourceAlpha" result="effect1_dropShadow"/>
+<feOffset dy="4"/>
+<feGaussianBlur stdDeviation="11"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.18 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+</filter>
+<linearGradient id="paint0_linear" x1="60" y1="523.5" x2="589.158" y2="291.337" gradientUnits="userSpaceOnUse">
+<stop offset="0.139123" stop-color="white"/>
+<stop offset="0.643789" stop-color="white" stop-opacity="0"/>
+</linearGradient>
+<image id="image0" width="120" height="120" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADHSURBVHgB7d0xDoMwEABByGf9Jr82aSM3FEgENjMdpbVClq+w9+3AGOP9/T3n3Lew2npfG2kCxwkcJ3CcwHECxwkct6/nvrPufm78t/X6g+MEjhM47nD/MIs2i+bGBI4TOE7gOIHjBI4TGAAAAAAAAAAAAAAAAAAAAAAAALic+6IX7ovmUQSOEzhO4DiB4wSOEzjO24UnebuQnxI4TuA4s+iFWTSPInCcwHECxwkcJ3CcwAAAAAAAAAAAAAAAAAAAAAAAAMDlPrZxMEti1CzqAAAAAElFTkSuQmCC"/>
+</defs>
+</svg>

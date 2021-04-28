@@ -72,7 +72,9 @@ const CreateAlertContent = (props: Props) => {
       {renderHeader && (
         <>
           <h1>Create an Alert</h1>
-          <p>Choose a source to trigger an alert from.</p>
+          <p style={{ marginBlockStart: 0 }}>
+            Choose a source to trigger an alert from.
+          </p>
         </>
       )}
 
@@ -147,8 +149,9 @@ const CreateAlertContent = (props: Props) => {
           </div>
         </div>
       </div>
+      <hr />
       {state === "activity" ? (
-        <>
+        <div className="activity-content">
           <p className={styles.subtitle}>CHOOSE AN EVENT</p>
           <p>
             When
@@ -188,7 +191,13 @@ const CreateAlertContent = (props: Props) => {
             ></Select>
             is performed, alert me if
           </p>
-          <div style={{ display: "inline-flex", alignItems: "center" }}>
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              marginLeft: "2rem",
+            }}
+          >
             <RedCross
               visible={true}
               onClick={(): void => {}}
@@ -224,10 +233,11 @@ const CreateAlertContent = (props: Props) => {
             ></Select>
             <input value="figma.com"></input>
           </div>
-          <div style={{ display: "inline-flex" }}>
-            <Plus visible={true} onClick={(): void => {}} /> ADD CONDITION
+          <div className="add-condition-wrapper" onClick={(): void => {}}>
+            <Plus visible={true} onClick={(): void => {}} />
+            <span className="add-condition">ADD CONDITION</span>
           </div>
-        </>
+        </div>
       ) : state === "sql" ? (
         <>
           <p className={styles.subtitle}>CONFIGURE A SCRIPT</p>
@@ -334,6 +344,48 @@ const CreateAlertContent = (props: Props) => {
             state === "sql" ? (!selectedAggKey ? "none" : "flex") : "initial",
         }}
       />
+      <style jsx>{`
+        .activity-content {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+        }
+
+        .activity-content > p {
+          margin-block-start: 1rem;
+          margin-block-end: 0px;
+        }
+
+        input {
+          padding: 2px 8px;
+          min-height: 38px;
+          font-family: "IBM Plex Sans";
+          font-size: 1rem;
+        }
+
+        .add-condition {
+          margin-left: 8px;
+        }
+        .add-condition-wrapper {
+          cursor: pointer;
+          display: inline-flex;
+          margin-left: 2rem;
+          margin-top: 1rem;
+        }
+        .add-condition-wrapper:hover {
+          background: #888888;
+          max-width: 180px;
+          padding: 6px 8px;
+          margin-top: 10px;
+          margin-left: calc(2rem - 8px);
+          margin-bottom: -6px;
+          border-radius: 4px;
+        }
+        .add-condition:hover {
+          cursor: pointer;
+          color: white;
+        }
+      `}</style>
     </>
   );
 };
