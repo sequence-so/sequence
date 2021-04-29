@@ -1,7 +1,8 @@
 import React from "react";
+import classNames from "classnames";
+import useErrorBoundary from "use-error-boundary";
 import styles from "../styles/Home.module.css";
 import OnboardingSidebar from "../components/OnboardingSidebar";
-import classNames from "classnames";
 import Navbar from "../components/Navbar";
 
 interface Props {
@@ -10,6 +11,8 @@ interface Props {
 }
 
 const OnboardingLayout = (props: Props) => {
+  const { ErrorBoundary, didCatch, error } = useErrorBoundary();
+
   return (
     <>
       <div className={classNames(styles.page)}>
@@ -25,7 +28,14 @@ const OnboardingLayout = (props: Props) => {
               <div className={"onboarding-content"}>
                 <div className="onboarding-box">
                   <div className="onboarding-inner-content">
-                    {props.children}
+                    {didCatch ? (
+                      <p>An error has been catched: {error.message}</p>
+                    ) : (
+                      <ErrorBoundary
+                        render={() => props.children}
+                        renderError={(error) => JSON.stringify(error)}
+                      />
+                    )}
                   </div>
                 </div>
               </div>

@@ -19,6 +19,7 @@ const IntegrationsContent = () => {
   const { loading, error, data: integrations } = useQuery(GET_INTEGRATIONS, {
     fetchPolicy: "no-cache",
   });
+  console.log({ loading, integrations, error });
 
   return loading ? (
     <CircularProgress />

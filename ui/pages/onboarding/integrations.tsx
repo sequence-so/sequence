@@ -5,6 +5,7 @@ import styles from "../../styles/Home.module.css";
 import OnboardingLayout from "../../layout/OnboardingLayout";
 import { useRouter } from "next/router";
 import IntegrationsContent from "../../components/IntegrationsContent";
+import useErrorBoundary from "use-error-boundary";
 
 const GET_INTEGRATIONS = gql`
   {
@@ -18,8 +19,12 @@ const GET_INTEGRATIONS = gql`
 
 const IntegrationsPage = () => {
   const router = useRouter();
-
-  const content = <IntegrationsContent />;
+  const { ErrorBoundary, didCatch, error } = useErrorBoundary();
+  const content = (
+    <ErrorBoundary>
+      <IntegrationsContent />
+    </ErrorBoundary>
+  );
 
   return (
     <>
@@ -27,7 +32,8 @@ const IntegrationsPage = () => {
         <div className={"content"}>
           <h1>Integrations</h1>
           <p>Click to setup your first integration.</p>
-          {content}
+          {didCatch ? error.message : content}
+
           <p className={styles.not_ready_text}>
             Not ready?{" "}
             <Link href="/onboarding/done">
