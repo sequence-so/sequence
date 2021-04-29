@@ -108,6 +108,7 @@ const OnboardingLayout = (props: Props) => {
           width: 100%;
           height: 100%;
           overflow: hidden;
+          opacity: 0.3;
         }
         .my-image-2 {
           position: absolute;

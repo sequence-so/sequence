@@ -65,7 +65,7 @@ const IntegrationsContent = () => {
               <img src={"/mongodb.svg"} width={35}></img>
             </div>
           )}
-          {integrations && !integrations.getIntegrations.mongo && (
+          {integrations && !integrations.getIntegrations.mongodb && (
             <Link href="/onboarding/integrations">
               <div
                 className={classNames(
@@ -94,13 +94,13 @@ const IntegrationsContent = () => {
           )}
           {integrations && !integrations.getIntegrations.segment && (
             <Link href="/onboarding/segment">
-              <img src={"/segment_icon.svg"} width={35}></img>
               <div
                 className={classNames(
                   styles.integration_box,
                   styles.integration
                 )}
               >
+                <img src={"/segment_icon.svg"} width={35}></img>
                 <span>Segment</span>
               </div>
             </Link>

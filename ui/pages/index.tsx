@@ -12,13 +12,7 @@ export default function Login() {
 
   useEffect(() => {
     const href = window.location.href;
-    if (href.includes("localhost")) {
-      setDomain("http://localhost:3000");
-    } else if (href.includes("dev.sequence")) {
-      setDomain("https://api-dev.sequence.so");
-    } else {
-      setDomain("https://api.sequence.so");
-    }
+    setDomain(process.env.NEXT_PUBLIC_API_URL);
   }, []);
 
   useEffect(() => {

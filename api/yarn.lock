@@ -1790,6 +1790,11 @@ dot-prop@^4.2.1:
   dependencies:
     is-obj "^1.0.0"
 
+dotenv@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-4.0.0.tgz#864ef1379aced55ce6f95debecdce179f7a0cd1d"
+  integrity sha1-hk7xN5rO1Vzm+V3r7NzhefegzR0=
+
 dotenv@^8.2.0:
   version "8.2.0"
   resolved "https://registry.npmjs.org/dotenv/-/dotenv-8.2.0.tgz"
@@ -1849,6 +1854,13 @@ encodeurl@~1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/encodeurl/-/encodeurl-1.0.2.tgz#ad3ff4c86ec2d029322f5a02c3a9a606c95b3f59"
   integrity sha1-rT/0yG7C0CkyL1oCw6mmBslbP1k=
+
+envkey@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/envkey/-/envkey-1.3.0.tgz#6ed167b664609bdba727c532fbe0cdda3b6a3682"
+  integrity sha512-23CTU93uK2K/h3lJf1nS82/AsEXDbahG8OSKP6EVrM6ja0D/WmNiSs6XulMjdYIFKAJWKiY/iLTtqDr5gDUvvw==
+  dependencies:
+    dotenv "^4.0.0"
 
 error-ex@^1.3.1:
   version "1.3.2"
