@@ -12,7 +12,7 @@
     "emitDecoratorMetadata": true,
     "lib": ["es2018"],
     "types": ["node", "mocha"],
-    "allowJs": false,
+    "allowJs": true,
     "checkJs": false,
     "resolveJsonModule": true,
     "baseUrl": ".",

@@ -3,7 +3,7 @@ export default {
     secret: process.env.JWT_SECRET_KEY,
     options: {
       audience: process.env.JWT_AUDIENCE, //"https://my.sequence.so",
-      expiresIn: "72h", // 1d
+      expiresIn: "72h",
       issuer: "sequence.so",
     },
     cookie: {

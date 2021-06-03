@@ -13,6 +13,7 @@ const dialectOptions = useSSL
 
 module.exports = {
   development: {
+    url: process.env.DATABASE_URL,
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
@@ -22,6 +23,7 @@ module.exports = {
     migrationStorageTableName: "sequelize_meta",
   },
   test: {
+    url: process.env.DATABASE_URL,
     username: process.env.DB_TEST_USERNAME,
     password: process.env.DB_TEST_PASSWORD,
     database: process.env.DB_TEST_DATABASE,
@@ -31,6 +33,7 @@ module.exports = {
     migrationStorageTableName: "sequelize_meta",
   },
   production: {
+    url: process.env.DATABASE_URL,
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,

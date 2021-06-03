@@ -46,6 +46,7 @@
     "slate-history": "^0.62.0",
     "slate-hyperscript": "^0.62.0",
     "slate-react": "^0.63.0",
+    "typescript": "^4.3.2",
     "use-error-boundary": "^2.0.4"
   },
   "devDependencies": {

@@ -12,8 +12,7 @@ const options: SequelizeOptions = {
         },
       }
     : {},
-  // logging: process.env.NODE_ENV === "local" ? true : false,
-  logging: true,
+  logging: process.env.DB_LOGGING === "true" ? console.log : false,
 };
 
 const config =
@@ -21,6 +20,11 @@ const config =
   SequelizeConfig.development;
 
 export const dbConfig = config;
-const sequelize = new Sequelize({ ...(config as any), ...options });
+let sequelize: Sequelize;
+if (dbConfig.url) {
+  sequelize = new Sequelize(dbConfig.url, { ...(config as any), ...options });
+} else {
+  sequelize = new Sequelize({ ...(config as any), ...options });
+}
 
 export default sequelize;
