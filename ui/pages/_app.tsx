@@ -6,7 +6,7 @@ import Head from "next/head";
 import { install } from "../services/analytics";
 import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "../layout/theme";
-import { IntercomProvider, useIntercom } from "react-use-intercom";
+import { IntercomProvider } from "react-use-intercom";
 
 const INTERCOM_APP_ID = "idhc7omi";
 
@@ -66,7 +66,7 @@ function MyApp({ Component, pageProps }) {
           rel="stylesheet"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@400;700&display=swap"
           rel="stylesheet"
         />
         <link

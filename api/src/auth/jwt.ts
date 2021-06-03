@@ -1,4 +1,5 @@
 import passport from "passport";
+// @ts-ignore
 import JwtCookieComboStrategy from "passport-jwt-cookiecombo";
 import { Strategy as LocalStrategy } from "passport-local";
 import User from "../models/user";

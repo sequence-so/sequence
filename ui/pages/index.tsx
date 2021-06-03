@@ -20,7 +20,7 @@ export default function Login() {
       return;
     }
     if (localStorage.token) {
-      router.push("/dashboard");
+      router.push("/campaigns");
     }
   }, [router.isReady]);
 

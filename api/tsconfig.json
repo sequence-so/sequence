@@ -1,28 +1,46 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "esModuleInterop": true,
-        "target": "es6",
-        "noImplicitAny": true,
-        "moduleResolution": "node",
-        "sourceMap": true,
-        "outDir": "dist",
-        "baseUrl": ".",
-        "skipLibCheck": true,
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
-        "lib": [
-            "es2015"
-        ]
-    },
-    "include": [
-        "src/**/*",
-        "modules.d.ts"
-    ],
-    "exclude": [
-        "node_modules",
-        "./node_modules",
-        "./node_modules/*",
-        "./node_modules/@types/node/index.d.ts",
-      ]
+  "compilerOptions": {
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "target": "es6",
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "outDir": "dist",
+    "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "lib": ["es2018"],
+    "types": ["node", "mocha"],
+    "allowJs": false,
+    "checkJs": false,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "src/*": ["src/*"],
+      "common/*": ["../common/*"]
+    }
+  },
+  "files": ["modules.d.ts"],
+  "include": [
+    "modules.d.ts",
+    "src/**/*",
+    "scripts/**/*",
+    "tests/",
+    "./node_modules/@types"
+  ],
+  "exclude": [
+    "node_modules",
+    "./node_modules",
+    "./node_modules/*",
+    "./node_modules/@types/node/index.d.ts"
+  ],
+  "references": [
+    {
+      "path": "../common"
+    }
+  ],
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  }
 }

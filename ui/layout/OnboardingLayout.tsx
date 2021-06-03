@@ -3,7 +3,12 @@ import classNames from "classnames";
 import useErrorBoundary from "use-error-boundary";
 import styles from "../styles/Home.module.css";
 import OnboardingSidebar from "../components/OnboardingSidebar";
-import Navbar from "../components/Navbar";
+import dynamic from "next/dynamic";
+import OnboardingContent from "../components/OnboardingContent";
+
+const NavbarNoSSR = dynamic(() => import("../components/Navbar"), {
+  ssr: false,
+});
 
 interface Props {
   children: React.ReactElement;
@@ -11,43 +16,27 @@ interface Props {
 }
 
 const OnboardingLayout = (props: Props) => {
-  const { ErrorBoundary, didCatch, error } = useErrorBoundary();
-
   return (
     <>
       <div className={classNames(styles.page)}>
         <div className={styles.with_dashboard_sidebar}>
           <div style={{ display: "flex" }}>
             <OnboardingSidebar index={props.index} />
-            <div
-              className={classNames(styles.container, "container-background")}
-            >
-              <img className="my-image" src="/crosses_backdrop.svg"></img>
-              {/* <img className="my-image-2" src="/top_background_image.svg"></img> */}
-              <Navbar />
-              <div className={"onboarding-content"}>
-                <div className="onboarding-box">
-                  <div className="onboarding-inner-content">
-                    {didCatch ? (
-                      <p>An error has been catched: {error.message}</p>
-                    ) : (
-                      <ErrorBoundary
-                        render={() => props.children}
-                        renderError={(error) => JSON.stringify(error)}
-                      />
-                    )}
-                  </div>
-                </div>
-              </div>
+            <div className={classNames(styles.container)}>
+              <img
+                className={styles["onboarding-backdrop"]}
+                src="/crosses_backdrop.svg"
+              ></img>
+              <NavbarNoSSR />
+              <OnboardingContent index={props.index}>
+                {props.children}
+              </OnboardingContent>
             </div>
           </div>
         </div>
       </div>
 
       <style jsx>{`
-        .container-background {
-        }
-
         .onboarding-content {
           position: relative;
           display: flex;
@@ -57,73 +46,14 @@ const OnboardingLayout = (props: Props) => {
           padding-bottom: 3rem;
           padding-top: 3rem;
         }
-
-         {
-          /* .container-background:before {
-          position: absolute;
-          display: block;
-          background: url("/top_background_image.svg") no-repeat center center
-            fixed;
-          -webkit-background-size: cover;
-          -moz-background-size: cover;
-          -o-background-size: cover;
-          background-size: cover;
-
-          content: "";
-          z-index: -1;
-          min-height: 80%;
-          min-width: 100%;
-          width: 100%;
-          height: auto;
-          top: 0px;
-          left: 0px;
-        } */
-        }
-         {
-          /* .container-background:after {
-          position: absolute;
-          display: block;
-          background: url("/crosses_backdrop.svg") no-repeat center center fixed;
-          -webkit-background-size: cover;
-          -moz-background-size: cover;
-          -o-background-size: cover;
-          background-size: cover;
-
-          content: "";
-          z-index: -1;
-          min-height: 80%;
-          min-width: 800px;
-          width: 100%;
-          height: auto;
-          bottom: 0px;
-        } */
-        }
-        .my-image {
-          left: 0;
-          right: 0;
-          top: 0;
-          bottom: 0;
-          position: absolute;
-          z-index: -4;
-          width: 100%;
-          height: 100%;
-          overflow: hidden;
-          opacity: 0.3;
-        }
-        .my-image-2 {
-          position: absolute;
-          right: 0px;
-          top: 0px;
-          z-index: -4;
-          width: 250%;
-          height: 100%;
-          overflow: hidden;
+        .onboarding-backdrop {
         }
         .onboarding-box {
           display: flex;
           align-items: center;
           justify-content: center;
           min-width: 50vw;
+          max-width: 55vw;
           min-height: 70vh;
           z-index: 2;
           background: white;

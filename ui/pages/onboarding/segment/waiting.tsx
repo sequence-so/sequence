@@ -73,7 +73,7 @@ const SegmentWaitingPage = () => {
           <Link href="/onboarding/segment">
             <p className={classnames(styles.go_back, styles.bold_text)}>
               <FontAwesomeIcon icon={faChevronLeft} width={10} />
-              <span>Go back</span>
+              <span>Back</span>
             </p>
           </Link>
           <h1>

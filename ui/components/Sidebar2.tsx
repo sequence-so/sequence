@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import SidebarItem from "./SidebarItem";
 import styles from "../styles/Home.module.css";
 import Logo from "../public/main_logo.svg";
@@ -6,8 +6,19 @@ import LogoSquare from "../public/logo_square.svg";
 import classNames from "classnames";
 import { SidebarItemProp } from "./DashboardSidebar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowRight,
+  faArrowLeft,
+  faPlusCircle,
+  faUserFriends,
+  faEnvelope,
+  faPaperPlane,
+} from "@fortawesome/free-solid-svg-icons";
 import { useGlobalState } from "../layout/DashboardLayout";
+import BlueButton from "./BlueButton";
+import { makeStyles, Menu, MenuItem } from "@material-ui/core";
+import Fade from "@material-ui/core/Fade";
+import { useRouter } from "next/router";
 
 interface SidebarProps {
   index: number;
@@ -15,8 +26,121 @@ interface SidebarProps {
   onClick: (index: number) => void;
 }
 
+const iconStyle: React.CSSProperties = {
+  width: 15,
+};
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    fontFamily: "IBM Plex Sans",
+    color: "#4E4F55",
+  },
+  menu: {
+    "& .MuiList-root": {
+      paddingTop: 0,
+      width: 200,
+    },
+    "& .MuiMenuItem-root": {
+      fontFamily: "IBM Plex Sans",
+      color: "#4E4F55",
+    },
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+}));
+
+const NewActionMenu = ({
+  anchorEl,
+  setAnchorEl,
+}: {
+  anchorEl: any;
+  setAnchorEl: any;
+}) => {
+  const classes = useStyles();
+  const router = useRouter();
+  const open = Boolean(anchorEl);
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleSettings = () => {
+    handleClose();
+  };
+
+  const handleRoute = (url: string) => {
+    if (router.pathname === url) {
+      return handleClose();
+    }
+    router.push(url);
+  };
+  const handleSendMesage = () => {
+    handleRoute("/campaigns/create");
+  };
+  const handleCreateEmail = () => {
+    handleRoute("/emails/create");
+  };
+  const handleCreateAudience = () => {
+    handleRoute("/audiences/create");
+  };
+
+  return (
+    <Menu
+      id="fade-menu"
+      anchorEl={anchorEl}
+      keepMounted
+      open={open}
+      onClose={handleClose}
+      TransitionComponent={Fade}
+      className={classes.menu}
+      anchorOrigin={{
+        vertical: "bottom",
+        horizontal: "left",
+      }}
+      getContentAnchorEl={null}
+      transformOrigin={{
+        vertical: 0,
+        horizontal: 0,
+      }}
+    >
+      <MenuItem
+        onClick={handleSendMesage}
+        style={{ paddingTop: 10, paddingBottom: 10 }}
+      >
+        <>
+          <FontAwesomeIcon icon={faPaperPlane} style={iconStyle} />
+          <span style={{ marginLeft: 8 }}>Send Message</span>
+        </>
+      </MenuItem>
+      <MenuItem
+        onClick={handleCreateAudience}
+        style={{ paddingTop: 10, paddingBottom: 10 }}
+      >
+        <>
+          <FontAwesomeIcon icon={faUserFriends} style={iconStyle} />
+          <span style={{ marginLeft: 8 }}>New Audience</span>
+        </>
+      </MenuItem>
+      <MenuItem
+        onClick={handleCreateEmail}
+        style={{ paddingTop: 10, paddingBottom: 10 }}
+      >
+        <>
+          <FontAwesomeIcon icon={faEnvelope} style={iconStyle} />
+          <span style={{ marginLeft: 8 }}>New Email</span>
+        </>
+      </MenuItem>
+    </Menu>
+  );
+};
+
 const Sidebar = (props: SidebarProps) => {
   const [isSidebarOpen, setSidebarOpen] = useGlobalState("isSidebarOpen");
+  const [anchorEl, setAnchorEl] = useState(null);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
   return (
     <div
@@ -41,7 +165,22 @@ const Sidebar = (props: SidebarProps) => {
           marginLeft: 4,
         }}
       />
-      {props.items.map(({ section, icon, style }, idx) => {
+      <BlueButton
+        className={classNames(
+          isSidebarOpen
+            ? styles.sidebar_action_button
+            : styles.sidebar_action_button_closed
+        )}
+        text={
+          <>
+            <FontAwesomeIcon icon={faPlusCircle}></FontAwesomeIcon>
+            {isSidebarOpen ? " New" : ""}
+          </>
+        }
+        onClick={handleClick}
+      ></BlueButton>
+      <NewActionMenu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
+      {props.items.map(({ section, icon, style, renderIcon }, idx) => {
         return (
           <SidebarItem
             key={section}
@@ -51,6 +190,7 @@ const Sidebar = (props: SidebarProps) => {
             onClick={() => {
               props.onClick(idx);
             }}
+            renderIcon={renderIcon}
             style={style}
             isSidebarOpen={isSidebarOpen}
           />

@@ -9,10 +9,50 @@ import { useRouter } from "next/router";
 import { DataGrid, GridCellParams } from "@material-ui/data-grid";
 import homeStyles from "../../styles/Home.module.css";
 import moment from "moment";
+import gql from "graphql-tag";
+import { useQuery } from "@apollo/client";
+
+const GET_EVENTS = gql`
+  query GetEvents($page: Int, $limit: Int) {
+    events(page: $page, limit: $limit) {
+      nodes {
+        id
+        name
+        type
+        source
+        distinctId
+        properties
+        createdAt
+        updatedAt
+      }
+      page
+      rows
+    }
+  }
+`;
+
+export interface EventNode {
+  id: string;
+  name: string;
+  type: string;
+  distinctId: string;
+  properties: Record<string, any>;
+  userId: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface GetEvents {
+  events: {
+    nodes: EventNode[];
+    page: number;
+    rows: number;
+  };
+}
 
 const columns = [
   {
-    field: "event_name",
+    field: "name",
     headerName: "Name",
     width: 200,
     renderCell: (params: GridCellParams) => (
@@ -38,7 +78,7 @@ const columns = [
             fill={"#9FA1A4"}
           />
         </svg>
-        {params.getValue("event_name")}
+        {params.getValue("name")}
       </div>
     ),
   },
@@ -49,10 +89,11 @@ const columns = [
     renderCell: (params: GridCellParams) => (
       <div style={{ display: "inline-flex", alignItems: "center" }}>
         <div className={homeStyles.initials_circle}>
-          {params.getValue("firstName").toString().substring(0, 1)}
-          {params.getValue("lastName").toString().substring(0, 1)}
+          {(params.getValue("properties") as any)?.firstName?.substring(0, 1)}
+          {(params.getValue("properties") as any)?.lastName?.substring(0, 1)}
         </div>
-        {params.getValue("name")}
+        {(params.getValue("properties") as any)?.firstName}{" "}
+        {(params.getValue("properties") as any)?.lastName}
       </div>
     ),
   },
@@ -62,13 +103,14 @@ const columns = [
     type: "string",
     width: 180,
     valueGetter: (params) =>
-      moment(params.getValue("signup_date")).format("MMMM DD, YYYY"),
+      moment(params.getValue("createdAt")).format("MMMM DD, YYYY"),
   },
   {
     field: "source",
     headerName: "Source",
     description: "This column has a value getter and is not sortable.",
     width: 150,
+    valueGetter: (params) => "node-sdk",
   },
 ];
 
@@ -199,104 +241,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const rows = [
-  {
-    id: 1,
-    event_name: "User Signup",
-    name: "Jon Snow",
-    firstName: "Snow",
-    lastName: "Jon",
-    signup_date: "2021-04-26T19:00:58.906Z",
-    is_subscribed: false,
-    source: "Mobile",
-  },
-  {
-    id: 2,
-    event_name: "New Teammate Added",
-    name: "Cersei Lannister",
-    lastName: "Lannister",
-    firstName: "Cersei",
-    signup_date: "2021-04-26T19:00:58.906Z",
-    is_subscribed: true,
-    source: "API",
-  },
-  {
-    id: 3,
-    event_name: "Invoice Paid",
-    name: "Jaime Lannister",
-    lastName: "Lannister",
-    firstName: "Jaime",
-    signup_date: "2021-04-26T19:00:58.906Z",
-    is_subscribed: true,
-    source: "API",
-  },
-  {
-    id: 4,
-    event_name: "User Signup",
-    name: "Arya Stark",
-    lastName: "Stark",
-    firstName: "Arya",
-    signup_date: "2021-04-26T19:00:58.906Z",
-    is_subscribed: true,
-    source: "Mobile",
-  },
-  {
-    id: 5,
-    event_name: "Webhook Processed",
-    name: "Daenerys Targaryen",
-    lastName: "Targaryen",
-    firstName: "Daenerys",
-    signup_date: "2021-04-26T19:00:58.906Z",
-    is_subscribed: true,
-    source: "API",
-  },
-  {
-    id: 6,
-    event_name: "New Teammate Added",
-    name: "Thomas Melisandre",
-    lastName: "Melisandre",
-    firstName: "Thomas",
-    signup_date: "2021-04-26T19:00:58.906Z",
-    is_subscribed: true,
-    source: "Mobile",
-  },
-  {
-    id: 7,
-    event_name: "Onboarding Clicked",
-    name: "Ferrara Clifford",
-    lastName: "Clifford",
-    firstName: "Ferrara",
-    signup_date: "2021-04-26T19:00:58.906Z",
-    is_subscribed: true,
-    source: "Mobile",
-  },
-  {
-    id: 8,
-    event_name: "Integration Added",
-    name: "Rossini Frances",
-    lastName: "Frances",
-    firstName: "Rossini",
-    signup_date: "2021-04-26T19:00:58.906Z",
-    is_subscribed: true,
-    source: "Mobile",
-  },
-  {
-    id: 9,
-    event_name: "Integration Removed",
-    name: "Harvey Roxie",
-    lastName: "Roxie",
-    firstName: "Harvey",
-    signup_date: "2021-04-26T19:00:58.906Z",
-    is_subscribed: false,
-    source: "Mobile",
-  },
-];
-
 const HistoryPage = () => {
   const [value, setValue] = useState(0);
   const classes = useStyles();
   const router = useRouter();
+  const [page, setPage] = useState(0);
+  const [rowCount, setRowCount] = useState(0);
+  const { loading, error, data } = useQuery<GetEvents>(GET_EVENTS, {
+    variables: {
+      page,
+      limit: 10,
+    },
+    onCompleted(data) {
+      setRowCount(data.events.rows);
+    },
+  });
 
+  console.log(data);
   useEffect(() => {
     if (!router.isReady) {
       return;
@@ -316,6 +277,7 @@ const HistoryPage = () => {
       router.push("/alerts/");
     }
   };
+  console.log({ rowCount });
 
   return (
     <DashboardLayout index={1}>
@@ -364,26 +326,36 @@ const HistoryPage = () => {
           ) : (
             <div
               style={{
-                height: "600px",
+                height: "700px",
                 width: "100%",
                 marginTop: 8,
                 paddingBottom: "2rem",
               }}
             >
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                pageSize={10}
-                className={classes.table}
-                components={{
-                  ColumnResizeIcon: () => null,
-                }}
-                componentsProps={{
-                  header: {
-                    className: classes.tableHeader,
-                  },
-                }}
-              />
+              {rowCount > 0 && (
+                <DataGrid
+                  rows={data?.events?.nodes || []}
+                  columns={columns}
+                  pageSize={10}
+                  page={page}
+                  rowCount={rowCount}
+                  className={classes.table}
+                  onPageChange={(params) => {
+                    setPage(params.page);
+                  }}
+                  pagination
+                  paginationMode="server"
+                  loading={loading}
+                  components={{
+                    ColumnResizeIcon: () => null,
+                  }}
+                  componentsProps={{
+                    header: {
+                      className: classes.tableHeader,
+                    },
+                  }}
+                />
+              )}
             </div>
           )}
         </div>

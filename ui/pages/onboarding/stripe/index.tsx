@@ -14,7 +14,7 @@ const IntercomPage = () => {
           <Link href="/onboarding/integrations">
             <p className={classNames(styles.go_back, styles.bold_text)}>
               <FontAwesomeIcon icon={faChevronLeft} width={10} />
-              <span>Go back</span>
+              <span>Back</span>
             </p>
           </Link>
           <h1>Stripe</h1>

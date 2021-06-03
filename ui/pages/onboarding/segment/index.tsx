@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useQuery, gql, useMutation } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import styles from "../../../styles/Home.module.css";
 import classnames from "classnames";
@@ -58,7 +58,7 @@ const SegmentPage = () => {
         <Link href="/onboarding/integrations">
           <p className={classnames(styles.go_back, styles.bold_text)}>
             <FontAwesomeIcon icon={faChevronLeft} width={10} />
-            <span>Go back</span>
+            <span>Back</span>
           </p>
         </Link>
         <h1 className={styles.title_with_back}>Connect Segment</h1>

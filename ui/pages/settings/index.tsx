@@ -1,4 +1,3 @@
-import DashboardLayout from "../../layout/DashboardLayout";
 import TitleBar from "../../layout/TitleBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -88,7 +87,7 @@ const SettingsPage = () => {
     <SettingsLayout index={5}>
       <>
         <TitleBar
-          renderCreateAlert={false}
+          showAction={false}
           title="Settings"
           subtitle="Change your stuff."
         ></TitleBar>

@@ -4,7 +4,6 @@ import {
   from,
   createHttpLink,
   InMemoryCache,
-  gql,
 } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
 
@@ -21,12 +20,18 @@ const httpLink = createHttpLink({
   },
 });
 
-const logout = () => console.log("do logout here");
+const logout = () => {
+  localStorage.clear();
+  window.location.pathname = "/";
+};
 
 const errorLink = onError(({ networkError }) => {
   if (networkError && (networkError as ServerParseError).statusCode) {
     const error = networkError as ServerParseError;
     if (error.statusCode === 401) {
+      logout();
+    }
+    if (error.message.indexOf("Context creation failed: jwt expired") > -1) {
       logout();
     }
   }
@@ -60,21 +65,5 @@ const client = new ApolloClient({
   link: from([authLink, errorLink, httpLink]),
   cache,
 });
-
-// client.writeQuery({
-//   query: gql`
-//     query WriteLocalState {
-//       state {
-//         isLoggedIn
-//       }
-//     }
-//   `,
-//   data: {
-//     state: {
-//       __typename: "State",
-//       isLoggedIn: !!localStorage.token,
-//     },
-//   },
-// });
 
 export default client;

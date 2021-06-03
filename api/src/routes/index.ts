@@ -1,14 +1,15 @@
 import { Application } from "express";
-import Passport from "./passport";
-import Ssl from "./ssl";
-import Segment from "./segment";
+import Passport from "./passport.http";
+import Segment from "./segment.http";
+import SequenceWebhook from "./sequenceWebhook.http";
+import MiddlewareRegistry from "../services/middleware.registry";
 
-class Routes {
+class HttpRoutes {
   constructor(app: Application) {
-    new Passport(app);
-    new Ssl(app);
-    new Segment(app);
+    MiddlewareRegistry.addMiddleware(new Passport(app));
+    MiddlewareRegistry.addMiddleware(new Segment(app));
+    MiddlewareRegistry.addMiddleware(new SequenceWebhook(app));
   }
 }
 
-export default Routes;
+export default HttpRoutes;

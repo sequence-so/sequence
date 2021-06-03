@@ -6,9 +6,11 @@ interface Props {
   active: boolean;
   name: string;
   icon: JSX.Element;
+  renderIcon?: (active: boolean, icon: JSX.Element) => JSX.Element;
   onClick: () => void;
   style?: React.CSSProperties;
   isSidebarOpen: boolean;
+  selectedIconStyle?: React.CSSProperties;
 }
 
 const SidebarItem = ({
@@ -18,6 +20,7 @@ const SidebarItem = ({
   onClick,
   style,
   isSidebarOpen,
+  renderIcon,
 }: Props) => {
   return (
     <div
@@ -29,7 +32,9 @@ const SidebarItem = ({
       style={style}
     >
       {active && <div className={styles.sidebar_link_box}></div>}
-      <div>{icon}</div>
+      <div className={styles.sidebar_icon}>
+        {renderIcon ? renderIcon(active, icon) : icon}
+      </div>
       {isSidebarOpen && <span>{name}</span>}
     </div>
   );

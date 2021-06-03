@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useQuery, gql } from "@apollo/client";
 import styles from "../styles/Home.module.css";
 import DownArrow from "../public/down_arrow.svg";
-import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Fade from "@material-ui/core/Fade";
@@ -145,27 +144,29 @@ export default function ProminentAppBar() {
           <IconButton aria-label="search" color="inherit">
             <NotificationIcon />
           </IconButton>
-          {data && data.getUser ? (
-            <div
-              className={styles.profile}
-              style={{
-                marginTop: 0,
-                marginRight: 0,
-                alignSelf: "center",
-                marginLeft: "auto",
-                border: 0,
-              }}
-              onClick={handleClick}
-            >
+
+          <div
+            className={styles.profile}
+            style={{
+              marginTop: 0,
+              marginRight: 0,
+              alignSelf: "center",
+              marginLeft: "auto",
+              border: 0,
+            }}
+            onClick={handleClick}
+          >
+            {data && data.getUser ? (
               <img
                 className={styles.profile_image}
                 width={30}
                 height={30}
                 src={data.getUser.photo}
               />
-              <img className={styles.profile_arrow} src={DownArrow} />
-            </div>
-          ) : null}
+            ) : null}
+            <img className={styles.profile_arrow} src={DownArrow} />
+          </div>
+
           <Menu
             id="fade-menu"
             anchorEl={anchorEl}

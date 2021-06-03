@@ -1,21 +1,10 @@
 import Link from "next/link";
-import { useQuery, gql } from "@apollo/client";
 import BlueButton from "../../components/BlueButton";
 import styles from "../../styles/Home.module.css";
 import OnboardingLayout from "../../layout/OnboardingLayout";
 import { useRouter } from "next/router";
 import IntegrationsContent from "../../components/IntegrationsContent";
 import useErrorBoundary from "use-error-boundary";
-
-const GET_INTEGRATIONS = gql`
-  {
-    getIntegrations {
-      intercom
-      segment
-      postgres
-    }
-  }
-`;
 
 const IntegrationsPage = () => {
   const router = useRouter();
@@ -25,6 +14,9 @@ const IntegrationsPage = () => {
       <IntegrationsContent />
     </ErrorBoundary>
   );
+  if (didCatch) {
+    console.error(error);
+  }
 
   return (
     <>

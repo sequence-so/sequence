@@ -13,15 +13,15 @@ interface Props
   href?: string;
 }
 
-const BlueButton = (props: Props) => {
+const BlueButton = React.forwardRef((props: Props, ref) => {
   const onClick = defaultProp(props.onClick, () => {});
   const className = classNames(styles.blue_button, props.className);
 
   return (
-    <button {...props} className={className} onClick={onClick}>
+    <button {...props} ref={ref as any} className={className} onClick={onClick}>
       <p>{props.text}</p>
     </button>
   );
-};
+});
 
 export default BlueButton;

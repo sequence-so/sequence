@@ -1,14 +1,64 @@
 import DashboardLayout from "../../layout/DashboardLayout";
 import TitleBar from "../../layout/TitleBar";
-import Tabs from "@material-ui/core/Tabs";
-import clsx from "clsx";
 import { makeStyles } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import SearchIcon from "@material-ui/icons/Search";
 import moment from "moment";
-import { DataGrid, GridCellParams } from "@material-ui/data-grid";
+import {
+  DataGrid,
+  GridCellParams,
+  GridColumns,
+  GridPageChangeParams,
+} from "@material-ui/data-grid";
 import homeStyles from "../../styles/Home.module.css";
+import gql from "graphql-tag";
+import { useMemo, useState } from "react";
+import { useQuery } from "@apollo/client";
+import Link from "next/link";
+import classNames from "classnames";
+import DefaultViewLayout from "layout/DefaultViewLayout";
+import { PRODUCT_USER_COLUMN_MAPPING } from "components/productUser/columnMapping";
+
+export const GET_PRODUCT_USERS = gql`
+  query GetProductUsers($page: Int, $limit: Int) {
+    productUsers(page: $page, limit: $limit) {
+      nodes {
+        id
+        firstName
+        lastName
+        email
+        externalId
+        createdAt
+        updatedAt
+      }
+      page
+      rows
+    }
+  }
+`;
+
+export interface ProductUser {
+  id: string;
+  email: string;
+  distinctId: string;
+  firstName: string;
+  lastName: string;
+  photo: string;
+  phone: string;
+  signedUpAt: Date;
+  lastSeenAt: Date;
+  intercomId: string;
+  externalId: string;
+  userId: string;
+}
+export interface GetProductUsers {
+  productUsers: {
+    nodes: ProductUser[];
+    page: number;
+    rows: number;
+  };
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -81,165 +131,139 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const columns = [
-  { field: "id", headerName: "ID", width: 70 },
   {
     field: "full_name",
-    headerName: "Name",
+    headerName: "User",
     width: 200,
     renderCell: (params: GridCellParams) => (
-      <div style={{ display: "inline-flex", alignItems: "center" }}>
-        <div className={homeStyles.initials_circle}>
-          {params.getValue("firstName").toString().substring(0, 1)}
-          {params.getValue("lastName").toString().substring(0, 1)}
-        </div>
-        {params.getValue("name")}
-      </div>
+      <Link href={`/explorer/${params.getValue("externalId")}`}>
+        <a>
+          <div style={{ display: "inline-flex", alignItems: "center" }}>
+            <div className={homeStyles.initials_circle}>
+              {(params.getValue("firstName") as any).substring(0, 1)}
+              {(params.getValue("lastName") as any)?.substring(0, 1)}
+            </div>
+            {params.getValue("firstName") as any}{" "}
+            {params.getValue("lastName") as any}
+          </div>
+        </a>
+      </Link>
     ),
-  },
-  {
-    field: "signup",
-    headerName: "Signup Date",
-    type: "string",
-    width: 180,
-    valueGetter: (params) =>
-      moment(params.getValue("signup_date")).format("MMMM DD, YYYY"),
-  },
-  {
-    field: "paying_user",
-    headerName: "Paying User",
-    description: "This column has a value getter and is not sortable.",
-    width: 150,
-    valueGetter: (params) => (params.getValue("is_subscribed") ? "Yes" : "No"),
-  },
-  {
-    field: "render_source",
-    headerName: "Source",
-    description: "This column has a value getter and is not sortable.",
-    width: 150,
-    valueGetter: (params) => "Mobile",
   },
 ];
 
-const rows = [
-  {
-    id: 1,
-    name: "Snow Jon",
-    firstName: "Snow",
-    lastName: "Jon",
-    signup_date: "2021-04-26T19:00:58.906Z",
-    is_subscribed: false,
-  },
-  {
-    id: 2,
-    name: "Cersei Lannister",
-    lastName: "Lannister",
-    firstName: "Cersei",
-    signup_date: "2021-04-26T19:00:58.906Z",
-    is_subscribed: true,
-  },
-  {
-    id: 3,
-    name: "Jaime Lannister",
-    lastName: "Lannister",
-    firstName: "Jaime",
-    signup_date: "2021-04-26T19:00:58.906Z",
-    is_subscribed: true,
-  },
-  {
-    id: 4,
-    name: "Arya Stark",
-    lastName: "Stark",
-    firstName: "Arya",
-    signup_date: "2021-04-26T19:00:58.906Z",
-    is_subscribed: true,
-  },
-  {
-    id: 5,
-    name: "Daenerys Targaryen",
-    lastName: "Targaryen",
-    firstName: "Daenerys",
-    signup_date: "2021-04-26T19:00:58.906Z",
-    is_subscribed: true,
-  },
-  {
-    id: 6,
-    name: "Thomas Melisandre",
-    lastName: "Melisandre",
-    firstName: "Thomas",
-    signup_date: "2021-04-26T19:00:58.906Z",
-    is_subscribed: true,
-  },
-  {
-    id: 7,
-    name: "Ferrara Clifford",
-    lastName: "Clifford",
-    firstName: "Ferrara",
-    signup_date: "2021-04-26T19:00:58.906Z",
-    is_subscribed: true,
-  },
-  {
-    id: 8,
-    name: "Rossini Frances",
-    lastName: "Frances",
-    firstName: "Rossini",
-    signup_date: "2021-04-26T19:00:58.906Z",
-    is_subscribed: true,
-  },
-  {
-    id: 9,
-    name: "Harvey Roxie",
-    lastName: "Roxie",
-    firstName: "Harvey",
-    signup_date: "2021-04-26T19:00:58.906Z",
-    is_subscribed: false,
-  },
-];
+const createColumnsFromData = (productUsers: ProductUser[]) => {
+  const keys = Object.keys(productUsers[0]).filter(
+    (key) => key !== "__typename"
+  );
+  let columnData: GridColumns = [];
+  keys.map((key) => {
+    columnData.push({
+      field: key,
+      width: 200,
+      headerName: key,
+    });
+  });
+  return columnData;
+};
+
+const SearchBar = () => {
+  const classes = useStyles();
+
+  return (
+    <TextField
+      className={classNames(classes.textField)}
+      InputProps={{
+        disableUnderline: true,
+        inputProps: {
+          className: classes.input,
+          placeholder: "Search...",
+        },
+        startAdornment: (
+          <InputAdornment position="start" className={classes.adornment}>
+            <SearchIcon />
+          </InputAdornment>
+        ),
+      }}
+    />
+  );
+};
 
 const UserExplorerPage = () => {
   const classes = useStyles();
 
+  const [page, setPage] = useState(0);
+  const [rowCount, setRowCount] = useState(0);
+  const [columnData, setColumnData] = useState<GridColumns>();
+  const { loading, error, data } = useQuery<GetProductUsers>(
+    GET_PRODUCT_USERS,
+    {
+      variables: {
+        page,
+        limit: 10,
+      },
+      onCompleted(data) {
+        setRowCount(data.productUsers.rows);
+      },
+    }
+  );
+  const renderColumns = useMemo(() => {
+    if (data?.productUsers.nodes) {
+      setColumnData(PRODUCT_USER_COLUMN_MAPPING);
+    }
+  }, [data?.productUsers]);
+
+  const components = useMemo(
+    () => ({
+      ColumnResizeIcon: () => null,
+    }),
+    []
+  );
+
+  const componentsProp = useMemo(
+    () => ({
+      header: {
+        className: classes.tableHeader,
+      },
+    }),
+    []
+  );
+
+  const onPageChange = useMemo(
+    () => (params: GridPageChangeParams) => {
+      setPage(params.page);
+    },
+    []
+  );
+
   return (
-    <DashboardLayout index={3}>
+    <DashboardLayout index={2}>
       <>
-        <TitleBar title="User Explorer" subtitle="View your users."></TitleBar>
-        <div
-          style={{
-            height: "600px",
-            width: "100%",
-            marginTop: 8,
-            paddingBottom: "2rem",
-          }}
-        >
-          <TextField
-            className={clsx(classes.textField)}
-            InputProps={{
-              disableUnderline: true,
-              inputProps: {
-                className: classes.input,
-                placeholder: "Search...",
-              },
-              startAdornment: (
-                <InputAdornment position="start" className={classes.adornment}>
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSize={10}
-            className={classes.table}
-            components={{
-              ColumnResizeIcon: () => null,
-            }}
-            componentsProps={{
-              header: {
-                className: classes.tableHeader,
-              },
-            }}
-          />
-        </div>
+        <TitleBar
+          title="User Explorer"
+          showAction={false}
+          subtitle="Filter and search through your user data."
+        ></TitleBar>
+        <DefaultViewLayout>
+          <>
+            {data?.productUsers?.nodes && rowCount > 0 && columnData.length && (
+              <DataGrid
+                rows={data?.productUsers?.nodes || []}
+                columns={columnData}
+                pageSize={10}
+                page={page}
+                rowCount={rowCount}
+                className={classes.table}
+                onPageChange={onPageChange}
+                pagination
+                paginationMode="server"
+                loading={loading}
+                components={components}
+                componentsProps={componentsProp}
+              />
+            )}
+          </>
+        </DefaultViewLayout>
       </>
     </DashboardLayout>
   );

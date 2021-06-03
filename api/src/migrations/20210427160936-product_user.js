@@ -1,6 +1,6 @@
 "use strict";
 
-const { STRING, UUID, TEXT, DATE, BOOLEAN } = require("sequelize");
+const { STRING, UUID, DATE } = require("sequelize");
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -10,7 +10,7 @@ module.exports = {
         unique: true,
         type: UUID,
         allowNull: false,
-        defaultValue: () => uuidv4(),
+        defaultValue: Sequelize.literal("uuid_generate_v4()"),
       },
       intercomId: {
         type: STRING,
@@ -36,20 +36,56 @@ module.exports = {
       lastSeenAt: {
         type: DATE,
       },
+      browser: {
+        type: STRING,
+      },
+      browserVersion: {
+        type: STRING,
+      },
+      browserLanguage: {
+        type: STRING,
+      },
+      os: {
+        type: STRING,
+      },
+      country: {
+        type: STRING,
+      },
+      region: {
+        type: STRING,
+      },
+      city: {
+        type: STRING,
+      },
+      title: {
+        type: STRING,
+      },
+      websiteUrl: {
+        type: STRING,
+      },
+      companyName: {
+        type: STRING,
+      },
+      industry: {
+        type: STRING,
+      },
       userId: {
         type: UUID,
         references: {
           model: "users",
           key: "id",
         },
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: Sequelize.literal("now()"),
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: Sequelize.literal("now()"),
       },
       deletedAt: {
         type: Sequelize.DATE,

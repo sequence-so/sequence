@@ -3,7 +3,6 @@ import { Model } from "sequelize-typescript";
 import sequelize from "../database";
 import { v4 as uuidv4 } from "uuid";
 import User from "./user";
-import { NUMBER } from "sequelize";
 import { DATE } from "sequelize";
 import { INTEGER } from "sequelize";
 

@@ -56,6 +56,7 @@ class IntercomService {
               : null,
             intercomId,
             externalId,
+            userId: "fake-id",
           });
         }
       })

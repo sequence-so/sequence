@@ -25,7 +25,7 @@ module.exports = {
     username: process.env.DB_TEST_USERNAME,
     password: process.env.DB_TEST_PASSWORD,
     database: process.env.DB_TEST_DATABASE,
-    host: process.env.DB_HOST,
+    host: process.env.DB_TEST_HOST,
     dialect: "postgres",
     dialectOptions,
     migrationStorageTableName: "sequelize_meta",

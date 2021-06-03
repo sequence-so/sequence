@@ -9,7 +9,7 @@ const config: InitOptions = {
   paranoid: true,
 };
 
-interface UserAttributes {
+export interface UserAttributes {
   id: string;
   firstName: string;
   lastName: string;
@@ -17,7 +17,8 @@ interface UserAttributes {
   photo: string;
 }
 
-interface UserCreationAttributes extends Optional<UserAttributes, "id"> {}
+export interface UserCreationAttributes
+  extends Optional<UserAttributes, "id" | "firstName" | "lastName" | "photo"> {}
 
 class User extends Model<UserAttributes, UserCreationAttributes> {
   public id!: string;

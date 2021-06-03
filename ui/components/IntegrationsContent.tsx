@@ -1,167 +1,142 @@
-import Link from "next/link";
-import { useQuery, gql } from "@apollo/client";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { useDidIntegrate } from "../hooks/useDidIntegrate";
 import styles from "../styles/Home.module.css";
-import GreenCheckmark from "../public/green_check.svg";
-import classNames from "classnames";
+import IntegrationBox from "./IntegrationBox";
 
-const GET_INTEGRATIONS = gql`
-  {
-    getIntegrations {
-      intercom
-      segment
-      postgres
-    }
-  }
-`;
+const INTEGRATIONS = {
+  billing: {
+    title: "Billing",
+    value: {
+      stripe: {
+        imgProps: {
+          src: "/stripe.svg",
+          width: 46,
+        },
+        text: "",
+        link: "/onboarding/integrations",
+      },
+    },
+  },
+  clientLibraries: {
+    title: "Client Libraries",
+    value: {
+      node: {
+        imgProps: {
+          src: "/node_js.svg",
+          width: 80,
+        },
+        text: "",
+        link: "/onboarding/node-sdk",
+      },
+    },
+  },
+  customerSupport: {
+    title: "Customer Support",
+    value: {
+      intercom: {
+        imgProps: {
+          src: "/intercom.svg",
+          width: 35,
+        },
+        text: "Intercom",
+        link: "/onboarding/intercom",
+      },
+    },
+  },
+  databases: {
+    title: "Databases",
+    value: {
+      postgres: {
+        imgProps: {
+          src: "/postgresql_elephant.svg",
+          width: 35,
+        },
+        text: "Postgres",
+        link: "/onboarding/postgres",
+      },
+      mongodb: {
+        imgProps: {
+          src: "/mongodb.svg",
+          width: 90,
+        },
+        text: "",
+        link: "/onboarding/integrations",
+      },
+    },
+  },
+  notifications: {
+    title: "Notifications",
+    value: {
+      discord: {
+        imgProps: {
+          src: "/discord.svg",
+          width: 90,
+        },
+        text: "",
+        link: "/onboarding/discord",
+      },
+    },
+  },
+  productEvents: {
+    title: "Product Events",
+    value: {
+      segment: {
+        imgProps: {
+          src: "/segment_icon.svg",
+          width: 35,
+        },
+        text: "Segment",
+        link: "/onboarding/segment",
+      },
+    },
+  },
+};
 
 const IntegrationsContent = () => {
-  const { loading, error, data: integrations } = useQuery(GET_INTEGRATIONS, {
-    fetchPolicy: "no-cache",
-  });
+  const { loading, error, integrations } = useDidIntegrate();
   console.log({ loading, integrations, error });
 
-  return loading ? (
-    <CircularProgress />
-  ) : error ? (
-    <p>An error has occured: {error.message}</p>
-  ) : (
-    <>
-      <div className="container">
-        <h3 style={{ alignSelf: "flex-start" }}>Databases</h3>
-        <div className={styles.integrations_grid}>
-          {/* Postgres */}
-          {integrations && integrations.getIntegrations.postgres && (
-            <div
-              className={classNames(
-                styles.integration_box_done,
-                styles.integration
-              )}
-            >
-              <img src={"/postgresql_elephant.svg"} width={35}></img>
-              <span>Postgres</span>
-            </div>
-          )}
-          {integrations && !integrations.getIntegrations.postgres && (
-            <Link href="/onboarding/postgres">
-              <div
-                className={classNames(
-                  styles.integration_box,
-                  styles.integration
-                )}
-              >
-                <img src={"/postgresql_elephant.svg"} width={35}></img>
-                <span>Postgres</span>
-              </div>
-            </Link>
-          )}
-          {integrations && integrations.getIntegrations.mongodb && (
-            <div
-              className={classNames(
-                styles.integration_box_done,
-                styles.integration
-              )}
-            >
-              <img src={"/mongodb.svg"} width={35}></img>
-            </div>
-          )}
-          {integrations && !integrations.getIntegrations.mongodb && (
-            <Link href="/onboarding/integrations">
-              <div
-                className={classNames(
-                  styles.integration_box,
-                  styles.integration
-                )}
-              >
-                <img src={"/mongodb.svg"} width={80} />
-              </div>
-            </Link>
-          )}
-        </div>
-        <h3 style={{ alignSelf: "flex-start" }}>Product Events</h3>
-        <div className={styles.integrations_grid}>
-          {/* Segment */}
-          {integrations && integrations.getIntegrations.segment && (
-            <div
-              className={classNames(
-                styles.integration_box_done,
-                styles.integration
-              )}
-            >
-              <img src={"/segment_icon.svg"} width={35}></img>
-              <span>Segment</span>
-            </div>
-          )}
-          {integrations && !integrations.getIntegrations.segment && (
-            <Link href="/onboarding/segment">
-              <div
-                className={classNames(
-                  styles.integration_box,
-                  styles.integration
-                )}
-              >
-                <img src={"/segment_icon.svg"} width={35}></img>
-                <span>Segment</span>
-              </div>
-            </Link>
-          )}
-        </div>
-        <h3 style={{ alignSelf: "flex-start" }}>Customer Support</h3>
-        <div className={styles.integrations_grid}>
-          {/* Intercom */}
-          {integrations && integrations.getIntegrations.intercom && (
-            <div
-              className={classNames(
-                styles.integration_box_done,
-                styles.integration
-              )}
-            >
-              <img src={"/intercom.svg"} width={46}></img>
-              <span>Intercom</span>
-            </div>
-          )}
-          {integrations && !integrations.getIntegrations.intercom && (
-            <Link href="/onboarding/intercom">
-              <div
-                className={classNames(
-                  styles.integration_box,
-                  styles.integration
-                )}
-              >
-                <img src={"/intercom.svg"} width={46}></img>
-                <span>Intercom</span>
-              </div>
-            </Link>
-          )}
-        </div>
-        <h3 style={{ alignSelf: "flex-start" }}>Billing</h3>
+  if (loading) {
+    return <CircularProgress />;
+  }
+  if (error) {
+    return <p>An error has occured: {error.message}</p>;
+  }
 
-        <div className={styles.integrations_grid}>
-          {/* Stripe */}
-          {integrations && integrations.getIntegrations.stripe && (
-            <div
-              className={classNames(
-                styles.integration_box_done,
-                styles.integration
-              )}
-            >
-              <img src={"/stripe.svg"} width={46}></img>
-            </div>
-          )}
-          {integrations && !integrations.getIntegrations.stripe && (
-            <Link href="/onboarding/stripe">
-              <div
-                className={classNames(
-                  styles.integration_box,
-                  styles.integration
-                )}
-              >
-                <img src={"/stripe.svg"} width={46}></img>
-              </div>
-            </Link>
-          )}
-        </div>
-      </div>
+  const RenderIntegrations = Object.keys(INTEGRATIONS).map((key) => {
+    const title = INTEGRATIONS[key].title;
+    const keysInSection = Object.keys(INTEGRATIONS[key].value);
+
+    const sectionItems = keysInSection.map((integrationKey) => {
+      const active = integrations[integrationKey];
+      return (
+        <IntegrationBox
+          key={integrationKey}
+          active={active}
+          {...INTEGRATIONS[key].value[integrationKey]}
+        />
+      );
+    });
+
+    return (
+      <>
+        <h3
+          style={{
+            alignSelf: "flex-start",
+            marginTop: "1rem",
+            marginBottom: "1rem",
+          }}
+        >
+          {title}
+        </h3>
+        <div className={styles.integrations_grid}>{sectionItems}</div>
+      </>
+    );
+  });
+
+  return (
+    <>
+      <div className="container">{RenderIntegrations}</div>
       <style jsx>{`
         .container {
           display: flex;

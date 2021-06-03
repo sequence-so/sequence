@@ -13,19 +13,22 @@ module.exports = withPlugins(
   ],
   {
     poweredByHeader: false,
-    // webpack: (config, { isServer, dev, webpack }) => {
-    //   config.optimization = {
-    //     minimize: false,
-    //   };
-
-    //   config.output.hotUpdateMainFilename =
-    //     "static/webpack/[fullhash].[runtime].hot-update.json";
-
-    //   if (!isServer) {
-    //     config.resolve.fallback.fs = false;
-    //   }
-
-    //   return config;
-    // },
+    webpack: (config, { isServer, dev, webpack }) => {
+      config.module.rules.push({
+        test: /\.(ts)?$/, // Just `tsx?` file only
+        use: [
+          // options.defaultLoaders.babel, I don't think it's necessary to have this loader too
+          {
+            loader: "ts-loader",
+            options: {
+              transpileOnly: true,
+              experimentalWatchApi: true,
+              onlyCompileBundledFiles: true,
+            },
+          },
+        ],
+      });
+      return config;
+    },
   }
 );

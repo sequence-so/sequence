@@ -17,7 +17,7 @@ const OnboardingPage = () => {
           </p>
           <p>Setup is simple:</p>
 
-          <div className={styles.row}>
+          <div className={classnames(styles.onboarding_box_row)}>
             <div
               className={classnames(
                 styles.onboarding_box,

@@ -13,6 +13,27 @@ interface Props {
 const initialState = { navigationIndex: 0, isSidebarOpen: true };
 export const { useGlobalState } = createGlobalState(initialState);
 
+const getSidebarIndex = (pathname: string) => {
+  if (pathname.indexOf("explorer") > -1) {
+    return 3;
+  }
+  if (pathname.indexOf("integrations") > -1) {
+    return 4;
+  }
+  if (pathname.indexOf("settings") > -1) {
+    return 5;
+  }
+  if (pathname.indexOf("campaigns") > -1) {
+    return 0;
+  }
+  if (pathname.indexOf("audiences") > -1) {
+    return 1;
+  }
+  if (pathname.indexOf("emails") > -1) {
+    return 2;
+  }
+};
+
 const DashboardLayout = (props: Props) => {
   const [index, setIndex] = useGlobalState("navigationIndex");
   const [isSidebarOpen, setSidebarOpen] = useGlobalState("isSidebarOpen");
@@ -39,39 +60,9 @@ const DashboardLayout = (props: Props) => {
     if (!router.isReady) {
       return;
     }
-    if (router.pathname.indexOf("explorer") > -1) {
-      setIndex(3);
-      return;
-    }
-    if (router.pathname.indexOf("integrations") > -1) {
-      setIndex(4);
-      return;
-    }
-    if (router.pathname.indexOf("settings") > -1) {
-      setIndex(5);
-      return;
-    }
-    if (router.pathname.indexOf("alerts/history") > -1) {
-      setIndex(1);
-      return;
-    }
-    if (router.pathname.indexOf("alerts/create") > -1) {
-      setIndex(2);
-      return;
-    }
-    if (router.pathname.indexOf("alerts/message") > -1) {
-      setIndex(2);
-      return;
-    }
-    if (router.pathname.indexOf("alerts/success") > -1) {
-      setIndex(2);
-      return;
-    }
-    if (router.pathname.indexOf("alerts") > -1) {
-      setIndex(0);
-      return;
-    }
+    setIndex(getSidebarIndex(router.pathname));
   }, [router.isReady]);
+
   return (
     <div className={classNames(styles.page)}>
       <div className={styles.with_dashboard_sidebar}>

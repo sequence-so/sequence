@@ -1,0 +1,10 @@
+{
+  "extension": [
+    "ts"
+  ],
+  "file": [
+    "./tests/setup.ts"
+  ],
+  "spec": "tests/**/*.spec.ts",
+  "watchFiles": "tests/**/*.spec.ts"
+}

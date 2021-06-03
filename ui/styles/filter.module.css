@@ -1,0 +1,32 @@
+
+.filter_wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.border {
+  border: 1px solid #e9e9e9;
+  padding: 21px 17px;
+  border-radius: 4px;
+}
+
+.condition_box {
+  padding: 0.5em;
+  flex-grow: 0;
+  font-family: IBM Plex Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 15px;
+  line-height: 19px;
+  /* identical to box height */
+  color: #9FA1A4;
+  background: #F7F7F7;
+  border: 1px solid #B6B6B8;
+  box-sizing: border-box;
+  border-radius: 3px;
+  align-self: flex-start;
+  text-transform: uppercase;
+  min-width: 50px;
+  text-align: center;
+  z-index: 0;
+}
