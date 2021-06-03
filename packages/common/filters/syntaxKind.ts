@@ -10,14 +10,14 @@ import {
 } from "./nodes";
 import { Operators } from "./operators";
 
-export const enum NodeKind {
+export enum NodeKind {
   Condition = "Condition",
   Filter = "Filter",
   Comparator = "Comparator",
   Expectation = "Expectation",
 }
 
-export const enum FilterKind {
+export enum FilterKind {
   Email = "Email",
   Event = "Event",
   UserAttribute = "UserAttribute",
@@ -25,14 +25,14 @@ export const enum FilterKind {
   EventAttribute = "EventAttribute",
 }
 
-export const enum ComparatorKind {
+export enum ComparatorKind {
   String = "String",
   Date = "Date",
   Number = "Number",
   IsTimestamp = "IsTimestamp",
 }
 
-export const enum SyntaxKind {
+export enum SyntaxKind {
   Abstract = "Abstract",
   Condition = "Condition",
   BeginCondition = "BeginCondition",
@@ -44,12 +44,12 @@ export const enum SyntaxKind {
   EndCondition = "EndCondition",
 }
 
-export const enum ConditionNodeKind {
+export enum ConditionNodeKind {
   AND = "AND",
   OR = "OR",
 }
 
-export const enum DateNodeKind {
+export enum DateNodeKind {
   ABSOLUTE = "ABSOLUTE",
   RELATIVE = "RELATIVE",
   IS_TIMESTAMP = "IS_TIMESTAMP",
