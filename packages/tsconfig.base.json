@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "target": "es6",
+    "module": "commonjs"
+  }
+}

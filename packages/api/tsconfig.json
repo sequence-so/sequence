@@ -18,8 +18,10 @@
     "baseUrl": ".",
     "paths": {
       "src/*": ["src/*"],
-      "common/*": ["../common/*"]
-    }
+      "common/*": ["../common/*"],
+      "common": ["../"]
+    },
+    "plugins": [{ "transform": "transformer-module" }]
   },
   "files": ["modules.d.ts"],
   "include": [
@@ -42,5 +44,13 @@
   ],
   "ts-node": {
     "require": ["tsconfig-paths/register"]
+  },
+  "paths": {
+    "api": ["../api"],
+    "api/*": ["../api/*"],
+    "common": ["../"],
+    "common/*": ["../common/*"],
+    "ui": ["../ui"],
+    "ui/*": ["../ui/*"]
   }
 }

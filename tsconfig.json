@@ -9,7 +9,15 @@
     "experimentalDecorators": true,
     "target": "es6",
     "sourceMap": true,
-    "lib": ["es6"]
+    "lib": ["es6"],
+    "paths": {
+      "api": ["../api"],
+      "api/*": ["../api/*"],
+      "common": ["../"],
+      "common/*": ["../common/*"],
+      "ui": ["../ui"],
+      "ui/*": ["../ui/*"]
+    }
   },
   "exclude": ["node_modules", "**/*.spec.ts"]
 }
