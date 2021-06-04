@@ -15,9 +15,6 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "outDir": "dist",
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
     "paths": {
       "components/*": ["components/*"],
       "hooks/*": ["hooks/*"],
