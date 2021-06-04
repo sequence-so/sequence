@@ -11,7 +11,10 @@
     "type": "git",
     "url": "git+https://github.com/sequence/sequence.git"
   },
-  "author": "",
+  "author": {
+    "name": "Helson Taveras",
+    "email": "helson@sequence.so"
+  },
   "license": "SEE LICENSE IN LICENSE.md",
   "bugs": {
     "url": "https://github.com/helsont/sequence/issues"
