@@ -1,0 +1,63 @@
+{
+  "name": "Sequence",
+  "description": "Marketing automation tool for data-driven marketers.",
+  "keywords": [
+    "email",
+    "automation",
+    "marketing"
+  ],
+  "website": "https://sequence.so",
+  "repository": "https://github.com/sequence-so/sequence",
+  "logo": "https://uploads-ssl.webflow.com/60833c570cb6a20dece728a9/608348227650bccc820214ad_Group%20138.png",
+  "success_url": "/welcome",
+  "scripts": {
+    "postdeploy": "bundle exec rake bootstrap"
+  },
+  "env": {
+    "JWT_SECRET_KEY": {
+      "description": "A secret key for verifying the integrity of signed cookies.",
+      "generator": "secret"
+    },
+    "JWT_AUDIENCE": {
+      "description": "URL for the frontend webapp",
+      "value": "https://[my-sequence-frontend].herokuapps.com"
+    },
+    "ENCRYPTION_KEY": {
+      "description": "A secret key for encrypting and decrypting secrets.",
+      "generator": "secret"
+    },
+    "USE_SSL": {
+      "description": "Enables using the x-forwarded-proto header flag to detect if the proxied request originally used SSL.",
+      "value": "true"
+    },
+    "NODE_ENV": {
+      "description": "Node environment variable",
+      "value": "production"
+    },
+    "DB_SSL": {
+      "description": "Enables connecting to the database via a secure connection",
+      "value": "true"
+    }
+  },
+  "formation": [
+    {
+      "quantity": 1,
+      "size": "hobby"
+    }
+  ],
+  "buildpacks": [
+    {
+      "url": "https://github.com/timanovsky/subdir-heroku-buildpack"
+    },
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "image": "heroku/nodejs",
+  "addons": [
+    {
+      "plan": "heroku-postgresql"
+    }
+  ],
+  "environments": {}
+}

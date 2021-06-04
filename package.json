@@ -15,5 +15,11 @@
   "license": "SEE LICENSE IN LICENSE.md",
   "bugs": {
     "url": "https://github.com/helsont/sequence/issues"
-  }
+  },
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }

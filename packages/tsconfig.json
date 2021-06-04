@@ -1,0 +1,9 @@
+{
+  "files": [],
+  "references": [
+    { "api": "./api" },
+    { "common": "./common" },
+    { "sequence-lib": "./sequence-lib" },
+    { "ui": "./ui" }
+  ]
+}
