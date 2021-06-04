@@ -11,7 +11,7 @@
     "exec": "node ./dist/scripts/check.js",
     "migrate": "npx sequelize-cli db:migrate --debug",
     "serve": "node -r ./prod-paths.js  dist/src/server.js",
-    "script": "ts-node scripts/baby.ts",
+    "script": "ts-node scripts/check.ts",
     "start": "npm run serve",
     "test:debug": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' ts-mocha --paths --inspect-brk 'tests/**/*.spec.ts'",
     "test:watch": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' ts-mocha --paths --watch 'tests/**/*.ts' 'tests/**/*.spec.ts'",
