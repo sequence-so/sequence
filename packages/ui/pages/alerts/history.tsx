@@ -78,7 +78,7 @@ const columns = [
             fill={"#9FA1A4"}
           />
         </svg>
-        {params.getValue("name")}
+        {params.row.name}
       </div>
     ),
   },
@@ -89,11 +89,11 @@ const columns = [
     renderCell: (params: GridCellParams) => (
       <div style={{ display: "inline-flex", alignItems: "center" }}>
         <div className={homeStyles.initials_circle}>
-          {(params.getValue("properties") as any)?.firstName?.substring(0, 1)}
-          {(params.getValue("properties") as any)?.lastName?.substring(0, 1)}
+          {(params.row.properties as any)?.firstName?.substring(0, 1)}
+          {(params.row.properties as any)?.lastName?.substring(0, 1)}
         </div>
-        {(params.getValue("properties") as any)?.firstName}{" "}
-        {(params.getValue("properties") as any)?.lastName}
+        {(params.row.properties as any)?.firstName}{" "}
+        {(params.row.properties as any)?.lastName}
       </div>
     ),
   },
@@ -103,7 +103,7 @@ const columns = [
     type: "string",
     width: 180,
     valueGetter: (params) =>
-      moment(params.getValue("createdAt")).format("MMMM DD, YYYY"),
+      moment(params.row.createdAt).format("MMMM DD, YYYY"),
   },
   {
     field: "source",

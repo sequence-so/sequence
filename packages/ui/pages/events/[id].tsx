@@ -5,7 +5,8 @@ import { useRouter } from "next/router";
 import EventTable from "../../components/EventTable";
 import DashboardLayout from "../../layout/DashboardLayout";
 import TitleBar from "../../layout/TitleBar";
-import ReactJson from "react-json-view";
+import dynamic from "next/dynamic";
+const DynamicReactJson = dynamic(import("react-json-view"), { ssr: false });
 
 const GET_EVENT = gql`
   query GetEvent($id: ID) {
@@ -45,7 +46,7 @@ const EventPage = () => {
   } else if (error) {
     RenderContent = <p>Error.</p>;
   } else {
-    RenderContent = <ReactJson src={data} />;
+    RenderContent = <DynamicReactJson src={data} />;
   }
 
   return (
@@ -70,4 +71,4 @@ const EventPage = () => {
   );
 };
 
-export default EventPage;
+export default dynamic(() => Promise.resolve(EventPage), { ssr: false });

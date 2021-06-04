@@ -31,7 +31,7 @@ const columns = [
     field: "name2",
     headerName: "Name",
     width: 200,
-    valueGetter: (params) => params.getValue("name") ?? "Untitled",
+    valueGetter: (params) => params.row.name ?? "Untitled",
   },
   {
     field: "subject",
@@ -43,15 +43,14 @@ const columns = [
     field: "draft",
     headerName: "Draft",
     width: 100,
-    valueGetter: (params) =>
-      params.getValue("sentCount") > 0 ? "Published" : "Draft",
+    valueGetter: (params) => (params.row.sentCount > 0 ? "Published" : "Draft"),
   },
   {
     field: "sentCount2",
     headerName: "Sent To",
     // description: "This column has a value getter and is not sortable.",
     width: 200,
-    valueGetter: (params) => params.getValue("sentCount") ?? "-",
+    valueGetter: (params) => params.row.sentCount ?? "-",
   },
   {
     field: "createdAtFormatted",
@@ -59,7 +58,7 @@ const columns = [
     type: "string",
     width: 180,
     valueGetter: (params) =>
-      moment(params.getValue("createdAt")).format("MMMM DD, YYYY"),
+      moment(params.row.createdAt).format("MMMM DD, YYYY"),
   },
 ];
 

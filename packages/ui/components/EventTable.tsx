@@ -51,7 +51,7 @@ export const EVENTS_TABLE_COLUMNS = [
     width: 200,
     renderCell: (params: GridCellParams) => (
       <div style={{ display: "inline-flex", alignItems: "center" }}>
-        <Link href={`/events/${params.getValue("id")}`}>
+        <Link href={`/events/${params.row.id}`}>
           <a>
             <svg
               width="22"
@@ -74,7 +74,7 @@ export const EVENTS_TABLE_COLUMNS = [
                 fill={"#9FA1A4"}
               />
             </svg>
-            {params.getValue("name")}
+            {params.row.name}
           </a>
         </Link>
       </div>
@@ -87,11 +87,11 @@ export const EVENTS_TABLE_COLUMNS = [
     renderCell: (params: GridCellParams) => (
       <div style={{ display: "inline-flex", alignItems: "center" }}>
         <div className={homeStyles.initials_circle}>
-          {(params.getValue("productUser") as any)?.firstName.substring(0, 1)}
-          {(params.getValue("productUser") as any)?.lastName.substring(0, 1)}
+          {(params.row.productUser as any)?.firstName.substring(0, 1)}
+          {(params.row.productUser as any)?.lastName.substring(0, 1)}
         </div>
-        {(params.getValue("productUser") as any)?.firstName}{" "}
-        {(params.getValue("productUser") as any)?.lastName}
+        {(params.row.productUser as any)?.firstName}{" "}
+        {(params.row.productUser as any)?.lastName}
       </div>
     ),
   },
@@ -101,7 +101,7 @@ export const EVENTS_TABLE_COLUMNS = [
     type: "string",
     width: 180,
     valueGetter: (params) =>
-      moment(params.getValue("createdAt")).format("MMMM DD, YYYY"),
+      moment(params.row.createdAt).format("MMMM DD, YYYY"),
   },
 ];
 

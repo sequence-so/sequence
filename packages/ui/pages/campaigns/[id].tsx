@@ -47,15 +47,14 @@ export const columns = [
     headerName: "User",
     width: 200,
     renderCell: (params: GridCellParams) => (
-      <Link href={`/explorer/${params.getValue("externalId")}`}>
+      <Link href={`/explorer/${params.row.externalId}`}>
         <a>
           <div style={{ display: "inline-flex", alignItems: "center" }}>
             <div className={homeStyles.initials_circle}>
-              {(params.getValue("firstName") as any).substring(0, 1)}
-              {(params.getValue("lastName") as any)?.substring(0, 1)}
+              {(params.row.firstName as any).substring(0, 1)}
+              {(params.row.lastName as any)?.substring(0, 1)}
             </div>
-            {params.getValue("firstName") as any}{" "}
-            {params.getValue("lastName") as any}
+            {params.row.firstName as any} {params.row.lastName as any}
           </div>
         </a>
       </Link>
@@ -67,7 +66,7 @@ export const columns = [
     type: "string",
     width: 180,
     valueGetter: (params) =>
-      moment(params.getValue("createdAt")).format("MMMM DD, YYYY"),
+      moment(params.row.createdAt).format("MMMM DD, YYYY"),
   },
   {
     field: "email",
