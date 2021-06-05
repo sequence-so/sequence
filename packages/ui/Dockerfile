@@ -3,7 +3,6 @@
 # Install dependencies for common library
 FROM node:alpine AS common
 RUN apk add --no-cache libc6-compat
-RUN mkdir -p /app/common
 WORKDIR /app/common
 COPY build/common/package.json build/common/yarn.lock ./
 RUN yarn install --frozen-lockfile
@@ -17,7 +16,6 @@ COPY --from=common /app/common/node_modules ./node_modules
 # Install dependencies for ui project
 FROM node:alpine AS ui-deps
 RUN apk add --no-cache libc6-compat
-RUN mkdir -p /app/ui
 WORKDIR /app/ui
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
