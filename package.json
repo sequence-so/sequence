@@ -5,7 +5,10 @@
   "description": "Marketing automation tool for data-driven marketers.",
   "homepage": "https://sequence.so",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "bootstrap": "lerna bootstrap",
+    "build": "lerna run build",
+    "dev": "lerna run dev --parallel",
+    "test": "lerna run test"
   },
   "repository": {
     "type": "git",

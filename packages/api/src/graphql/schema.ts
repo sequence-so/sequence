@@ -1,51 +1,10 @@
-import {
-  GraphQLList,
-  GraphQLObjectType,
-  GraphQLScalarType,
-  Kind,
-} from "graphql";
-import { makeExecutableSchema } from "graphql-tools";
+import { GraphQLScalarType, Kind } from "graphql";
 import { gql } from "apollo-server-express";
-import resolvers from "./resolvers";
-
-const GraphQLDate = new GraphQLScalarType({
-  name: "Date",
-  description: "Date custom scalar type",
-  parseValue(value) {
-    return new Date(value); // value from the client
-  },
-  serialize(value) {
-    return value.toISOString(); // value sent to the client
-  },
-  parseLiteral(ast) {
-    if (ast.kind === Kind.INT) {
-      return new Date(ast.value); // ast value is always in string format
-    }
-    return null;
-  },
-});
-
-const dates = {
-  createdAt: {
-    type: GraphQLDate,
-  },
-  updatedAt: {
-    type: GraphQLDate,
-  },
-};
 
 const typeDefs = gql`
   scalar Date
   scalar JSONObject
 
-  type AuthDiscord {
-    id: ID!
-    userId: ID!
-    webhookId: String
-    expiresAt: Date
-    createdAt: Date
-    updatedAt: Date
-  }
   type Audience {
     id: ID!
     name: String
@@ -108,29 +67,12 @@ const typeDefs = gql`
     createdAt: Date
     updatedAt: Date
   }
-  type PostgresDatabase {
-    id: ID!
-    type: String
-    username: String
-    port: Int
-    hostname: String
-    schema: String
-  }
   type Integrations {
-    intercom: Boolean
     segment: Boolean
-    postgres: Boolean
-    discord: Boolean
     node: Boolean
   }
   type QueryResult {
     result: String
-  }
-  type PostgresSchema {
-    schema: String
-    name: String
-    type: String
-    owner: String
   }
   type PaginatedAudience {
     nodes: [Audience]
@@ -214,10 +156,7 @@ const typeDefs = gql`
     emails(id: ID, page: Int, limit: Int): PaginatedEmails
     events(id: ID, page: Int, limit: Int, distinctId: ID): PaginatedEvent
     getChannelWebhooks: QueryResult
-    getDatabases: [PostgresDatabase]
-    getIntegrations: Integrations
     getIntercom: AuthIntercom
-    getPostgresSchema: [PostgresSchema]
     getSegmentWebhook: SegmentWebhook
     getUser: User
     productUsers(page: Int, limit: Int): PaginatedProductUser
@@ -234,21 +173,10 @@ const typeDefs = gql`
       from: String
       fromName: String
     ): Email
-    createPostgresDatabase(
-      username: String
-      password: String
-      port: Int
-      hostname: String
-      schema: String
-      database: String
-      ssl: Boolean
-    ): PostgresDatabase
     createSegmentWebhook: SegmentWebhook
     createSequenceWebhook: SequenceWebhook
     deleteEmail(id: ID!): DeleteResult
     executeAudience(audience: String): PaginatedProductUser
-    executeDatabaseQuery(query: String, databaseId: String): QueryResult
-    saveDiscordCode(code: String!): AuthDiscord
     saveIntercomCode(code: String!): AuthIntercom
     updateAudience(id: ID!, name: String, node: String): Audience
     updateCampaign(name: String, emailId: ID, audienceId: ID): Campaign
