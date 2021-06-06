@@ -17,9 +17,13 @@
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
-      "src/*": ["src/*"],
+      "api": ["../api"],
+      "api/*": ["../api/*"],
+      "common": ["../"],
       "common/*": ["../common/*"],
-      "common": ["../"]
+      "ui": ["../ui"],
+      "ui/*": ["../ui/*"],
+      "src/*": ["src/*"]
     },
     "plugins": [{ "transform": "transformer-module" }]
   },
@@ -44,13 +48,5 @@
   ],
   "ts-node": {
     "require": ["tsconfig-paths/register"]
-  },
-  "paths": {
-    "api": ["../api"],
-    "api/*": ["../api/*"],
-    "common": ["../"],
-    "common/*": ["../common/*"],
-    "ui": ["../ui"],
-    "ui/*": ["../ui/*"]
   }
 }

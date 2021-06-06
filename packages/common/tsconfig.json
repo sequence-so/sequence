@@ -17,7 +17,8 @@
     "declarationMap": true,
     "rootDir": ".",
     "composite": true,
-    "strict": true
+    "strict": true,
+    "noEmit": false
   },
   "include": ["./filters", "./node_modules/@types"],
   "exclude": [

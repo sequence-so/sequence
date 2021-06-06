@@ -3,7 +3,6 @@ import { APIEventPayload } from "sequence-lib";
 import SequenceWebhook from "../models/sequence_webhook";
 import WebhookExecution from "../models/webhook_execution";
 import Event from "../models/event";
-import NotificationRegistry from "../notifications/notification.registry";
 import track from "../events/track.event";
 import alias from "../events/alias.event";
 

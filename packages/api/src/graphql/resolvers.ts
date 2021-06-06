@@ -4,7 +4,6 @@ import { GraphQLJSONObject } from "graphql-type-json";
 import * as AudienceResolvers from "./resolvers/audience.resolver";
 import * as CampaignResolvers from "./resolvers/campaign.resolver";
 import * as CustomPropertyResolvers from "./resolvers/customProperty.resolver";
-import * as DiscordResolvers from "./resolvers/discord.resolver";
 import * as EmailResolvers from "./resolvers/email.resolver";
 import * as EventResolvers from "./resolvers/event.resolver";
 import * as IntercomResolvers from "./resolvers/intercom.resolver";
@@ -16,19 +15,16 @@ import * as AudienceMutations from "./mutations/audience.mutation";
 import * as CampaignMutations from "./mutations/campaign.mutation";
 import * as EmailMutations from "./mutations/email.mutation";
 import * as IntercomMutations from "./mutations/intercom.mutation";
-import * as PostgresMutations from "./mutations/postgres.mutation";
 import * as SegmentMutations from "./mutations/segment.mutation";
 import * as WebhookMutations from "./mutations/webhook.mutation";
 import { GraphQLContextType } from ".";
 import Audience from "src/models/audience";
-import { Sequelize, Op } from "sequelize";
 
 const resolvers = {
   Query: {
     ...AudienceResolvers,
     ...CampaignResolvers,
     ...CustomPropertyResolvers,
-    ...DiscordResolvers,
     ...EmailResolvers,
     ...EventResolvers,
     ...IntercomResolvers,
@@ -41,7 +37,6 @@ const resolvers = {
     ...CampaignMutations,
     ...EmailMutations,
     ...IntercomMutations,
-    ...PostgresMutations,
     ...SegmentMutations,
     ...WebhookMutations,
   },
