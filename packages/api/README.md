@@ -1,3 +1,0 @@
-# Sequence
-Sequence is... 
-### Setup
