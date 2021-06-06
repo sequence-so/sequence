@@ -20,14 +20,20 @@ const RenderEventFilter = ({ node }: Props) => {
   useEffect(() => {
     if (data?.uniqueEventNames) {
       const eventName = node.expected;
-      setEventType({
-        label: eventName,
-        value: eventName,
-      });
-      const valueOptions = (node as EventFilter).getFilterOptions();
-      const key = node.performed ? "hasBeenPerformed" : "hasNotBeenPerformed";
-      const nodeValue = valueOptions.find((e) => e.value === key);
-      setCurrentValue(nodeValue);
+      if (typeof eventName !== "undefined") {
+        setEventType({
+          label: eventName,
+          value: eventName,
+        });
+      }
+      if (typeof node.performed !== "undefined") {
+        const valueOptions = (node as EventFilter).getFilterOptions();
+        const key = node.performed ? "hasBeenPerformed" : "hasNotBeenPerformed";
+        if (key) {
+          const nodeValue = valueOptions.find((e) => e.value === key);
+          setCurrentValue(nodeValue);
+        }
+      }
     }
   }, [data?.uniqueEventNames]);
 

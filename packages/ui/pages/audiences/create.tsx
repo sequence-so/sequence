@@ -20,7 +20,9 @@ const AudienceBuilderContent = () => {
       </div>
       <style jsx>{`
         .content {
-          border: 1px solid #b6b6b8;
+          border: var(--border-grey);
+          border-radius: 4px;
+          box-shadow: var(--subtle-shadow);
           padding: 21px 17px;
           border-radius: 4px;
           margin-bottom: 4em;
