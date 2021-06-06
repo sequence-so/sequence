@@ -154,13 +154,13 @@ const AudienceBuilder = (props: Props) => {
   const showSave = didExecute && !!!executeAudienceError;
 
   const onClickExecuteAudience = () => {
-    const serializedData = serialize(rootNode.current);
     const errors: NodeParseError[] = [];
     parse(rootNode.current, errors);
     if (errors.length) {
       setParseErrors(errors);
       return;
     }
+    const serializedData = serialize(rootNode.current);
     const serializedDataAsString = JSON.stringify(serializedData);
     setSerializedAudienceData(serializedDataAsString);
     executeAudienceQuery({
@@ -182,6 +182,7 @@ const AudienceBuilder = (props: Props) => {
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
+      <h3>AUDIENCE CONDITIONS</h3>
       <RenderCondition
         node={rootNode.current}
         depth={0}
@@ -237,6 +238,16 @@ const AudienceBuilder = (props: Props) => {
         ></BlueButton>
       )}
       {createAudienceError && <p>{createAudienceError.message}</p>}
+      <style jsx>
+        {`
+          h3 {
+            margin-block-start: 0px;
+            margin-block-end: 1em;
+            color: #4e4f55;
+            font-weight: 600;
+          }
+        `}
+      </style>
     </div>
   );
 };
