@@ -151,12 +151,19 @@ export default function ProminentAppBar() {
             }}
             onClick={handleClick}
           >
-            {data && data.getUser ? (
+            {data && data.getUser && data.getUser.photo ? (
+              <img
+                className={styles.profile_image}
+                width={30}
+                height={30}
+                src={data.getUser.photo}
+              />
+            ) : (
               <FontAwesomeIcon
                 icon={faUserCircle}
                 style={{ width: "24px", height: "24px" }}
               />
-            ) : null}
+            )}
             <img className={styles.profile_arrow} src={DownArrow} />
           </div>
 
@@ -190,7 +197,14 @@ export default function ProminentAppBar() {
                 paddingTop: 16,
               }}
             >
-              {data && data.getUser && (
+              {data && data.getUser && data.getUser.photo ? (
+                <img
+                  className={styles.profile_image}
+                  width={30}
+                  height={30}
+                  src={data.getUser.photo}
+                />
+              ) : (
                 <FontAwesomeIcon
                   icon={faUserCircle}
                   style={{ width: "45px", height: "45px" }}
