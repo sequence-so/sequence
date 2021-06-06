@@ -69,7 +69,7 @@ class PassportRoutes {
 
     app.post(
       "/login",
-      passport.authenticate("local", { failureRedirect: "/login/failed" }),
+      passport.authenticate("local", { failWithError: true }),
       function (req, res) {
         jwt.sign(
           {
@@ -90,6 +90,13 @@ class PassportRoutes {
             });
           }
         );
+      },
+      function (err: any, req: any, res: any) {
+        // handle error
+        if (err) {
+          return res.status(err.status).json(err);
+        }
+        return res.redirect("/login");
       }
     );
 
@@ -98,17 +105,17 @@ class PassportRoutes {
 
       if (!body.email) {
         return res.status(409).send({
-          error: "No email provided",
+          message: "No email provided",
         });
       }
       if (!body.password) {
         return res.status(409).send({
-          error: "No password provided",
+          message: "No password provided",
         });
       }
       if (body.password.length < 8) {
         return res.status(409).send({
-          error: "Password must be 8 characters or longer",
+          message: "Password must be 8 characters or longer",
         });
       }
       const existing = await User.findOne({
@@ -118,7 +125,7 @@ class PassportRoutes {
       });
       if (existing) {
         return res.status(409).send({
-          error: "Email is already taken",
+          message: "Email is already taken",
         });
       }
 
@@ -129,7 +136,7 @@ class PassportRoutes {
 
       jwt.sign(
         {
-          user: req.user,
+          user,
         },
         JwtConfig.jwt.secret,
         JwtConfig.jwt.options,

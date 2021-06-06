@@ -1,5 +1,6 @@
 import SignupButton from "components/SignupButton";
 import { Formik, ErrorMessage } from "formik";
+import { useState } from "react";
 
 import * as yup from "yup";
 
@@ -14,19 +15,24 @@ interface Props {
 }
 
 const LoginForm = (props: Props) => {
+  const [networkError, setNetworkError] = useState("");
+
   return (
     <Formik
+      validateOnBlur={false}
+      validateOnChange={false}
       validationSchema={props.type === "signup" ? schema : null}
       initialValues={{
         email: "",
         password: "",
       }}
       onSubmit={(values, { setSubmitting, setFieldError }): void => {
-        props.perform(values.email, values.password).catch((error) => {
-          setSubmitting(false);
-          setFieldError("submit", error.message);
-        });
+        setNetworkError("");
         setSubmitting(true);
+        props.perform(values.email, values.password).catch((error) => {
+          setNetworkError(error.message);
+          setSubmitting(false);
+        });
       }}
     >
       {({
@@ -40,7 +46,7 @@ const LoginForm = (props: Props) => {
         setSubmitting,
       }) => (
         <form className="container" onSubmit={handleSubmit}>
-          <label htmlFor="hostname">Email</label>
+          <label htmlFor="email">Email</label>
           <input
             name="email"
             type="email"
@@ -50,7 +56,8 @@ const LoginForm = (props: Props) => {
             value={values.email}
             placeholder="Email"
           />
-          <label htmlFor="hostname">Password</label>
+          <ErrorMessage name="email" component="div" />
+          <label htmlFor="password">Password</label>
           <input
             name="password"
             type="password"
@@ -60,10 +67,12 @@ const LoginForm = (props: Props) => {
             value={values.password}
             placeholder="Password"
           />
-          <ErrorMessage name="email" component="div" />
+          <ErrorMessage name="password" component="div" />
           <ErrorMessage name="submit" component="div" />
+          {networkError && <p>Error: {networkError}</p>}
           <SignupButton
             type="submit"
+            disabled={isSubmitting}
             text={props.type === "login" ? "Login" : "Sign up"}
           />
           <style jsx>{`

@@ -6,7 +6,7 @@ import LogoColor from "../public/logo_color.svg";
 import LoginForm from "components/login/LoginForm";
 import Link from "next/link";
 
-export default function Login() {
+export default function Signup() {
   const [domain, setDomain] = useState("");
   const router = useRouter();
 
@@ -23,14 +23,14 @@ export default function Login() {
     }
   }, [router.isReady]);
 
-  const onSubmitLogin = (email: string, password: string) => {
+  const onSubmitSignup = (email: string, password: string) => {
     let headers = new Headers();
     headers.append("Accept", "application/json");
     headers.append("Content-Type", "application/json");
     const form = new FormData();
     form.append("email", email);
     form.append("password", password);
-    return fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
+    return fetch(`${process.env.NEXT_PUBLIC_API_URL}/signup`, {
       method: "POST",
       headers: headers,
       body: JSON.stringify({
@@ -96,11 +96,11 @@ export default function Login() {
           width={80}
           height={80}
         />
-        <h2 className={styles.signup_title}>Login</h2>
-        <LoginForm type="login" perform={onSubmitLogin} />
-        <Link href="/signup">
+        <h2 className={styles.signup_title}>Signup</h2>
+        <LoginForm type="signup" perform={onSubmitSignup} />
+        <Link href="/">
           <a style={{ marginTop: "1em", color: "#4191E4" }}>
-            <p>Don't have an account? Click to sign up.</p>
+            <p>Have an account? Login here.</p>
           </a>
         </Link>
       </div>

@@ -3,13 +3,20 @@ import React from "react";
 interface Props {
   onClick?: () => {};
   text: string;
+  disabled: boolean;
   type: React.ButtonHTMLAttributes<HTMLButtonElement>["type"];
 }
 
 const SignupButton = React.forwardRef<{}, Props>(
-  ({ type, text, onClick }, ref) => {
+  ({ type, text, onClick, disabled }, ref) => {
     return (
-      <button type={type} className="button" onClick={onClick} ref={ref as any}>
+      <button
+        type={type}
+        className="button"
+        onClick={onClick}
+        disabled={disabled}
+        ref={ref as any}
+      >
         <p>{text}</p>
         <style jsx>
           {`
