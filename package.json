@@ -5,7 +5,7 @@
   "description": "Marketing automation tool for data-driven marketers.",
   "homepage": "https://sequence.so",
   "scripts": {
-    "bootstrap": "lerna bootstrap",
+    "bootstrap": "lerna exec yarn && lerna link",
     "build": "lerna run build",
     "dev": "lerna run dev --parallel",
     "test": "lerna run test"
@@ -24,8 +24,5 @@
   },
   "devDependencies": {
     "lerna": "^4.0.0"
-  },
-  "workspaces": [
-    "packages/*"
-  ]
+  }
 }

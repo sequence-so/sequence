@@ -11,7 +11,7 @@ RUN yarn install --frozen-lockfile
 COPY packages/api ./packages/api
 COPY packages/common ./packages/common
 COPY lerna.json tsconfig.json ./
-RUN lerna bootstrap
+RUN yarn run bootstrap
 
 # Build API
 FROM node:alpine AS api-builder
@@ -38,7 +38,7 @@ RUN adduser -S nodejs -u 1001
 
 COPY --from=api-builder /app .
 # TODO: Make less shit
-COPY --from=common-builder /app/packages/common/dist /app/packages/api/dist/common
+COPY --from=common-builder /app/packages/dist /app/packages/api/dist/common
 WORKDIR /app/packages/api
 
 USER node

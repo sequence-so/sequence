@@ -1,0 +1,40 @@
+version: "3"
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "8000:8000"
+    container_name: sequence-api
+    links:
+      - "postgres:postgres"
+    volumes:
+      - ./packages/api/.env:/app/packages/api/.env
+    depends_on:
+      - postgres
+    expose:
+      - 8000
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: sequence
+    networks:
+      - api-postgres
+    expose:
+      - 5432
+  ui:
+    build:
+      context: ./packages/ui
+    ports:
+      - "3000:3000"
+    container_name: sequence-ui
+    depends_on:
+      - api
+    expose:
+      - 3000
+networks:
+  ui-api:
+  api-postgres:

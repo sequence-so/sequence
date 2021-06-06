@@ -23,8 +23,8 @@
     "test": "./src"
   },
   "_moduleAliases": {
-    "src": "src/",
-    "tests": "tests/"
+    "src": "./src/",
+    "tests": "./tests/"
   },
   "author": "",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -104,8 +104,12 @@
     "sequelize-typescript": "^2.1.0",
     "sequence-lib": "^0.0.2",
     "ts-node": "^9.1.1",
+    "tsconfig-paths": "^3.9.0",
     "typescript": "^4.3.2",
     "ui": "^0.1.0",
     "uuid": "^8.3.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }

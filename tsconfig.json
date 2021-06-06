@@ -9,7 +9,7 @@
     "experimentalDecorators": true,
     "target": "es6",
     "sourceMap": true,
-    "lib": ["es6"],
+    "lib": ["es2018"],
     "paths": {
       "api": ["../api"],
       "api/*": ["../api/*"],
@@ -17,7 +17,8 @@
       "common/*": ["../common/*"],
       "ui": ["../ui"],
       "ui/*": ["../ui/*"]
-    }
+    },
+    "typeRoots": ["./node_modules/@types", "../../node_modules/@types"]
   },
   "exclude": ["node_modules", "**/*.spec.ts"]
 }
