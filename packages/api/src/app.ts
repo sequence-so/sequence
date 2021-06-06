@@ -1,7 +1,7 @@
 import "module-alias/register";
-import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
+import express from "express";
 import cookieParser from "cookie-parser";
 import { ApolloServer } from "apollo-server-express";
 import jwt from "jsonwebtoken";
@@ -79,7 +79,7 @@ const server = new ApolloServer({
     const token = req.headers.authorization;
     const result = jwt.verify(token, JwtConfig.jwt.secret);
     const user = (result as any).user;
-
+    debugger;
     return {
       models: SequelizeModels,
       user,

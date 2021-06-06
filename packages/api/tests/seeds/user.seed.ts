@@ -11,6 +11,7 @@ export const build = (
     ...opts,
     firstName,
     lastName,
+    password: "test1234",
     email: opts?.email || faker.internet.email(firstName, lastName),
     photo: opts?.photo || faker.image.avatar(),
   };

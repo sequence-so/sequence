@@ -1,17 +1,15 @@
 import Head from "next/head";
-import SignupButton from "../components/SignupButton";
-import styles from "../styles/Home.module.css";
-import LogoColor from "../public/logo_color.svg";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import styles from "../styles/Home.module.css";
+import LogoColor from "../public/logo_color.svg";
+import LoginForm from "components/login/LoginForm";
 
 export default function Login() {
   const [domain, setDomain] = useState("");
   const router = useRouter();
 
   useEffect(() => {
-    const href = window.location.href;
     setDomain(process.env.NEXT_PUBLIC_API_URL);
   }, []);
 
@@ -24,6 +22,29 @@ export default function Login() {
     }
   }, [router.isReady]);
 
+  const onSubmitLogin = (email: string, password: string) => {
+    let headers = new Headers();
+    headers.append("Accept", "application/json");
+    headers.append("Content-Type", "application/json");
+    const form = new FormData();
+    form.append("email", email);
+    form.append("password", password);
+    return fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        localStorage.token = data.token;
+        setTimeout(() => {
+          window.location = data.url;
+        });
+      });
+  };
   return (
     <div className={styles.login_container}>
       <Head>
@@ -65,16 +86,14 @@ export default function Login() {
         <img
           className={styles.signup_logo}
           src={LogoColor}
-          width={120}
-          height={120}
+          width={80}
+          height={80}
         />
-        <h2 className={styles.signup_title}>Signup</h2>
-        <Link href={domain + "/auth/google"} passHref>
-          <SignupButton />
-        </Link>
-        <p className={styles.login_footer}>
-          Copyright © 2021 Sequence Technologies
-        </p>
+        <h2 className={styles.signup_title}>Login</h2>
+        <LoginForm text="Login" type="login" perform={onSubmitLogin} />
+        {/* <Link href={domain + "/auth/google"} passHref>
+          <GoogleSignupButton />
+        </Link> */}
       </div>
       <div className={styles.signup_right}></div>
     </div>

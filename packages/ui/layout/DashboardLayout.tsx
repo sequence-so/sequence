@@ -17,11 +17,8 @@ const getSidebarIndex = (pathname: string) => {
   if (pathname.indexOf("explorer") > -1) {
     return 3;
   }
-  if (pathname.indexOf("integrations") > -1) {
-    return 4;
-  }
   if (pathname.indexOf("settings") > -1) {
-    return 5;
+    return 4;
   }
   if (pathname.indexOf("campaigns") > -1) {
     return 0;
@@ -83,6 +80,7 @@ const DashboardLayout = (props: Props) => {
                 paddingRight: 40,
                 paddingBottom: 40,
                 width: "100%",
+                height: "auto",
               }}
               ref={(ref): void => {
                 contentPaneRef.current = ref;

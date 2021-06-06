@@ -28,7 +28,6 @@ passport.use(
       profile: GoogleProfile,
       done: CallableFunction
     ) {
-      console.log({ accessToken, refreshToken, profile });
       const firstName = profile.name.givenName;
       const lastName = profile.name.familyName;
       const photo = profile.photos ? profile.photos[0].value : null;
@@ -39,7 +38,7 @@ passport.use(
           googleId: profile.id,
         },
       });
-      console.log({ authGoogle });
+
       if (!authGoogle) {
         const user = await User.create({
           firstName,
@@ -66,7 +65,6 @@ passport.use(
             email,
           },
         });
-        console.log({ user });
         done(null, user);
       }
     }

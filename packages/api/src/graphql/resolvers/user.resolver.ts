@@ -7,33 +7,3 @@ export const getUser = async (
 ) => {
   return user;
 };
-
-export const getIntegrations = async (
-  root: any,
-  _: any,
-  { models, user }: GraphQLContextType
-) => {
-  const intercom = await models.AuthIntercom.findOne({
-    where: {
-      userId: user.id,
-    },
-  });
-  const segmentExecution = await models.WebhookExecution.findOne({
-    where: {
-      userId: user.id,
-    },
-    order: [["createdAt", "DESC"]],
-  });
-  const node = await models.SequenceWebhook.findOne({
-    where: {
-      userId: user.id,
-    },
-  });
-  let integrations: any = {
-    intercom: intercom ? true : false,
-    segment: segmentExecution ? true : false,
-    node: node ? true : false,
-  };
-
-  return integrations;
-};

@@ -121,7 +121,7 @@ const CampaignBuilderContent = (props: CampaignBuilderContentProps) => {
       <div className="wrapper">
         <h4>1. CHOOSE AN AUDIENCE</h4>
         <div className="table-wrapper">
-          <AudienceTable onClick={onClickAudience} />
+          <AudienceTable onClick={onClickAudience} shadow={false} />
         </div>
         {audience && (
           <span>
@@ -132,7 +132,7 @@ const CampaignBuilderContent = (props: CampaignBuilderContentProps) => {
       <div className="wrapper">
         <h4>2. CHOOSE AN EMAIL</h4>
         <div className="table-wrapper">
-          <EmailTable onClick={onClickEmail} />
+          <EmailTable onClick={onClickEmail} shadow={false} />
         </div>
         {email && (
           <>
@@ -155,9 +155,9 @@ const CampaignBuilderContent = (props: CampaignBuilderContentProps) => {
           margin-bottom: 4em;
         }
         .wrapper {
-          box-shadow: 0px 0px 0px 1px rgb(15 15 15 / 2%),
-            0px 3px 6px rgb(15 15 15 / 3%), 0px 9px 24px rgb(15 15 15 / 10%);
-          border-radius: 14px;
+          box-shadow: var(--subtle-shadow);
+          border-radius: 4px;
+          border: var(--border-grey);
           padding: 1.5em 1.25em;
           margin-bottom: 1.5em;
         }

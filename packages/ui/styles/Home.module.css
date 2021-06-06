@@ -157,9 +157,9 @@
 .signup_title {
   font-family: IBM Plex Sans;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 36px;
-  margin-top: 60px;
+  margin-top: 1em;
 }
 
 .button {
@@ -688,7 +688,7 @@
   min-width: 300px;
 }
 
-.settings_form { 
+.settings_form {
   display: flex;
   flex-direction: column;
   min-width: 300px;
@@ -782,17 +782,17 @@
 .blinking_circle {
   height:1.25rem;
   width:1.25rem;
-  
+
   border-radius: 4rem;
-  
+
   opacity: 0.0;
   background: #F8D72B;
 }
 
 .blinking_circle_anim {
   -webkit-animation: pulsate 1000ms ease-out;
-  -webkit-animation-iteration-count: infinite; 
-  
+  -webkit-animation-iteration-count: infinite;
+
   -webkit-transition: background-color 300ms linear;
   -moz-transition: background-color 300ms linear;
   -o-transition: background-color 300ms linear;
@@ -804,7 +804,7 @@
   background: #36D71C;
   opacity: 1;
 }
-  
+
 @-webkit-keyframes pulsate {
   0% {opacity: 0.1;}
   40% {opacity: 1.0;}
@@ -863,7 +863,7 @@
   margin-block-start: 10px;
   margin-block-end: 10px;
   font-weight: 500;
-} 
+}
 
 .sidebar_action_button {
   font-size: 16px;

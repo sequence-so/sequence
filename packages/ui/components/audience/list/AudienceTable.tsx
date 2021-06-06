@@ -6,6 +6,7 @@ import Table from "components/Table";
 import AudienceTableRow from "./AudienceTableRow";
 import { GridRowParams } from "@material-ui/data-grid";
 import { memo, useMemo } from "react";
+import { defaultProp } from "services/defaultProp";
 
 const GET_AUDIENCES = gql`
   query GetAudiences {
@@ -37,6 +38,7 @@ export type Audience = {
 
 interface Props {
   onClick?: (audience: Audience) => void;
+  shadow?: boolean;
 }
 
 const columns = [
@@ -76,6 +78,7 @@ const RenderEmptyAudiences = () => {
 
 const AudienceTable = (props?: Props) => {
   const { data, loading, error } = useQuery(GET_AUDIENCES);
+  const shadow = defaultProp(props.shadow, true);
   const router = useRouter();
   const onClick = useMemo(
     () => (param: GridRowParams) => {
@@ -110,6 +113,7 @@ const AudienceTable = (props?: Props) => {
       onRowClick={onClick}
       columns={columns}
       page={0}
+      shadow={shadow}
     ></Table>
   );
 };

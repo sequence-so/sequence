@@ -10,6 +10,7 @@ import {
 import { DocumentNode } from "graphql";
 import gql from "graphql-tag";
 import { useMemo, useState } from "react";
+import { defaultProp } from "services/defaultProp";
 import Table from "./Table";
 
 type ServerPaginateTableProps = Partial<DataGridProps> & {
@@ -17,6 +18,7 @@ type ServerPaginateTableProps = Partial<DataGridProps> & {
   getRows: (elem: any) => any[];
   variables?: Record<string, any>;
   queryOptions?: QueryHookOptions<any, Record<string, any>>;
+  shadow: boolean;
 };
 
 const DEFAULT_LIMIT = 10;
@@ -33,7 +35,7 @@ const ServerPaginatedTable = (props: ServerPaginateTableProps) => {
     variables: props.variables,
     ...props.queryOptions,
   });
-
+  const shadow = defaultProp(props.shadow, true);
   const onPageChange = (params: GridPageChangeParams) => {
     setPage(params.page);
   };
@@ -61,6 +63,7 @@ const ServerPaginatedTable = (props: ServerPaginateTableProps) => {
       onPageChange={onPageChange}
       pagination
       paginationMode="server"
+      shadow={shadow}
       {...props}
     />
   );
