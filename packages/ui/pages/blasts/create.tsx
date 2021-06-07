@@ -55,25 +55,23 @@ const CampaignBuilderContent = (props: CampaignBuilderContentProps) => {
   const [audience, setAudience] = useState<Audience>();
   const [email, setEmail] = useState<EmailType>();
   const router = useRouter();
-  const [createCampaign, { data, loading, error }] =
-    useMutation<CreateCampaignQuery>(CREATE_CAMPAIGN, {
-      onCompleted(data) {
-        router.push(`/campaigns/${data.createCampaign.id}`);
+  const [createCampaign] = useMutation<CreateCampaignQuery>(CREATE_CAMPAIGN, {
+    onCompleted(data) {
+      setTimeout(() => {
+        router.push(`/blasts/${data.createCampaign.id}`);
+      }, 1000);
+    },
+  });
+
+  const onClickSendEmail = (): void => {
+    createCampaign({
+      variables: {
+        audienceId: audience.id,
+        emailId: email.id,
+        name: props.title,
       },
     });
-
-  const onClickSendEmail = useMemo(
-    () => (): void => {
-      createCampaign({
-        variables: {
-          audienceId: audience.id,
-          emailId: email.id,
-          name: props.title,
-        },
-      });
-    },
-    []
-  );
+  };
   const tooltipText = !!!audience
     ? "No audience selected"
     : !!!email
@@ -82,22 +80,22 @@ const CampaignBuilderContent = (props: CampaignBuilderContentProps) => {
     ? "No campaign name provided"
     : "";
 
-  const SendEmailButton = (
+  const SendBlastButton = (
     <BlueButton
-      text="Send Email"
+      text="Send Blast"
       onClick={onClickSendEmail}
       style={{ marginLeft: 0 }}
       disabled={!!tooltipText}
     />
   );
-  const RenderSendEmailButton = useMemo(
+  const RenderSendBlastButton = useMemo(
     () =>
       tooltipText ? (
         <Tooltip title={tooltipText} placement="bottom" leaveDelay={1000}>
-          {SendEmailButton}
+          {SendBlastButton}
         </Tooltip>
       ) : (
-        SendEmailButton
+        SendBlastButton
       ),
     [tooltipText]
   );
@@ -145,7 +143,7 @@ const CampaignBuilderContent = (props: CampaignBuilderContentProps) => {
       <div className="wrapper">
         <h4>3. SEND EMAIL</h4>
         <p>Total users: {audience?.count}</p>
-        {RenderSendEmailButton}
+        {RenderSendBlastButton}
       </div>
       <style jsx>{`
         .content {
@@ -200,7 +198,7 @@ const EmailBuilderPage = () => {
           title={title}
           onChangeTitleText={onChangeTitleText}
           subtitle="Send a message to your Audience."
-          placeholderTitle="Untitled Campaign"
+          placeholderTitle="Untitled Blast"
           showAction={false}
           icon={<FontAwesomeIcon icon={faCommentAlt} color={"#4a7da7"} />}
         ></DynamicTitleBar>

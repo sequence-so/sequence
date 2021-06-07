@@ -2,17 +2,13 @@ import DashboardLayout from "layout/DashboardLayout";
 import TitleBar from "layout/TitleBar";
 import CampaignTable from "components/campaign/list/CampaignTable";
 import DefaultViewLayout from "layout/DefaultViewLayout";
+import { PAGE_DEFAULTS } from "constants/page";
 
-const CampaignsIndexPage = () => {
+const BlastsIndexPage = () => {
   return (
     <DashboardLayout index={0}>
       <>
-        <TitleBar
-          title="Campaigns"
-          subtitle="View and manage your campaigns."
-          actionText="+ Create Campaign"
-          actionUrl="/campaigns/create"
-        ></TitleBar>
+        <TitleBar {...PAGE_DEFAULTS.blasts.index}></TitleBar>
         <DefaultViewLayout>
           <CampaignTable />
         </DefaultViewLayout>
@@ -21,4 +17,4 @@ const CampaignsIndexPage = () => {
   );
 };
 
-export default CampaignsIndexPage;
+export default BlastsIndexPage;
