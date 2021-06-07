@@ -15,33 +15,39 @@ const DetailSidebar = (props: Props) => {
         const field = elem.field;
         const label = elem.headerName;
         const value = props.productUser[field] ? props.productUser[field] : "-";
-        return { label, value };
+        let render: JSX.Element = null;
+        if (elem.renderCell) {
+          render = elem.renderCell({ row: props.productUser } as any);
+        }
+        return { field, label, value, render };
       }),
     []
   );
-  const RenderAttributeList = attributeList.map(({ label, value }) => {
-    return (
-      <div key={value}>
-        <p className="attribute-label">{label}</p>
-        <p className="attribute-value">{value}</p>
-        <style jsx>{`
-          p {
-            margin-block-start: 0px;
-            margin-block-end: 0px;
-          }
-          .attribute-label {
-            color: #4e4f55;
-            font-weight: 600;
-            text-transform: uppercase;
-          }
-          .attribute-value {
-            color: #4e4f55;
-            margin-block-end: 14px;
-          }
-        `}</style>
-      </div>
-    );
-  });
+  const RenderAttributeList = attributeList.map(
+    ({ field, label, value, render }) => {
+      return (
+        <div key={field}>
+          <p className="attribute-label">{label}</p>
+          <p className="attribute-value">{render ? render : value}</p>
+          <style jsx>{`
+            p {
+              margin-block-start: 0px;
+              margin-block-end: 0px;
+            }
+            .attribute-label {
+              color: #4e4f55;
+              font-weight: 600;
+              text-transform: uppercase;
+            }
+            .attribute-value {
+              color: #4e4f55;
+              margin-block-end: 14px;
+            }
+          `}</style>
+        </div>
+      );
+    }
+  );
   return (
     <div className="sidebar">
       <div className="top">
@@ -57,8 +63,8 @@ const DetailSidebar = (props: Props) => {
           flex-direction: column;
           height: 100%;
           border-radius: 4px;
-          box-shadow: 0px 0px 0px 1px rgb(15 15 15 / 2%),
-            0px 3px 6px rgb(15 15 15 / 3%), 0px 9px 24px rgb(15 15 15 / 10%);
+          border: var(--border-grey);
+          box-shadow: var(--subtle-shadow);
           margin-left: 1em;
         }
         .line {
@@ -90,7 +96,7 @@ const DetailSidebar = (props: Props) => {
         .attributes {
           display: flex;
           flex-direction: column;
-          padding: 1.5em;
+          padding: 1.25em;
           width: 350px;
         }
         p {

@@ -256,7 +256,7 @@ const RichTextExample = (props: Props) => {
           <Editable
             renderElement={renderElement}
             renderLeaf={renderLeaf}
-            placeholder="Enter some rich text…"
+            placeholder="Enter some text..."
             spellCheck
             autoFocus
             onKeyDown={(event) => {

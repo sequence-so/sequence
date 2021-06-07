@@ -43,7 +43,7 @@ const columns = [
   {
     field: "draft",
     headerName: "Draft",
-    width: 100,
+    width: 150,
     valueGetter: (params) => (params.row.sentCount > 0 ? "Published" : "Draft"),
   },
   {
@@ -92,8 +92,8 @@ const EmailTable = (props?: EmailTableProps) => {
     <ServerPaginatedTable
       columns={columns}
       gql={GET_EMAILS}
+      onReceivedData={(data) => setEmails(data)}
       getRows={(data) => {
-        setEmails(data);
         return data.emails.nodes;
       }}
       queryOptions={{ fetchPolicy: "no-cache" }}

@@ -20,7 +20,7 @@ const getSidebarIndex = (pathname: string) => {
   if (pathname.indexOf("settings") > -1) {
     return 4;
   }
-  if (pathname.indexOf("campaigns") > -1) {
+  if (pathname.indexOf("blasts") > -1) {
     return 0;
   }
   if (pathname.indexOf("audiences") > -1) {

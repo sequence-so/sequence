@@ -3,9 +3,8 @@ import { CircularProgress } from "@material-ui/core";
 import moment from "moment";
 import { useRouter } from "next/router";
 import Table from "components/Table";
-import AudienceTableRow from "./AudienceTableRow";
 import { GridRowParams } from "@material-ui/data-grid";
-import { memo, useMemo } from "react";
+import { useMemo } from "react";
 import { defaultProp } from "services/defaultProp";
 
 const GET_AUDIENCES = gql`
@@ -43,24 +42,22 @@ interface Props {
 
 const columns = [
   {
-    field: "name2",
+    field: "name",
     headerName: "Name",
-    width: 200,
+    width: 250,
     valueGetter: (params) => params.row.name ?? "Untitled",
   },
   {
     field: "count",
     headerName: "Users",
-    // description: "This column has a value getter and is not sortable.",
     width: 150,
   },
   {
-    field: "createdAtFormatted",
+    field: "createdAt",
     headerName: "Created",
     type: "string",
-    width: 180,
-    valueGetter: (params) =>
-      moment(params.row.createdAt).format("MMMM DD, YYYY"),
+    width: 250,
+    valueGetter: (params) => moment(params.row.createdAt).fromNow(),
   },
 ];
 
@@ -77,7 +74,9 @@ const RenderEmptyAudiences = () => {
 };
 
 const AudienceTable = (props?: Props) => {
-  const { data, loading, error } = useQuery(GET_AUDIENCES);
+  const { data, loading, error } = useQuery(GET_AUDIENCES, {
+    fetchPolicy: "no-cache",
+  });
   const shadow = defaultProp(props.shadow, true);
   const router = useRouter();
   const onClick = useMemo(

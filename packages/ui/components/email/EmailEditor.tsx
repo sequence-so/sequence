@@ -131,6 +131,7 @@ const EmailEditorInner = (props: EmailEditorInnerProps) => {
             <p style={{ fontWeight: 500, marginBlockEnd: 14 }}>Subject:</p>
             <CreateInput
               defaultValue={subject}
+              placeholder="Subject"
               onChangeText={(value) => {
                 setSubject(value);
                 debouncedUpdate.current({

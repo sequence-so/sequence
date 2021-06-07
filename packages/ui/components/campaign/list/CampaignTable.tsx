@@ -1,9 +1,8 @@
-import { gql, useQuery } from "@apollo/client";
-import { CircularProgress } from "@material-ui/core";
+import { gql } from "@apollo/client";
 import moment from "moment";
 import { useRouter } from "next/router";
-import Table from "components/Table";
 import { GridRowParams } from "@material-ui/data-grid";
+import ServerPaginatedTable from "components/ServerPaginatedTable";
 
 const GET_CAMPAIGNS = gql`
   query GetCampaigns {
@@ -42,48 +41,40 @@ const columns = [
   {
     field: "name2",
     headerName: "Name",
-    width: 200,
+    width: 250,
     valueGetter: (params) => params.row.name ?? "Untitled",
   },
   {
     field: "count",
     headerName: "Users",
     // description: "This column has a value getter and is not sortable.",
-    width: 150,
+    width: 250,
     valueGetter: (params) => params.row.audience.count ?? "-",
   },
   {
-    field: "createdAtFormatted",
+    field: "sentAt",
     headerName: "Sent",
     type: "string",
-    width: 180,
-    valueGetter: (params) => moment(params.row.sentAt).format("MMMM DD, YYYY"),
+    width: 250,
+    valueGetter: (params) => moment(params.row.sentAt).fromNow(),
   },
 ];
 
-const CampaignTable = () => {
-  const { data, loading, error } = useQuery(GET_CAMPAIGNS);
+const BlastsTable = () => {
   const router = useRouter();
 
   const onClick = (param: GridRowParams) => {
-    router.push(`/campaigns/${param.id}`);
+    router.push(`/blasts/${param.id}`);
   };
 
-  if (loading) {
-    return <CircularProgress />;
-  }
-  if (error) {
-    return <p>An error occured: {error.message} </p>;
-  }
-
   return (
-    <Table
-      rows={data.campaigns.nodes}
+    <ServerPaginatedTable
+      gql={GET_CAMPAIGNS}
+      getRows={(data) => data.campaigns.nodes}
       onRowClick={onClick}
       columns={columns}
-      page={0}
-    ></Table>
+    />
   );
 };
 
-export default CampaignTable;
+export default BlastsTable;
