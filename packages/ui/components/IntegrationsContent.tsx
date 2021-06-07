@@ -4,19 +4,6 @@ import styles from "../styles/Home.module.css";
 import IntegrationBox from "./IntegrationBox";
 
 const INTEGRATIONS = {
-  billing: {
-    title: "Billing",
-    value: {
-      stripe: {
-        imgProps: {
-          src: "/stripe.svg",
-          width: 46,
-        },
-        text: "",
-        link: "/onboarding/integrations",
-      },
-    },
-  },
   clientLibraries: {
     title: "Client Libraries",
     value: {
@@ -27,53 +14,6 @@ const INTEGRATIONS = {
         },
         text: "",
         link: "/onboarding/node-sdk",
-      },
-    },
-  },
-  customerSupport: {
-    title: "Customer Support",
-    value: {
-      intercom: {
-        imgProps: {
-          src: "/intercom.svg",
-          width: 35,
-        },
-        text: "Intercom",
-        link: "/onboarding/intercom",
-      },
-    },
-  },
-  databases: {
-    title: "Databases",
-    value: {
-      postgres: {
-        imgProps: {
-          src: "/postgresql_elephant.svg",
-          width: 35,
-        },
-        text: "Postgres",
-        link: "/onboarding/postgres",
-      },
-      mongodb: {
-        imgProps: {
-          src: "/mongodb.svg",
-          width: 90,
-        },
-        text: "",
-        link: "/onboarding/integrations",
-      },
-    },
-  },
-  notifications: {
-    title: "Notifications",
-    value: {
-      discord: {
-        imgProps: {
-          src: "/discord.svg",
-          width: 90,
-        },
-        text: "",
-        link: "/onboarding/discord",
       },
     },
   },

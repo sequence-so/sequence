@@ -76,7 +76,7 @@ const NewActionMenu = ({
     router.push(url);
   };
   const handleSendMesage = () => {
-    handleRoute("/campaigns/create");
+    handleRoute("/blasts/create");
   };
   const handleCreateEmail = () => {
     handleRoute("/emails/create");
@@ -110,7 +110,7 @@ const NewActionMenu = ({
       >
         <>
           <FontAwesomeIcon icon={faPaperPlane} style={iconStyle} />
-          <span style={{ marginLeft: 8 }}>Send Message</span>
+          <span style={{ marginLeft: 8 }}>Send Blast</span>
         </>
       </MenuItem>
       <MenuItem

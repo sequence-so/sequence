@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "next dev -p 8000",
     "build": "next build",
-    "start": "next start"
+    "start": "next start -p 8000"
   },
   "dependencies": {
     "@analytics/segment": "^1.1.0",

@@ -28,7 +28,7 @@ export const up = async () => {
   await Promise.all(
     new Array(1000).fill(null).map(async () => {
       track({
-        distinctId: faker.random.arrayElement(personIds),
+        personId: faker.random.arrayElement(personIds),
         messageId: uuidv4(),
         userId: user.id,
       });
@@ -38,7 +38,7 @@ export const up = async () => {
   await Promise.all(
     new Array(100).fill(null).map(async () => {
       alias({
-        distinctId: faker.random.arrayElement(personIds),
+        personId: faker.random.arrayElement(personIds),
         messageId: uuidv4(),
         userId: user.id,
       });

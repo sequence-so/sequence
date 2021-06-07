@@ -23,9 +23,9 @@ export interface SidebarItemProp {
 
 const ITEMS = [
   {
-    section: "Campaigns",
+    section: "Blasts",
     icon: <FontAwesomeIcon icon={faCommentAlt} style={iconStyle} />,
-    route: "/campaigns",
+    route: "/blasts",
   },
   {
     section: "Audiences",
@@ -38,14 +38,9 @@ const ITEMS = [
     route: "/emails",
   },
   {
-    section: "User Explorer",
+    section: "Person Explorer",
     icon: <FontAwesomeIcon icon={faSearch} style={iconStyle} />,
     route: "/explorer",
-  },
-  {
-    section: "Settings",
-    icon: <FontAwesomeIcon icon={faCog} style={iconStyle} />,
-    route: "/settings",
   },
 ];
 
