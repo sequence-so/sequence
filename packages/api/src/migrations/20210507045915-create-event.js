@@ -31,7 +31,7 @@ module.exports = {
       sourceId: {
         type: Sequelize.STRING,
       },
-      distinctId: {
+      personId: {
         type: Sequelize.STRING,
       },
       type: {

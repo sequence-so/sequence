@@ -6,7 +6,7 @@ export const campaigns = async (
     id,
     page,
     limit,
-  }: { id: string; page: number; limit: number; distinctId: string },
+  }: { id: string; page: number; limit: number; personId: string },
   { models, user }: GraphQLContextType
 ) => {
   page = page || 0;

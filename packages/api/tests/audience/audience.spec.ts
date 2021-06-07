@@ -32,7 +32,7 @@ describe("event filter", () => {
     });
     await eventSeed({
       name: "Signed In",
-      distinctId: john.externalId,
+      personId: john.externalId,
       userId: user.id,
     });
     await productUserSeed({
@@ -47,7 +47,7 @@ describe("event filter", () => {
         name: "Signed In",
         userId: user.id,
       },
-      group: "distinctId",
+      group: "personId",
     });
     const node = AND([EventFilter.new("Signed In").hasBeenPerformed()]);
     let builder = new AudienceBuilder(node, user.id);
@@ -192,7 +192,7 @@ describe("event attribute", () => {
     });
     await eventSeed({
       userId: user.id,
-      distinctId: tom.externalId,
+      personId: tom.externalId,
       type: "track",
       name: "Clicked a Button",
     });
@@ -203,7 +203,7 @@ describe("event attribute", () => {
     });
     await eventSeed({
       userId: user.id,
-      distinctId: john.externalId,
+      personId: john.externalId,
       type: "track",
       name: "Clicked a Button",
     });
@@ -240,7 +240,7 @@ describe("event attribute", () => {
     });
     await eventSeed({
       userId: user.id,
-      distinctId: tom.externalId,
+      personId: tom.externalId,
       type: "track",
       name: "Onboarding Started",
     });
@@ -262,7 +262,7 @@ describe("event attribute", () => {
     });
     await eventSeed({
       userId: user.id,
-      distinctId: tom.externalId,
+      personId: tom.externalId,
       type: "track",
       name: "Onboarding Started",
     });

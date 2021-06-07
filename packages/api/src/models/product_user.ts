@@ -21,7 +21,7 @@ const config: InitOptions = {
   },
 };
 
-interface ProductUserAttributes {
+export interface ProductUserAttributes {
   id: string;
   firstName: string;
   lastName: string;
@@ -168,13 +168,13 @@ ProductUser.belongsTo(User, {
 
 ProductUser.hasMany(Event, {
   as: "events",
-  foreignKey: "distinctId",
+  foreignKey: "personId",
   sourceKey: "externalId",
 });
 
 Event.belongsTo(ProductUser, {
   as: "productUser",
-  foreignKey: "distinctId",
+  foreignKey: "personId",
   targetKey: "externalId",
 });
 

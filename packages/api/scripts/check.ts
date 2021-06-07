@@ -23,7 +23,7 @@ const runTest = async () => {
   const createEvent = () => ({
     type: "event",
     name: eventNames[Math.floor(Math.random() * eventNames.length)],
-    distinctId: uuidv4(),
+    personId: uuidv4(),
     properties: {
       $library: "1",
       $libraryVersion: "1",

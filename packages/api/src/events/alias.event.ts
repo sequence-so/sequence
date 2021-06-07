@@ -15,7 +15,7 @@ const alias = async (
 
   let productUser = await ProductUser.findOne({
     where: {
-      externalId: event.distinctId,
+      externalId: event.personId,
       userId,
     },
   });
@@ -23,7 +23,7 @@ const alias = async (
   if (!productUser) {
     productUser = await ProductUser.create({
       email: event.properties.email,
-      externalId: event.distinctId,
+      externalId: event.personId,
       firstName: event.properties.firstName,
       lastName: event.properties.lastName,
       photo: event.properties.photo,

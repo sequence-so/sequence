@@ -17,16 +17,11 @@ const track = async (
     );
   }
 
-  // const CustomPropertyModel = await createOrUpdateCustomPropertiesTable(
-  //   event,
-  //   userId
-  // );
-
   const trackEventParams = {
     name: event.name,
     createdAt: moment.tz(event.timestamp, "America/Los_Angeles").toDate(),
     updatedAt: moment.tz(event.timestamp, "America/Los_Angeles").toDate(),
-    distinctId: event.distinctId,
+    personId: event.personId,
     messageId: event.messageId,
     properties: event.properties,
     source,

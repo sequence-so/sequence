@@ -55,13 +55,14 @@ const typeDefs = gql`
     user: User
     createdAt: Date
     updatedAt: Date
+    deletedAt: Date
   }
   type Event {
     id: ID!
     name: String
     type: String
     source: String
-    distinctId: String
+    personId: String
     properties: JSONObject
     productUser: ProductUser
     createdAt: Date
@@ -70,9 +71,6 @@ const typeDefs = gql`
   type Integrations {
     segment: Boolean
     node: Boolean
-  }
-  type QueryResult {
-    result: String
   }
   type PaginatedAudience {
     nodes: [Audience]
@@ -154,12 +152,12 @@ const typeDefs = gql`
     campaigns(id: ID, page: Int, limit: Int): PaginatedCampaign
     customProperties: [CustomProperty]
     emails(id: ID, page: Int, limit: Int): PaginatedEmails
-    events(id: ID, page: Int, limit: Int, distinctId: ID): PaginatedEvent
-    getChannelWebhooks: QueryResult
+    events(id: ID, page: Int, limit: Int, personId: ID): PaginatedEvent
     getIntercom: AuthIntercom
     getSegmentWebhook: SegmentWebhook
     getUser: User
-    productUsers(page: Int, limit: Int): PaginatedProductUser
+    integrations: Integrations
+    productUsers(id: String, page: Int, limit: Int): PaginatedProductUser
     uniqueEventNames: [String]
   }
   type Mutation {

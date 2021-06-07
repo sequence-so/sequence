@@ -15,7 +15,7 @@ export interface EventAttributes {
   id: string;
   name: string;
   type: string;
-  distinctId: string;
+  personId: string;
   properties: Record<string, any>;
   source: string;
   sourceId: string;
@@ -35,7 +35,7 @@ class Event extends Sequelize.Model<EventAttributes, EventCreationAttributes> {
   public id!: string;
   public name: string;
   public type: string;
-  public distinctId: string;
+  public personId: string;
   public properties: Record<string, any>;
   public source: string;
   public sourceId: string;
@@ -63,7 +63,7 @@ Event.init(
       type: DataTypes.STRING,
       unique: true,
     },
-    distinctId: DataTypes.STRING,
+    personId: DataTypes.STRING,
     userId: DataTypes.STRING,
   },
   config

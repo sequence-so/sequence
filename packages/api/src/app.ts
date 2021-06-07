@@ -1,6 +1,7 @@
-import "module-alias/register";
 import dotenv from "dotenv";
 dotenv.config();
+import { register } from "./moduleAliases";
+register();
 import express from "express";
 import cookieParser from "cookie-parser";
 import { ApolloServer } from "apollo-server-express";
@@ -52,26 +53,6 @@ app.use(
 
 new Routes(app);
 
-// const productUserLoader = (models: typeof SequelizeModels) =>
-//   new DataLoader(async (productUserIds: string[]) => {
-//     return await models.ProductUser.findAll({
-//       where: {
-//         id: {
-//           [sequelize.Op.in]: productUserIds,
-//         },
-//       },
-//     });
-//   });
-
-// const audienceProductUserLoader = (models: typeof SequelizeModels) =>
-//   new DataLoader(async (audienceProductUserIds: string[]) => {
-//     return await models.AudienceProductUser.findAll({
-//       where: {
-//         id: audienceProductUserIds,
-//       },
-//     });
-//   });
-
 const server = new ApolloServer({
   typeDefs: schema,
   resolvers: resolvers,
@@ -79,14 +60,9 @@ const server = new ApolloServer({
     const token = req.headers.authorization;
     const result = jwt.verify(token, JwtConfig.jwt.secret);
     const user = (result as any).user;
-    debugger;
     return {
       models: SequelizeModels,
       user,
-      // dataLoaders: {
-      //   productUserLoader: productUserLoader(SequelizeModels),
-      //   audienceProductUserLoader: audienceProductUserLoader(SequelizeModels),
-      // },
     };
   },
   formatError(err) {

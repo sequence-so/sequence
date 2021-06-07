@@ -2,7 +2,7 @@ import { Application, Request } from "express";
 import SegmentWebook from "../models/segment_webhook";
 import WebhookExecution from "../models/webhook_execution";
 import Event from "../models/event";
-
+import { v4 as generateId } from "uuid";
 // ignore "group" type
 type SegmentEventTypes = "track" | "identify" | "alias" | "page";
 
@@ -148,10 +148,22 @@ class Segment {
     event: SegmentIdentify | SegmentTrack | SegmentPage,
     source: WebhookExecution
   ) {
+    const messageId = event.messageId || generateId();
     try {
+      const existing = await Event.findOne({
+        where: {
+          userId: source.userId,
+          messageId,
+        },
+      });
+      if (existing) {
+        throw new Error(
+          `An existing event was found for this messageId: ${messageId}`
+        );
+      }
       if (event.type === "identify") {
         await Event.create({
-          distinctId: event.userId,
+          personId: event.userId,
           name: "$identify",
           messageId: event.messageId,
           properties: event.traits,
@@ -164,7 +176,7 @@ class Segment {
         });
       } else if (event.type === "page") {
         await Event.create({
-          distinctId: event.userId,
+          personId: event.userId,
           name: "$page",
           messageId: event.messageId,
           properties: event.properties,
@@ -177,14 +189,14 @@ class Segment {
         });
       } else if (event.type === "track") {
         await Event.create({
-          distinctId: event.userId,
+          personId: event.userId,
           name: event.event,
           messageId: event.messageId,
           properties: event.properties,
           source: source.type,
           sourceId: source.id,
           userId: source.userId,
-          type: "page",
+          type: "track",
           createdAt: new Date(event.timestamp),
           updatedAt: new Date(event.timestamp),
         });
