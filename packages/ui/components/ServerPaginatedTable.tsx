@@ -1,14 +1,7 @@
 import { QueryHookOptions, useQuery } from "@apollo/client";
-import { CircularProgress, makeStyles } from "@material-ui/core";
-import {
-  DataGrid,
-  DataGridProps,
-  GridCellParams,
-  GridColumns,
-  GridPageChangeParams,
-} from "@material-ui/data-grid";
+import { CircularProgress } from "@material-ui/core";
+import { DataGridProps, GridPageChangeParams } from "@material-ui/data-grid";
 import { DocumentNode } from "graphql";
-import gql from "graphql-tag";
 import { useMemo, useState } from "react";
 import { defaultProp } from "services/defaultProp";
 import Table from "./Table";
@@ -16,9 +9,10 @@ import Table from "./Table";
 type ServerPaginateTableProps = Partial<DataGridProps> & {
   gql: DocumentNode;
   getRows: (elem: any) => any[];
+  onReceivedData?: (elem: any) => void;
   variables?: Record<string, any>;
   queryOptions?: QueryHookOptions<any, Record<string, any>>;
-  shadow: boolean;
+  shadow?: boolean;
 };
 
 const DEFAULT_LIMIT = 10;
@@ -31,6 +25,7 @@ const ServerPaginatedTable = (props: ServerPaginateTableProps) => {
     onCompleted(data) {
       const key = Object.keys(data)[0];
       setRowCount(data[key].rows);
+      props.onReceivedData ? props.onReceivedData(data) : null;
     },
     variables: props.variables,
     ...props.queryOptions,
@@ -40,14 +35,14 @@ const ServerPaginatedTable = (props: ServerPaginateTableProps) => {
     setPage(params.page);
   };
 
-  if (error) {
-    return <p>An error occured loading this table: {error.message}</p>;
-  }
   const rows = useMemo(
     () => (loading ? [] : props.getRows(data)),
     [loading, data, rowCount]
   );
 
+  if (error) {
+    return <p>An error occured loading this table: {error.message}</p>;
+  }
   if (loading || rowCount === -1) {
     return <CircularProgress />;
   }

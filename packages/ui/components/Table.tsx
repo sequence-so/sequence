@@ -12,6 +12,10 @@ const useStyles = makeStyles((theme) => ({
     "&": {
       boxShadow: (props) =>
         (props as any).shadow ? "var(--subtle-shadow)" : "none",
+      minHeight: 300,
+    },
+    "& .MuiDataGrid-row:hover": {
+      cursor: "pointer",
     },
     "& .MuiDataGrid-colCell": {
       textTransform: "uppercase",
