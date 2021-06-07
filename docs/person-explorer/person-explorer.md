@@ -4,7 +4,7 @@
 
 The Person Explorer allows you to view your People data in a table view.
 
-![](../.gitbook/assets/image%20%2815%29.png)
+![](../.gitbook/assets/image%20%289%29%20%281%29.png)
 
 **COMING SOON:**
 

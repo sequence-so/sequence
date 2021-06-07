@@ -1,6 +1,7 @@
 # Table of contents
 
-* [Quickstart](README.md)
+* [Quick Start](README.md)
+* [Running From Source](running-from-source.md)
 * [Overview](overview.md)
 * [Importing Data](importing-data.md)
 
@@ -34,4 +35,8 @@
 
 * [Blasts](campaign/blasts.md)
 * [Sending a Blast](campaign/sending-a-blast.md)
+
+## Support
+
+* [Support](support/support.md)
 

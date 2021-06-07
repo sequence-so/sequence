@@ -1,8 +1,23 @@
----
-description: Setting up Sequence.
----
+# Quick Start
 
-# Quickstart
+### Sequence
+
+Sequence is an open-core email marketing automation tool. 
+
+![](.gitbook/assets/my-movie-4.gif)
+
+#### Features
+
+* **Segment your customers** by Events or Person Attributes via our Audience Builder
+* **Send targeted emails** to your Audiences
+* **Search and filter through customer data** from multiple sources \(Segment, API, SDK, with Intercom and CSV coming soon\)
+* **GraphQL API and HTTP API**
+
+**Coming Soon**
+
+* **Email, SMS, and Push Notification support**
+* **Event and SQL** based campaign triggers
+* **Rich HTML editor**
 
 ## Quick Start
 
@@ -17,31 +32,7 @@ Open `http://0.0.0.0:8000` to see the application.
 
 #### **What's Next**
 
-Read about importing data to begin using Sequence.
+Read about **Importing Data** to begin using Sequence.
 
 {% page-ref page="importing-data.md" %}
-
-## Building Sequence
-
-**Requirements**
-
-* Node version 14 and greater
-* Postgres version 11 and greater
-
-**Recommended**
-
-* A Sendgrid API Key to send emails
-* Read `/packages/api/.env.example` to configure your environment variables.
-
-```text
-git clone https://github.com/sequence-so/sequence
-cd sequence
-yarn bootstrap
-./build/copy_env
-yarn dev
-```
-
-Please reach out if any errors occur at `support@sequence.so`.
-
-Test edit.
 
