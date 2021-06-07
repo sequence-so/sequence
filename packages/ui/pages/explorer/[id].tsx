@@ -5,9 +5,10 @@ import { useRouter } from "next/router";
 import EventTable, { EVENTS_TABLE_COLUMNS } from "../../components/EventTable";
 import DashboardLayout from "../../layout/DashboardLayout";
 import TitleBar from "../../layout/TitleBar";
-import { GET_PRODUCT_USERS, GetProductUsers } from "pages/explorer/index";
+import { GetProductUsers, GET_PRODUCT_USER } from "pages/explorer/index";
 import { CircularProgress } from "@material-ui/core";
 import { getFullName } from "utils/getFullName";
+import GQLErrorMessage from "components/GQLErrorMessage";
 
 const USER_EVENTS_TABLE_COLUMNS = [...EVENTS_TABLE_COLUMNS].filter(
   (k) => k.field !== "full_name"
@@ -17,7 +18,16 @@ USER_EVENTS_TABLE_COLUMNS[0].width = 250;
 const User = () => {
   const router = useRouter();
   const id = router.query.id as string;
-  const { data, loading, error } = useQuery<GetProductUsers>(GET_PRODUCT_USERS);
+  const { data, loading, error } = useQuery<GetProductUsers>(GET_PRODUCT_USER, {
+    variables: { id },
+  });
+
+  const RenderContents = id && (
+    <EventTable
+      variables={{ personId: id }}
+      columns={USER_EVENTS_TABLE_COLUMNS}
+    />
+  );
 
   return (
     <DashboardLayout index={3}>
@@ -33,10 +43,8 @@ const User = () => {
         <div style={{ width: "100%" }}>
           <DefaultViewLayout>
             <div className="container">
-              <EventTable
-                variables={{ distinctId: id }}
-                columns={USER_EVENTS_TABLE_COLUMNS}
-              />
+              {error && <GQLErrorMessage error={error.message} />}
+              {RenderContents}
               {loading ? (
                 <CircularProgress />
               ) : (

@@ -5,6 +5,7 @@ import styles from "../styles/Home.module.css";
 import LogoColor from "../public/logo_color.svg";
 import LoginForm from "components/login/LoginForm";
 import Link from "next/link";
+import Wordmark from "components/Wordmark";
 
 export default function Login() {
   const [domain, setDomain] = useState("");
@@ -19,7 +20,7 @@ export default function Login() {
       return;
     }
     if (localStorage.token) {
-      router.push("/campaigns");
+      router.push("/blasts");
     }
   }, [router.isReady]);
 
@@ -103,6 +104,7 @@ export default function Login() {
             <p>Don't have an account? Click to sign up.</p>
           </a>
         </Link>
+        <Wordmark />
       </div>
       <div className={styles.signup_right}></div>
     </div>

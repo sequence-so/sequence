@@ -20,7 +20,7 @@ const GET_EVENTS = gql`
         name
         type
         source
-        distinctId
+        personId
         properties
         createdAt
         updatedAt
@@ -35,7 +35,7 @@ export interface EventNode {
   id: string;
   name: string;
   type: string;
-  distinctId: string;
+  personId: string;
   properties: Record<string, any>;
   userId: string;
   createdAt: Date;

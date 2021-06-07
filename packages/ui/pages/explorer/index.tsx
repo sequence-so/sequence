@@ -1,24 +1,23 @@
-import DashboardLayout from "../../layout/DashboardLayout";
-import TitleBar from "../../layout/TitleBar";
+import { useMemo, useState } from "react";
 import { makeStyles } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import SearchIcon from "@material-ui/icons/Search";
-import moment from "moment";
 import {
   DataGrid,
-  GridCellParams,
   GridColumns,
   GridPageChangeParams,
+  GridRowParams,
 } from "@material-ui/data-grid";
-import homeStyles from "../../styles/Home.module.css";
 import gql from "graphql-tag";
-import { useMemo, useState } from "react";
 import { useQuery } from "@apollo/client";
-import Link from "next/link";
 import classNames from "classnames";
+import { useRouter } from "next/router";
+import DashboardLayout from "layout/DashboardLayout";
+import TitleBar from "layout/TitleBar";
 import DefaultViewLayout from "layout/DefaultViewLayout";
 import { PRODUCT_USER_COLUMN_MAPPING } from "components/productUser/columnMapping";
+import { PAGE_DEFAULTS } from "constants/page";
 
 export const GET_PRODUCT_USERS = gql`
   query GetProductUsers($page: Int, $limit: Int) {
@@ -28,6 +27,32 @@ export const GET_PRODUCT_USERS = gql`
         firstName
         lastName
         email
+        lastSeenAt
+        signedUpAt
+        photo
+        browser
+        externalId
+        createdAt
+        updatedAt
+      }
+      page
+      rows
+    }
+  }
+`;
+
+export const GET_PRODUCT_USER = gql`
+  query GetProductUsers($id: String) {
+    productUsers(id: $id) {
+      nodes {
+        id
+        firstName
+        lastName
+        email
+        lastSeenAt
+        signedUpAt
+        photo
+        browser
         externalId
         createdAt
         updatedAt
@@ -41,7 +66,7 @@ export const GET_PRODUCT_USERS = gql`
 export interface ProductUser {
   id: string;
   email: string;
-  distinctId: string;
+  personId: string;
   firstName: string;
   lastName: string;
   photo: string;
@@ -117,6 +142,9 @@ const useStyles = makeStyles((theme) => ({
       textTransform: "uppercase",
       color: "#4E4F55",
     },
+    "& .MuiDataGrid-row:hover": {
+      cursor: "pointer",
+    },
     "& .MuiDataGrid-colCellRight": {
       border: "none",
     },
@@ -129,42 +157,6 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
   },
 }));
-
-const columns = [
-  {
-    field: "full_name",
-    headerName: "User",
-    width: 200,
-    renderCell: (params: GridCellParams) => (
-      <Link href={`/explorer/${params.row.externalId}`}>
-        <a>
-          <div style={{ display: "inline-flex", alignItems: "center" }}>
-            <div className={homeStyles.initials_circle}>
-              {(params.row.firstName as any).substring(0, 1)}
-              {(params.row.lastName as any)?.substring(0, 1)}
-            </div>
-            {params.row.firstName as any} {params.row.lastName as any}
-          </div>
-        </a>
-      </Link>
-    ),
-  },
-];
-
-const createColumnsFromData = (productUsers: ProductUser[]) => {
-  const keys = Object.keys(productUsers[0]).filter(
-    (key) => key !== "__typename"
-  );
-  let columnData: GridColumns = [];
-  keys.map((key) => {
-    columnData.push({
-      field: key,
-      width: 200,
-      headerName: key,
-    });
-  });
-  return columnData;
-};
 
 const SearchBar = () => {
   const classes = useStyles();
@@ -190,10 +182,12 @@ const SearchBar = () => {
 
 const UserExplorerPage = () => {
   const classes = useStyles();
-
+  const router = useRouter();
   const [page, setPage] = useState(0);
   const [rowCount, setRowCount] = useState(0);
-  const [columnData, setColumnData] = useState<GridColumns>();
+  const [columnData, setColumnData] = useState<GridColumns>(
+    PRODUCT_USER_COLUMN_MAPPING
+  );
   const { loading, error, data } = useQuery<GetProductUsers>(
     GET_PRODUCT_USERS,
     {
@@ -206,11 +200,6 @@ const UserExplorerPage = () => {
       },
     }
   );
-  const renderColumns = useMemo(() => {
-    if (data?.productUsers.nodes) {
-      setColumnData(PRODUCT_USER_COLUMN_MAPPING);
-    }
-  }, [data?.productUsers]);
 
   const components = useMemo(
     () => ({
@@ -235,13 +224,18 @@ const UserExplorerPage = () => {
     []
   );
 
+  const onRowClick = (param: GridRowParams) => {
+    console.log(param.row);
+    router.push(`/explorer/${param.row.id}`);
+  };
+
   return (
     <DashboardLayout index={2}>
       <>
         <TitleBar
-          title="User Explorer"
+          title={PAGE_DEFAULTS.explorer.index.title}
           showAction={false}
-          subtitle="Filter and search through your user data."
+          subtitle={PAGE_DEFAULTS.explorer.index.subtitle}
         ></TitleBar>
         <DefaultViewLayout>
           <>
@@ -254,6 +248,7 @@ const UserExplorerPage = () => {
                 rowCount={rowCount}
                 className={classes.table}
                 onPageChange={onPageChange}
+                onRowClick={onRowClick}
                 pagination
                 paginationMode="server"
                 loading={loading}

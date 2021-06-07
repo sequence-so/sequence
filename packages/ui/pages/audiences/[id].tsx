@@ -72,7 +72,7 @@ const AudienceByIdPage = () => {
     ) : (
       <>
         <div className="content">
-          <AudienceBuilder rootNode={nodeRef.current} />
+          <AudienceBuilder name={title} rootNode={nodeRef.current} />
           <ProductUserTable
             productUsers={data.audiences.nodes[0].productUsers}
             rows={data.audiences.rows}

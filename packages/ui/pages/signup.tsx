@@ -5,6 +5,7 @@ import styles from "../styles/Home.module.css";
 import LogoColor from "../public/logo_color.svg";
 import LoginForm from "components/login/LoginForm";
 import Link from "next/link";
+import Wordmark from "components/Wordmark";
 
 export default function Signup() {
   const [domain, setDomain] = useState("");
@@ -103,6 +104,7 @@ export default function Signup() {
             <p>Have an account? Login here.</p>
           </a>
         </Link>
+        <Wordmark />
       </div>
       <div className={styles.signup_right}></div>
     </div>

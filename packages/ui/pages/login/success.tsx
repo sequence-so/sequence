@@ -18,7 +18,7 @@ const Success = () => {
     }
     localStorage.token = router.query.token;
     setToken(router.query.token as string);
-    router.push("/");
+    router.push("/blasts");
   }, [router.isReady]);
 
   return <div></div>;
