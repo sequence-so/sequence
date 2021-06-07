@@ -14,6 +14,9 @@ import RenderNode from "./RenderNode";
 import RenderConditionKind from "./RenderConditionKind";
 import CommonSelect from "../common/Select";
 import filterStyles from "styles/filter.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { Tooltip } from "@material-ui/core";
 
 interface RenderConditionProps {
   node: Condition;
@@ -133,14 +136,16 @@ const RenderCondition = ({
             />
             <span>of the following conditions match</span>
             {depth > 0 && (
-              <span
-                style={{ marginLeft: "auto" }}
-                onClick={() => {
-                  removeSelf();
-                }}
-              >
-                Delete Me
-              </span>
+              <Tooltip title={"Delete filter"} placement="bottom">
+                <span
+                  style={{ marginLeft: "auto" }}
+                  onClick={() => {
+                    removeSelf();
+                  }}
+                >
+                  <FontAwesomeIcon icon={faTimesCircle}></FontAwesomeIcon>
+                </span>
+              </Tooltip>
             )}
           </div>
         </div>
