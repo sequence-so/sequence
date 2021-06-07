@@ -1,12 +1,10 @@
-import {
-  NodeKind,
-  AbstractNode,
-  NodeParseError,
-  Condition,
-} from "common/filters";
+import { NodeKind, AbstractNode, NodeParseError } from "common/filters";
 import RenderNodeByKind from "./RenderNodeByKind";
 import { mapNodeKindToSelectOption, SELECT_OPTIONS } from "./AudienceConstants";
 import CommonSelect from "../common/Select";
+import { Tooltip } from "@material-ui/core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 
 export interface RenderNodeProps {
   node: AbstractNode;
@@ -17,14 +15,18 @@ export interface RenderNodeProps {
 }
 
 const RemoveNode = (props: RenderNodeProps) => (
-  <span
-    style={{ marginLeft: "auto" }}
-    onClick={() => {
-      props.remove();
-    }}
-  >
-    Delete Me
-  </span>
+  <Tooltip title={"Delete filter"} placement="bottom">
+    <span
+      style={{
+        marginLeft: "auto",
+      }}
+      onClick={() => {
+        props.remove();
+      }}
+    >
+      <FontAwesomeIcon icon={faTimesCircle} color="#9FA1A4"></FontAwesomeIcon>
+    </span>
+  </Tooltip>
 );
 
 const RenderNode = (props: RenderNodeProps) => {
