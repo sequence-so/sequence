@@ -23,10 +23,8 @@ interface SequenceWebhook {
 }
 
 const NodeSDKPage = () => {
-  const [
-    createWebhook,
-    { loading, data, error },
-  ] = useMutation<SequenceWebhook>(CREATE_SEQUENCE_WEBHOOK);
+  const [createWebhook, { loading, data, error }] =
+    useMutation<SequenceWebhook>(CREATE_SEQUENCE_WEBHOOK);
   const { integrations, loading: loadingIntegrations } = useDidIntegrate({
     pollingInterval: 1000,
   });
@@ -45,13 +43,10 @@ const NodeSDKPage = () => {
       content={
         <>
           <p>
-            Need custom integration with Sequence? Use our Node SDK to both
-            capture events from your backend and trigger alerts.
+            Need custom integration with Sequence? Use our Node SDK to capture
+            events and user data.
           </p>
-          <p>
-            For more instructions on how to integrate with our SDK, click here
-            for the Github link.
-          </p>
+          <p>This integration provides a client library over our API.</p>
         </>
       }
       instructions={
