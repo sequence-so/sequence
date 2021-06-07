@@ -66,5 +66,37 @@ Could not find a cake matching this query.
 {% endapi-method-spec %}
 {% endapi-method %}
 
+### Event Schema
 
+The NodeJS SDK offers the following methods for tracking events:
+
+```typescript
+import Analytics from 'sequence-lib';
+const analytics = new Analytics(process.env.SEQUENCE_API_KEY);
+
+interface SequenceEvent {
+  /**
+   * Defines the name of the event.
+   */
+  event: string;
+  /**
+   * Timestamp of the event. If you're doing a historical import,
+   * specify the timestamp here. Otherwise, leave empty.
+   */
+  timestamp?: string | Date;
+  /**
+   * Custom properties on the event.
+   */
+  properties?: {
+    [k: string]: any;
+  };
+}
+
+// Track an event
+analytics.track(event: SequenceEvent, callback?: CallbackFunction)
+
+// Identify a user
+analytics.identify(
+    
+```
 
