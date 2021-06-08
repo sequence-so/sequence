@@ -11,6 +11,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "lib": ["es2018"],
+    "types": ["node"],
     "checkJs": false,
     "resolveJsonModule": true,
     "declaration": true,

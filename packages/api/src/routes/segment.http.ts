@@ -2,7 +2,7 @@ import { Application, Request, Response } from "express";
 import SegmentWebook from "../models/segment_webhook";
 import SegmentProcessor from "src/services/segmentProcessor";
 import SegmentWebhook from "../models/segment_webhook";
-import SequenceError from "src/error/SequenceError";
+import SequenceError from "src/error/sequenceError";
 
 export interface HttpResponse extends Record<string, any> {
   success: boolean;

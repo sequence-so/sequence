@@ -19,7 +19,7 @@ export async function getServerSideProps(context) {
   const url = context.req.url as string;
   const index = url.indexOf("?token=");
   const token = url.substring(index + "?token=".length, url.length);
-  let apiEndpoint = `${process.env.NEXT_PUBLIC_API_URL}/graphql`;
+  let apiEndpoint = `${process.env.NEXT_PRIVATE_API_URL}/graphql`;
   const res = await fetch(apiEndpoint, {
     method: "POST",
     headers: {

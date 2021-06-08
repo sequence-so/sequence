@@ -6,9 +6,6 @@ import Head from "next/head";
 import { install } from "../services/analytics";
 import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "../layout/theme";
-import { IntercomProvider } from "react-use-intercom";
-
-const INTERCOM_APP_ID = "idhc7omi";
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
@@ -76,9 +73,7 @@ function MyApp({ Component, pageProps }) {
       </Head>
       <ApolloProvider client={ApolloClient}>
         <ThemeProvider theme={theme}>
-          <IntercomProvider appId={INTERCOM_APP_ID}>
-            <Component {...pageProps} />
-          </IntercomProvider>
+          <Component {...pageProps} />
         </ThemeProvider>
       </ApolloProvider>
     </>

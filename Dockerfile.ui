@@ -1,0 +1,60 @@
+# Based off of https://nextjs.org/docs/deployment#docker-image
+# Install dependencies for all subprojects
+FROM node:alpine AS base
+WORKDIR /app
+RUN apk add --no-cache libc6-compat
+# Install lerna
+RUN yarn global add lerna
+# Root package.json for all modules
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
+COPY packages/common ./packages/common
+COPY packages/ui ./packages/ui
+COPY lerna.json tsconfig.json ./
+RUN yarn run bootstrap
+
+# Install UI dependencies
+FROM node:alpine AS ui-builder
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+COPY --from=base /app .
+WORKDIR /app/packages/ui
+RUN yarn build && yarn install --production --ignore-scripts --prefer-offline
+
+# Build Common
+FROM node:alpine AS common-builder
+WORKDIR /app
+COPY --from=base /app .
+WORKDIR /app/packages/common
+ENV NEXT_PUBLIC_API_URL=http://0.0.0.0:3000/graphql
+RUN yarn build && yarn install --production --ignore-scripts --prefer-offline
+
+# Production image, copy all the files and run next
+FROM node:alpine AS runner
+WORKDIR /app/packages/ui
+
+ENV NODE_ENV production
+
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
+
+COPY . .
+# You only need to copy next.config.js if you are NOT using the default configuration
+COPY --from=ui-builder /app/packages/ui/.env ./.env
+COPY --from=ui-builder /app/packages/ui/next.config.js ./
+COPY --from=ui-builder /app/packages/ui/public ./public
+COPY --from=ui-builder --chown=nextjs:nodejs /app/packages/ui/.next ./.next
+COPY --from=ui-builder /app/packages/ui/node_modules ./node_modules
+COPY --from=ui-builder /app/packages/ui/package.json ./package.json
+
+USER nextjs
+
+EXPOSE 8000
+
+# Next.js collects completely anonymous telemetry data about general usage.
+# Learn more here: https://nextjs.org/telemetry
+# Uncomment the following line in case you want to disable telemetry.
+# ENV NEXT_TELEMETRY_DISABLED 1
+ENV PORT 8000
+
+CMD ["yarn", "start"]
