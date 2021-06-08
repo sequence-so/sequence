@@ -47,13 +47,13 @@ const IntegrationLayout = (props: Props) => {
                 <>
                   <p className="cta">
                     <img src={BlueCheckmark} width={28} />
-                    You've already authorized access to {props.title}.
+                    You're already integrated with {props.title}.
                   </p>
                 </>
               )}
             </div>
-            <hr />
-            <div className="row">
+            {/* <hr /> */}
+            {/* <div className="row">
               <div className="col bottom">
                 <h4>PERMISSIONS REQUIRED</h4>
                 <p>
@@ -76,7 +76,7 @@ const IntegrationLayout = (props: Props) => {
                   We send messages only to the channel you configure.
                 </p>
               </div>
-            </div>
+            </div> */}
             {props.instructions && (
               <>
                 <hr />

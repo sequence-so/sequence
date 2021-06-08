@@ -409,10 +409,8 @@
 }
 
 .onboarding_box_row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, 200px);
-  column-gap: 1rem;
-  row-gap: 1rem;
+  display: flex;
+  flex-direction: row;
   width: 100%;
   justify-content: space-evenly;
   justify-items: center;
@@ -420,12 +418,15 @@
   align-items: center;
 }
 
+.onboarding_box_row > * + * {
+  margin-left: 1.5rem;
+}
 .onboarding_box {
   display: flex;
   flex-direction: column;
   border-radius: 16px;
-  width: 200px;
-  height: 200px;
+  width: 175px;
+  height: 175px;
   color: white;
   font-style: normal;
   font-weight: 500;
@@ -434,7 +435,6 @@
   padding: 15px 18px 22px 15px;
   background-size: 200% auto;
   transition: all 0.5s;
-  cursor: pointer;
 }
 
 .onboarding_box_red {
@@ -448,10 +448,10 @@
 
 .onboarding_box_red:hover {
   box-shadow: 8px 6px 0px #FFCCCC;
-  margin-left: 3px;
+  /* margin-left: 3px;
   margin-top: 3px;
   margin-right: -3px;
-  margin-bottom: -3px;
+  margin-bottom: -3px; */
 }
 
 .onboarding_box_blue {
@@ -461,10 +461,10 @@
 
 .onboarding_box_blue:hover {
   box-shadow: 8px 6px 0px #CEF5FD;
-  margin-left: 33px;
+  /* margin-left: 33px;
   margin-top: 3px;
   margin-right: -3px;
-  margin-bottom: -3px;
+  margin-bottom: -3px; */
 }
 
 .onboarding_box_purple {
@@ -474,10 +474,10 @@
 
 .onboarding_box_purple:hover {
   box-shadow: 8px 6px 0px #EECEFD;
-  margin-left: 33px;
+  /* margin-left: 33px;
   margin-top: 3px;
   margin-right: -3px;
-  margin-bottom: -3px;
+  margin-bottom: -3px; */
 }
 
 

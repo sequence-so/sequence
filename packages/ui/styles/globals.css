@@ -15,6 +15,10 @@ a {
   text-decoration: none;
 }
 
+a.default {
+  color: #4191e4;
+}
+
 * {
   box-sizing: border-box;
 }
