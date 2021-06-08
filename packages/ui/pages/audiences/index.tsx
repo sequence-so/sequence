@@ -3,6 +3,7 @@ import DashboardLayout from "layout/DashboardLayout";
 import TitleBar from "layout/TitleBar";
 import AudienceTable from "components/audience/list/AudienceTable";
 import DefaultViewLayout from "layout/DefaultViewLayout";
+import { PAGE_DEFAULTS } from "constants/page";
 
 export const GET_UNIQUE_EVENTS = gql`
   query UniqueEvents {
@@ -38,12 +39,7 @@ const AudiencesList = () => {
   return (
     <DashboardLayout index={0}>
       <>
-        <TitleBar
-          title="Audiences"
-          subtitle="View and manage your audiences."
-          actionText="+ Create Audience"
-          actionUrl="/audiences/create"
-        ></TitleBar>
+        <TitleBar {...PAGE_DEFAULTS.audiences.index}></TitleBar>
         <DefaultViewLayout>
           <AudiencesListContent />
         </DefaultViewLayout>

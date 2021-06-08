@@ -1,6 +1,6 @@
 import { GraphQLScalarType, Kind } from "graphql";
 import { GraphQLJSONObject } from "graphql-type-json";
-
+import isNull from "lodash/isnull";
 import * as AudienceResolvers from "./resolvers/audience.resolver";
 import * as CampaignResolvers from "./resolvers/campaign.resolver";
 import * as CustomPropertyResolvers from "./resolvers/customProperty.resolver";
@@ -17,8 +17,10 @@ import * as EmailMutations from "./mutations/email.mutation";
 import * as IntercomMutations from "./mutations/intercom.mutation";
 import * as SegmentMutations from "./mutations/segment.mutation";
 import * as WebhookMutations from "./mutations/webhook.mutation";
+import * as UserMutations from "./mutations/user.mutation";
 import { GraphQLContextType } from ".";
 import Audience from "src/models/audience";
+import ProductUser from "src/models/product_user";
 
 const resolvers = {
   Query: {
@@ -39,6 +41,7 @@ const resolvers = {
     ...IntercomMutations,
     ...SegmentMutations,
     ...WebhookMutations,
+    ...UserMutations,
   },
   JSONObject: GraphQLJSONObject,
   Date: new GraphQLScalarType({
@@ -48,6 +51,9 @@ const resolvers = {
       return new Date(value); // value from the client
     },
     serialize(value) {
+      if (typeof value === "string") {
+        return new Date(value).toISOString();
+      }
       return value.toISOString(); // value sent to the client
     },
     parseLiteral(ast) {
@@ -75,6 +81,14 @@ const resolvers = {
         },
       });
       return productUsers;
+    },
+  },
+  ProductUser: {
+    traits: async (root: ProductUser) => {
+      if (isNull(root.traits)) {
+        return null;
+      }
+      return root.traits;
     },
   },
 };

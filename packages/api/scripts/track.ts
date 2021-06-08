@@ -1,8 +1,9 @@
 const app = require("../src/app").default;
-import SequenceWebhookRoute from "../src/routes/sequenceWebhook.http";
+import SequenceHttpHandler from "../src/routes/sequence.http";
 import { v4 as uuidv4 } from "uuid";
 import SequenceWebhook from "../src/models/sequence_webhook";
 import moment from "moment";
+import { EventPayload } from "sequence-node";
 
 const eventNames = [
   "User Created",
@@ -17,38 +18,39 @@ const eventNames = [
 ];
 
 const runTest = async () => {
-  let route = new SequenceWebhookRoute(app);
+  let route = new SequenceHttpHandler(app);
   const hook = await SequenceWebhook.findOne();
 
-  const createEvent = () => ({
+  const createEvent = (): EventPayload => ({
     type: "track",
-    name: eventNames[Math.floor(Math.random() * eventNames.length)],
-    distinctId: "6319fea8-80d1-4488-8a7b-2d524e3c1f2f",
+    event: eventNames[Math.floor(Math.random() * eventNames.length)],
+    userId: "6319fea8-80d1-4488-8a7b-2d524e3c1f2f",
     properties: {
-      $library: "1",
-      $libraryVersion: "1",
       bullshit: "yes",
       DoIt: 123,
       hithere: 123.55,
       boy: null as any,
     },
     messageId: uuidv4(),
-    timestamp: moment().format("YYYY-MM-DD HH:MM:SS"),
+    timestamp: new Date(),
+    context: {},
+    receivedAt: null,
+    sentAt: new Date(),
   });
 
-  route.onEvent(
-    {
-      body: {
-        batch: Array.from({ length: 40 }, () => createEvent()),
-      },
-      headers: {
-        authorization: `Bearer ${hook.token}`,
-      },
-    } as any,
-    {
-      json: () => {},
-    } as any
-  );
+  // route.onEvent(
+  //   {
+  //     body: {
+  //       batch: Array.from({ length: 40 }, () => createEvent()),
+  //     },
+  //     headers: {
+  //       authorization: `Bearer ${hook.token}`,
+  //     },
+  //   } as any,
+  //   {
+  //     json: () => {},
+  //   } as any
+  // );
 };
 
 runTest();

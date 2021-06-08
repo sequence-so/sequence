@@ -12,7 +12,26 @@ const config: InitOptions = {
   paranoid: true,
 };
 
-class SegmentWebhook extends Model {
+export interface SegmentWebhookAttributes {
+  id: string;
+  token: string;
+  userId: string;
+  executions: number;
+  lastExecutionAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface SegmentWebhookCreationAttributes {
+  token: string;
+  userId: string;
+  lastExecutionAt?: Date;
+}
+
+class SegmentWebhook extends Model<
+  SegmentWebhookAttributes,
+  SegmentWebhookCreationAttributes
+> {
   public id: string;
   public token: string;
   public userId: string;

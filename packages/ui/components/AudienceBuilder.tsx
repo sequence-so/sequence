@@ -6,11 +6,12 @@ import gql from "graphql-tag";
 import { useMutation } from "@apollo/client";
 import { CircularProgress, makeStyles } from "@material-ui/core";
 import ProductUserTable from "./UserTable";
-import TitleInput from "./input/TitleInput";
+import { useRouter } from "next/router";
 
 interface Props {
   id?: string;
   rootNode: Condition;
+  name: string;
 }
 
 const EXECUTE_AUDIENCE = gql`
@@ -148,19 +149,19 @@ const AudienceBuilder = (props: Props) => {
       error: createAudienceError,
     },
   ] = useMutation(CREATE_AUDIENCE);
-  const [audienceName, setAudienceName] = useState("");
   const [didExecute, setDidExecute] = useState(false);
   const [serializedAudienceData, setSerializedAudienceData] = useState("");
   const showSave = didExecute && !!!executeAudienceError;
+  const router = useRouter();
 
   const onClickExecuteAudience = () => {
-    const serializedData = serialize(rootNode.current);
     const errors: NodeParseError[] = [];
     parse(rootNode.current, errors);
     if (errors.length) {
       setParseErrors(errors);
       return;
     }
+    const serializedData = serialize(rootNode.current);
     const serializedDataAsString = JSON.stringify(serializedData);
     setSerializedAudienceData(serializedDataAsString);
     executeAudienceQuery({
@@ -174,14 +175,17 @@ const AudienceBuilder = (props: Props) => {
   const onSaveAudience = () => {
     createAudience({
       variables: {
-        name: audienceName,
+        name: props.name,
         node: serializedAudienceData,
       },
+    }).then((res) => {
+      router.push("/audiences/" + res.data.createAudience.id);
     });
   };
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
+      <h3>AUDIENCE CONDITIONS</h3>
       <RenderCondition
         node={rootNode.current}
         depth={0}
@@ -219,24 +223,22 @@ const AudienceBuilder = (props: Props) => {
       )}
       {showSave && (
         <BlueButton
-          text={
-            createAudienceLoading ? (
-              <>
-                <CircularProgress
-                  size={14}
-                  color={"white" as any}
-                  style={{ marginRight: 2 }}
-                />{" "}
-                Save Audience
-              </>
-            ) : (
-              "Save Audience"
-            )
-          }
+          text="Save Audience"
+          disabled={createAudienceLoading}
           onClick={onSaveAudience}
         ></BlueButton>
       )}
       {createAudienceError && <p>{createAudienceError.message}</p>}
+      <style jsx>
+        {`
+          h3 {
+            margin-block-start: 0px;
+            margin-block-end: 1em;
+            color: #4e4f55;
+            font-weight: 600;
+          }
+        `}
+      </style>
     </div>
   );
 };

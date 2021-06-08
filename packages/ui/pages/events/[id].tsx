@@ -2,10 +2,12 @@ import { useQuery } from "@apollo/client";
 import { CircularProgress } from "@material-ui/core";
 import gql from "graphql-tag";
 import { useRouter } from "next/router";
-import EventTable from "../../components/EventTable";
 import DashboardLayout from "../../layout/DashboardLayout";
 import TitleBar from "../../layout/TitleBar";
 import dynamic from "next/dynamic";
+import { PAGE_DEFAULTS } from "constants/page";
+import DefaultViewLayout from "layout/DefaultViewLayout";
+import GQLErrorMessage from "components/GQLErrorMessage";
 const DynamicReactJson = dynamic(import("react-json-view"), { ssr: false });
 
 const GET_EVENT = gql`
@@ -16,7 +18,7 @@ const GET_EVENT = gql`
         name
         type
         source
-        distinctId
+        personId
         properties
         productUser {
           firstName
@@ -44,7 +46,7 @@ const EventPage = () => {
   if (loading) {
     RenderContent = <CircularProgress />;
   } else if (error) {
-    RenderContent = <p>Error.</p>;
+    RenderContent = <GQLErrorMessage error={error.message} />;
   } else {
     RenderContent = <DynamicReactJson src={data} />;
   }
@@ -52,20 +54,11 @@ const EventPage = () => {
   return (
     <DashboardLayout index={3}>
       <>
-        <TitleBar title="Event Explorer" subtitle="View your users."></TitleBar>
-        <div style={{ width: "100%" }}>
-          <p>Event ID: {id}</p>
-          <div
-            style={{
-              height: "700px",
-              width: "100%",
-              marginTop: 8,
-              paddingBottom: "2rem",
-            }}
-          >
-            {RenderContent}
-          </div>
-        </div>
+        <TitleBar
+          title={data?.events?.nodes[0].name}
+          subtitle={PAGE_DEFAULTS.events.id.title}
+        ></TitleBar>
+        <DefaultViewLayout>{RenderContent}</DefaultViewLayout>
       </>
     </DashboardLayout>
   );

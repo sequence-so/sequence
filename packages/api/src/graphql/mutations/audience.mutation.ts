@@ -20,9 +20,7 @@ export const executeAudience = async (
 
   try {
     const parsed = JSON.parse(audience);
-    console.log({ parsed });
     const node = deserialize(parsed as SerializedConditionNode);
-    console.log({ node });
     const builder = new AudienceBuilder(node, user.id);
     const productUsers = await builder.build().execute();
 
@@ -94,8 +92,6 @@ export const createAudience = async (
 
   return audienceModel;
 };
-
-// const onSaveAudience = () => {}
 
 export const updateAudience = async (
   root: any,

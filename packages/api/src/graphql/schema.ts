@@ -55,13 +55,14 @@ const typeDefs = gql`
     user: User
     createdAt: Date
     updatedAt: Date
+    deletedAt: Date
   }
   type Event {
     id: ID!
     name: String
     type: String
     source: String
-    distinctId: String
+    personId: String
     properties: JSONObject
     productUser: ProductUser
     createdAt: Date
@@ -70,9 +71,6 @@ const typeDefs = gql`
   type Integrations {
     segment: Boolean
     node: Boolean
-  }
-  type QueryResult {
-    result: String
   }
   type PaginatedAudience {
     nodes: [Audience]
@@ -101,27 +99,28 @@ const typeDefs = gql`
   }
   type ProductUser {
     id: ID!
-    firstName: String
-    lastName: String
-    email: String
-    photo: String
-    phone: String
-    signedUpAt: Date
-    lastSeenAt: Date
     browser: String
-    browserVersion: String
     browserLanguage: String
-    os: String
-    country: String
-    region: String
+    browserVersion: String
     city: String
-    title: String
-    websiteUrl: String
     companyName: String
+    country: String
+    email: String
+    externalId: String
+    firstName: String
     industry: String
     intercomId: String
-    externalId: String
+    lastName: String
+    lastSeenAt: Date
+    os: String
+    phone: String
+    photo: String
+    region: String
+    signedUpAt: Date
+    traits: JSONObject
+    title: String
     userId: ID
+    websiteUrl: String
     user: User
     createdAt: Date
     updatedAt: Date
@@ -146,6 +145,7 @@ const typeDefs = gql`
     lastName: String
     email: String
     photo: String
+    onboardedAt: Date
     createdAt: Date
     updatedAt: Date
   }
@@ -154,12 +154,12 @@ const typeDefs = gql`
     campaigns(id: ID, page: Int, limit: Int): PaginatedCampaign
     customProperties: [CustomProperty]
     emails(id: ID, page: Int, limit: Int): PaginatedEmails
-    events(id: ID, page: Int, limit: Int, distinctId: ID): PaginatedEvent
-    getChannelWebhooks: QueryResult
+    events(id: ID, page: Int, limit: Int, personId: ID): PaginatedEvent
     getIntercom: AuthIntercom
     getSegmentWebhook: SegmentWebhook
     getUser: User
-    productUsers(page: Int, limit: Int): PaginatedProductUser
+    integrations: Integrations
+    productUsers(id: String, page: Int, limit: Int): PaginatedProductUser
     uniqueEventNames: [String]
   }
   type Mutation {
@@ -189,6 +189,7 @@ const typeDefs = gql`
       from: String
       fromName: String
     ): Email
+    updateUser(firstName: String, lastName: String, onboardedAt: Date): User
   }
 `;
 

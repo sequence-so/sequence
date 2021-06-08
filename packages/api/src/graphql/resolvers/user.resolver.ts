@@ -8,7 +8,7 @@ export const getUser = async (
   return user;
 };
 
-export const getIntegrations = async (
+export const integrations = async (
   root: any,
   _: any,
   { models, user }: GraphQLContextType
@@ -34,6 +34,5 @@ export const getIntegrations = async (
     segment: segmentExecution ? true : false,
     node: node ? true : false,
   };
-
   return integrations;
 };

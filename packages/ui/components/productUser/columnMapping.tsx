@@ -1,4 +1,5 @@
 import { GridColumns } from "@material-ui/data-grid";
+import moment from "moment";
 
 const DEFAULT_WIDTH = 150;
 
@@ -27,11 +28,25 @@ export const PRODUCT_USER_COLUMN_MAPPING: GridColumns = [
     field: "signedUpAt",
     headerName: "Signed Up At",
     width: DEFAULT_WIDTH,
+    renderCell: (params) => (
+      <span>
+        {params.row.signedUpAt
+          ? moment((params.row as any).signedUpAt as string).fromNow()
+          : ""}
+      </span>
+    ),
   },
   {
-    field: "lastSeenAt",
+    field: "updatedAt",
     headerName: "Last Seen At",
     width: DEFAULT_WIDTH,
+    renderCell: (params) => (
+      <span>
+        {params.row.signedUpAt
+          ? moment((params.row as any).updatedAt as string).fromNow()
+          : ""}
+      </span>
+    ),
   },
   {
     field: "browser",

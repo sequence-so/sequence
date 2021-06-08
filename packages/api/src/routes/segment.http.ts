@@ -1,122 +1,46 @@
-import { Application, Request } from "express";
+import { Application, Request, Response } from "express";
 import SegmentWebook from "../models/segment_webhook";
-import WebhookExecution from "../models/webhook_execution";
-import Event from "../models/event";
+import SegmentProcessor from "src/services/segmentProcessor";
+import SegmentWebhook from "../models/segment_webhook";
+import SequenceError from "src/error/SequenceError";
 
-// ignore "group" type
-type SegmentEventTypes = "track" | "identify" | "alias" | "page";
-
-type SegmentBase = {
-  type: SegmentEventTypes;
-  anonymousId: string;
-  context: SegmentContext;
-  userId?: string;
-  receivedAt: string;
-  timestamp: string;
-  sentAt: string;
-  messageId: string;
-  integrations: Record<string, boolean>;
-};
-
-interface SegmentContext {
-  library: {
-    name: string;
-    version: string;
-  };
-  page?: {
-    path: string;
-    referrer: string;
-    search: string;
-    title: string;
-    url: string;
-  };
-  userAgent: string;
-  ip: string;
+export interface HttpResponse extends Record<string, any> {
+  success: boolean;
 }
 
-interface SegmentTrack extends SegmentBase {
-  type: "track";
-  event: string;
-  originalTimestamp: string;
-  properties: Record<string, any>;
-}
-
-interface SegmentIdentify extends SegmentBase {
-  type: "identify";
-  channel: string;
-  traits: Record<string, any>;
-}
-
-interface SegmentPage extends SegmentBase {
-  type: "page";
-  name: string;
-  properties: {
-    title: string;
-    url: string;
-  };
-}
-
-class Segment {
+/**
+ * Handle HTTP requests for Segment data import routes.
+ */
+class SegmentHttpHandler {
+  processor: SegmentProcessor;
   constructor(app: Application) {
-    app.post("/event/segment/subscription", async (req, res, next) => {
-      const webhook = await this.getWebhookSegmentSubscription(req);
-      if (!webhook) {
-        res
-          .status(401)
-          .json({ success: false, error: "No webhook found for this token" });
-        return;
-      }
-
-      let execution: WebhookExecution;
-      try {
-        execution = await this.updateWebhook(webhook, req.body);
-      } catch (error) {
-        console.error(error);
-        return res.status(500).json({
-          success: false,
-        });
-      }
-
-      try {
-        this.process(req.body as any, execution);
-      } catch (error) {
-        console.error(error);
-        return res.status(500).json({
-          success: false,
-          error: error.message,
-        });
-      }
-
-      return res.json({
-        success: true,
-      });
-    });
-    app.post("/event/segment", async (req, res, next) => {
-      console.log(req.body);
-      const authorization = req.headers.authorization;
-
-      const webhook = await SegmentWebook.findOne({
-        where: {
-          token: authorization,
-        },
-      });
-      if (!webhook) {
-        res
-          .status(401)
-          .json({ success: false, error: "No webhook found for this token" });
-        return;
-      }
-
-      const execution = await this.updateWebhook(webhook, req.body);
-
-      this.process(req.body as any, execution);
-
-      return res.json({
-        success: true,
-      });
+    this.processor = new SegmentProcessor();
+    this.registerRoutes(app);
+  }
+  /**
+   * Registers the routes.
+   *
+   * @param app Application
+   */
+  registerRoutes(app: Application) {
+    app.post(
+      "/event/segment/subscription",
+      this.withAuthentication(this.processor.process.bind(this.processor))
+    );
+    app.post(
+      "/event/segment",
+      this.withAuthentication(this.processor.process.bind(this.processor))
+    );
+  }
+  async getSegmentWebhookForAuthToken(req: Request): Promise<SegmentWebook> {
+    const authorization = req.headers.authorization;
+    return SegmentWebook.findOne({
+      where: {
+        token: authorization,
+      },
     });
   }
-  async getWebhookSegmentSubscription(req: Request): Promise<SegmentWebook> {
+  async authenticate(req: Request) {
     const authorization = req.headers.authorization;
     const passwordString = authorization.split("Basic ")[1];
 
@@ -129,70 +53,40 @@ class Segment {
       },
     });
   }
-  async updateWebhook(
-    webhook: SegmentWebook,
-    body: any
-  ): Promise<WebhookExecution> {
-    webhook.executions += 1;
-    webhook.lastExecutionAt = new Date();
-    await webhook.save();
-    const execution = await WebhookExecution.create({
-      type: "segment_webhook",
-      webhookId: webhook.id,
-      payload: body,
-      userId: webhook.userId,
-    });
-    return execution;
-  }
-  async process(
-    event: SegmentIdentify | SegmentTrack | SegmentPage,
-    source: WebhookExecution
+  /**
+   * Wraps the route handler in a middleware that authenticates the SegmentWebhook and if successful,
+   * executes the handler with with SegmentWebhook model and the request body as an argument.
+   *
+   * @param handler Function to execute after authentication passes
+   * @returns Response
+   */
+  withAuthentication(
+    handler: (value: SegmentWebhook, body: any) => Promise<HttpResponse>
   ) {
-    try {
-      if (event.type === "identify") {
-        await Event.create({
-          distinctId: event.userId,
-          name: "$identify",
-          messageId: event.messageId,
-          properties: event.traits,
-          source: source.type,
-          sourceId: source.id,
-          userId: source.userId,
-          type: "identify",
-          createdAt: new Date(event.timestamp),
-          updatedAt: new Date(event.timestamp),
-        });
-      } else if (event.type === "page") {
-        await Event.create({
-          distinctId: event.userId,
-          name: "$page",
-          messageId: event.messageId,
-          properties: event.properties,
-          source: source.type,
-          sourceId: source.id,
-          userId: source.userId,
-          type: "page",
-          createdAt: new Date(event.timestamp),
-          updatedAt: new Date(event.timestamp),
-        });
-      } else if (event.type === "track") {
-        await Event.create({
-          distinctId: event.userId,
-          name: event.event,
-          messageId: event.messageId,
-          properties: event.properties,
-          source: source.type,
-          sourceId: source.id,
-          userId: source.userId,
-          type: "page",
-          createdAt: new Date(event.timestamp),
-          updatedAt: new Date(event.timestamp),
+    return async (request: Request, response: Response) => {
+      const webhook = await this.getSegmentWebhookForAuthToken(request);
+      if (!webhook) {
+        return response
+          .status(401)
+          .json({ success: false, error: "No webhook found for this token" });
+      }
+      try {
+        const result = await handler(webhook, request.body);
+        return response.json(result);
+      } catch (error) {
+        if ((error as SequenceError).statusCode) {
+          let sequenceError = error as SequenceError;
+          return response
+            .status(sequenceError.statusCode)
+            .json(sequenceError.payload);
+        }
+        return response.status(500).json({
+          sucess: false,
+          message: (error as any).message,
         });
       }
-    } catch (error) {
-      console.log(error);
-    }
+    };
   }
 }
 
-export default Segment;
+export default SegmentHttpHandler;

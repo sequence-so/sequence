@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Select from "components/common/Select";
 import { AbstractFilterNode } from "common/filters/nodes";
 import { DEFAULT_OPERATOR_VALUE } from "./AudienceConstants";
@@ -15,6 +15,9 @@ const OperatorsSelect = ({ node }: Props) => {
     args: number;
   }>(DEFAULT_OPERATOR_VALUE);
 
+  useEffect(() => {
+    node[node.getOperators().find((e) => e.value === "equals").value as any]();
+  }, []);
   const onChange = (event) => {
     const op = node.getOperators().find((e) => e.value === event.value);
     if (!op) {

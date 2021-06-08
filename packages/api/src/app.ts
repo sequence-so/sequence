@@ -1,7 +1,8 @@
-import "module-alias/register";
-import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
+import { register } from "./moduleAliases";
+register();
+import express from "express";
 import cookieParser from "cookie-parser";
 import { ApolloServer } from "apollo-server-express";
 import jwt from "jsonwebtoken";
@@ -13,6 +14,7 @@ import schema from "./graphql/schema";
 import SequelizeModels from "./models/index";
 import Routes from "./routes";
 import resolvers from "./graphql/resolvers";
+import logger from "./utils/logger";
 
 const app = express();
 
@@ -52,26 +54,6 @@ app.use(
 
 new Routes(app);
 
-// const productUserLoader = (models: typeof SequelizeModels) =>
-//   new DataLoader(async (productUserIds: string[]) => {
-//     return await models.ProductUser.findAll({
-//       where: {
-//         id: {
-//           [sequelize.Op.in]: productUserIds,
-//         },
-//       },
-//     });
-//   });
-
-// const audienceProductUserLoader = (models: typeof SequelizeModels) =>
-//   new DataLoader(async (audienceProductUserIds: string[]) => {
-//     return await models.AudienceProductUser.findAll({
-//       where: {
-//         id: audienceProductUserIds,
-//       },
-//     });
-//   });
-
 const server = new ApolloServer({
   typeDefs: schema,
   resolvers: resolvers,
@@ -79,18 +61,13 @@ const server = new ApolloServer({
     const token = req.headers.authorization;
     const result = jwt.verify(token, JwtConfig.jwt.secret);
     const user = (result as any).user;
-
     return {
       models: SequelizeModels,
       user,
-      // dataLoaders: {
-      //   productUserLoader: productUserLoader(SequelizeModels),
-      //   audienceProductUserLoader: audienceProductUserLoader(SequelizeModels),
-      // },
     };
   },
   formatError(err) {
-    console.log("Error occured processing request:", err);
+    logger.error("Error occured processing request:", err);
     return {
       message: err.message,
       // code: err.originalError && err.originalError.code,

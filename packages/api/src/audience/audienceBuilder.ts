@@ -1,5 +1,5 @@
 import Event from "src/models/event";
-import ProductUser from "src/models/product_user";
+import ProductUser, { VALID_KEYS } from "src/models/product_user";
 import {
   AbstractNode,
   AttributeFilter,
@@ -15,6 +15,10 @@ import { comparatorToQuery } from "./comparatorToQuery";
 import AbstractComparatorNode from "common/filters/comparators/abstractComparatorNode";
 import QueryResult from "./queryResult";
 
+/**
+ * Execute your filter nodes through this call.
+ *
+ */
 export class AudienceBuilder implements NodeVisitor {
   queryResult: QueryResult<ProductUser>;
   queryParents: QueryResult<ProductUser>[] = [];
@@ -25,6 +29,11 @@ export class AudienceBuilder implements NodeVisitor {
     this.root = node;
     this.userId = userId;
   }
+  /**
+   * Visits all the nodes in your filters and constructs a query from it.
+   *
+   * @returns AudienceBuilder
+   */
   build() {
     this.buildCalled = true;
     this.queryResult = new QueryResult<ProductUser>();
@@ -32,6 +41,12 @@ export class AudienceBuilder implements NodeVisitor {
     visit(this.root, this);
     return this;
   }
+  /**
+   * Executes the query from `build` and returns the list of
+   * matching users.
+   *
+   * @returns ProductUser[]
+   */
   async execute() {
     if (!this.buildCalled) {
       throw new Error("AudienceBuilder.build() not called");
@@ -106,12 +121,6 @@ export class AudienceBuilder implements NodeVisitor {
     this.addMatch(
       ProductUser.findAll({
         where: {
-          //@ts-ignore
-          [`$events.${node.attribute}$`]: comparatorToQuery(
-            node.comparator,
-            node.expected,
-            node
-          ),
           userId: this.userId,
         },
         include: [
@@ -120,6 +129,13 @@ export class AudienceBuilder implements NodeVisitor {
             as: "events",
             attributes: [],
             required: true,
+            where: {
+              [`properties.${node.attribute}`]: comparatorToQuery(
+                node.comparator,
+                node.expected,
+                node
+              ),
+            },
           },
         ],
         group: "ProductUser.id",
@@ -127,18 +143,34 @@ export class AudienceBuilder implements NodeVisitor {
     );
   }
   onUserAttributeNode(node: AttributeFilter) {
-    this.addMatch(
-      ProductUser.findAll({
-        where: {
-          [node.attribute]: comparatorToQuery(
-            node.comparator,
-            node.expected,
-            node
-          ),
-          userId: this.userId,
-        },
-      })
-    );
+    const isValid = (VALID_KEYS as any)[node.attribute];
+    if (isValid) {
+      this.addMatch(
+        ProductUser.findAll({
+          where: {
+            [node.attribute]: comparatorToQuery(
+              node.comparator,
+              node.expected,
+              node
+            ),
+            userId: this.userId,
+          },
+        })
+      );
+    } else {
+      this.addMatch(
+        ProductUser.findAll({
+          where: {
+            [`traits.${node.attribute}`]: comparatorToQuery(
+              node.comparator,
+              node.expected,
+              node
+            ),
+            userId: this.userId,
+          },
+        })
+      );
+    }
   }
   onEndOperand() {}
   onEmailNode(node: EmailFilter) {}

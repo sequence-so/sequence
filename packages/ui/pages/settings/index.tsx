@@ -1,11 +1,8 @@
 import TitleBar from "../../layout/TitleBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import { makeStyles, TextField, withStyles } from "@material-ui/core";
+import { makeStyles, withStyles } from "@material-ui/core";
 import { useState } from "react";
-import { ErrorMessage, Formik } from "formik";
-import BlueButton from "../../components/BlueButton";
-import styles from "../../styles/Home.module.css";
 import SettingsLayout from "../../layout/SettingsLayout";
 
 const AntTabs = withStyles({
@@ -89,12 +86,11 @@ const SettingsPage = () => {
         <TitleBar
           showAction={false}
           title="Settings"
-          subtitle="Change your stuff."
+          subtitle="Update your profile and configurations."
         ></TitleBar>
 
         <AntTabs value={value} onChange={handleChange} aria-label="ant example">
           <AntTab label="Profile" />
-          <AntTab label="Billing" />
           <AntTab label="Team" />
           <AntTab label="Notifications" />
         </AntTabs>
@@ -102,140 +98,7 @@ const SettingsPage = () => {
         <div
           style={{ display: "flex", width: "100%", flexDirection: "column" }}
         >
-          {value === 0 ? (
-            <>
-              <p>My name here</p>
-              <Formik
-                initialValues={{
-                  hostname: "",
-                  username: "",
-                  database: "",
-                  password: "",
-                  port: "5432",
-                  schema: "public",
-                  ssl: "false",
-                }}
-                onSubmit={(values, { setSubmitting }): void => {}}
-              >
-                {({
-                  values,
-                  errors,
-                  touched,
-                  handleChange,
-                  handleBlur,
-                  handleSubmit,
-                  isSubmitting,
-                  setSubmitting,
-                }) => (
-                  <form
-                    className={styles.settings_form}
-                    onSubmit={handleSubmit}
-                  >
-                    <label htmlFor="hostname">Hostname</label>
-                    <input
-                      type="hostname"
-                      name="hostname"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.hostname}
-                      placeholder="Hostname"
-                    />
-                    <ErrorMessage name="hostname" component="div" />
-
-                    <label htmlFor="username">Username</label>
-                    <input
-                      type="username"
-                      name="username"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.username}
-                      placeholder="Username"
-                    />
-                    <ErrorMessage name="username" component="div" />
-                    {errors.username && touched.username && errors.username}
-
-                    <label htmlFor="username">Database</label>
-                    <input
-                      type="database"
-                      name="database"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.database}
-                      placeholder="database"
-                    />
-                    <ErrorMessage name="database" component="div" />
-                    {errors.database && touched.database && errors.database}
-
-                    <label htmlFor="password">Password</label>
-                    <input
-                      type="password"
-                      name="password"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.password}
-                      placeholder="Password"
-                    />
-                    {errors.password && touched.password && errors.password}
-                    <label htmlFor="port">Port</label>
-                    <input
-                      type="port"
-                      name="port"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.port}
-                      placeholder="Port"
-                    />
-                    {errors.port && touched.port && errors.port}
-                    <label htmlFor="schema">Schema</label>
-                    <input
-                      type="schema"
-                      name="schema"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.schema}
-                      placeholder="Schema"
-                    />
-                    {errors.schema && touched.schema && errors.schema}
-                    <div
-                      style={{ display: "inline-flex", alignItems: "center" }}
-                    >
-                      <input
-                        type="checkbox"
-                        name="ssl"
-                        onChange={(value) => {
-                          handleChange("ssl")(
-                            value.target.checked ? "true" : "false"
-                          );
-                        }}
-                        onBlur={handleBlur}
-                        value={values.ssl}
-                        style={{ marginLeft: 4 }}
-                      ></input>
-                      <label htmlFor="ssl">Use SSL</label>
-                    </div>
-                    {/* {error && <p style={{ color: "red" }}>{error.message}</p>}
-                    {dataPostgres && dataPostgres.createPostgresDatabase && (
-                      <p>Successfully saved database</p>
-                    )} */}
-                    <BlueButton
-                      type="submit"
-                      text={"Save"}
-                      style={{ marginBottom: "0px" }}
-                    />
-                  </form>
-                )}
-              </Formik>
-            </>
-          ) : (
-            <>
-              <h3>Billing</h3>
-              <p>Manage your billing information and invoices</p>
-              <hr></hr>
-              <h4>Current plan</h4>
-              <p>You are currently on the Free plan with 2 users.</p>
-              <p>View plans and upgrade </p>
-            </>
-          )}
+          <p>Not much happening here yet!</p>
         </div>
       </>
     </SettingsLayout>

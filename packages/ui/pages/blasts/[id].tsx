@@ -12,6 +12,10 @@ import ServerPaginatedTable from "components/ServerPaginatedTable";
 import homeStyles from "styles/Home.module.css";
 import moment from "moment";
 import { GridCellParams } from "@material-ui/data-grid";
+import GQLErrorMessage from "components/GQLErrorMessage";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { PAGE_DEFAULTS } from "constants/page";
 
 const DynamicReactJson = dynamic(import("react-json-view"), { ssr: false });
 
@@ -31,6 +35,9 @@ export const GET_CAMPAIGN = gql`
             id
             firstName
             lastName
+            email
+            createdAt
+            lastSeenAt
           }
         }
         audienceId
@@ -47,7 +54,7 @@ export const columns = [
     headerName: "User",
     width: 200,
     renderCell: (params: GridCellParams) => (
-      <Link href={`/explorer/${params.row.externalId}`}>
+      <Link href={`/explorer/${params.row.id}`}>
         <a>
           <div style={{ display: "inline-flex", alignItems: "center" }}>
             <div className={homeStyles.initials_circle}>
@@ -61,34 +68,25 @@ export const columns = [
     ),
   },
   {
-    field: "date",
-    headerName: "Date",
-    type: "string",
-    width: 180,
-    valueGetter: (params) =>
-      moment(params.row.createdAt).format("MMMM DD, YYYY"),
-  },
-  {
     field: "email",
     headerName: "Email",
-    description: "This column has a value getter and is not sortable.",
-    width: 150,
+    width: 250,
   },
   {
     field: "createdAt",
     headerName: "Created At",
-    description: "This column has a value getter and is not sortable.",
     width: 150,
+    valueGetter: (params) => moment(params.row.createdAt).fromNow(),
   },
   {
     field: "lastSeenAt",
     headerName: "Last Seen At",
-    description: "This column has a value getter and is not sortable.",
     width: 150,
+    valueGetter: (params) => moment(params.row.lastSeenAt).fromNow(),
   },
 ];
 
-const CampaignByIdPage = () => {
+const BlastByIdPage = () => {
   const router = useRouter();
   const { data, loading, error } = useQuery(GET_CAMPAIGN, {
     variables: {
@@ -98,15 +96,27 @@ const CampaignByIdPage = () => {
   const content = loading ? (
     <CircularProgress />
   ) : error ? (
-    <p>An error occured: {error.message}</p>
+    <GQLErrorMessage error={error.message} />
   ) : (
     <>
-      <Link href={`/emails/${data.campaigns.nodes[0].emailId}`}>
-        <a>View Email</a>
-      </Link>
-      <Link href={`/audiences/${data.campaigns.nodes[0].audienceId}`}>
-        <a>View Audience</a>
-      </Link>
+      <div className="relations">
+        <Link href={`/emails/${data.campaigns.nodes[0].emailId}`}>
+          <a>
+            <div className="relation">
+              <FontAwesomeIcon icon={faArrowRight}></FontAwesomeIcon>
+              <span>View Email</span>
+            </div>
+          </a>
+        </Link>
+        <Link href={`/audiences/${data.campaigns.nodes[0].audienceId}`}>
+          <a>
+            <div className="relation">
+              <FontAwesomeIcon icon={faArrowRight}></FontAwesomeIcon>
+              <span>View Audience</span>
+            </div>
+          </a>
+        </Link>
+      </div>
       <h4>SENT TO:</h4>
       <ServerPaginatedTable
         variables={{ id: router.query.id }}
@@ -121,6 +131,32 @@ const CampaignByIdPage = () => {
           color: #4e4f55;
           font-weight: 600;
         }
+        .relations {
+          display: flex;
+          flex-direction: row;
+          margin-top: 1em;
+        }
+        .relation {
+          display: flex;
+          border: var(--border-grey);
+          border-radius: 4px;
+          padding: 1em;
+          cursor: pointer;
+          flex-grow: 1;
+        }
+        .relation:hover {
+          box-shadow: var(--subtle-shadow);
+        }
+        .relations > a {
+          display: flex;
+          flex-grow: 1;
+        }
+        .relation > span {
+          margin-left: 10px;
+        }
+        .relations > * + * {
+          margin-left: 1em;
+        }
       `}</style>
     </>
   );
@@ -132,7 +168,7 @@ const CampaignByIdPage = () => {
           <DynamicTitleBar
             title={data?.campaigns?.nodes[0].name}
             onChangeTitleText={(text: string) => {}}
-            subtitle="View and manage your campaigns."
+            subtitle={PAGE_DEFAULTS.blasts.id.subtitle}
             showAction={false}
           />
           {content}
@@ -142,4 +178,4 @@ const CampaignByIdPage = () => {
   );
 };
 
-export default dynamic(() => Promise.resolve(CampaignByIdPage), { ssr: false });
+export default dynamic(() => Promise.resolve(BlastByIdPage), { ssr: false });

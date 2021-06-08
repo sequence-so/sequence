@@ -23,7 +23,15 @@ const IntegrationsPage = () => {
       <OnboardingLayout index={1}>
         <div className={"content"}>
           <h1>Integrations</h1>
-          <p>Click to setup your first integration.</p>
+          <p>Import your data quickly from the sources below.</p>
+
+          <a
+            href="https://sequence.gitbook.io/sequence/importing-data"
+            target="blank"
+          >
+            <p>Read our documentation on data import here.</p>
+          </a>
+
           {didCatch ? error.message : content}
 
           <p className={styles.not_ready_text}>
@@ -35,7 +43,7 @@ const IntegrationsPage = () => {
           <BlueButton
             text="Next"
             onClick={(): void => {
-              router.push("/onboarding/alert");
+              router.push("/onboarding/done");
             }}
           />
         </div>
@@ -48,6 +56,9 @@ const IntegrationsPage = () => {
           width: 100%;
           height: 100%;
           padding: 1rem;
+        }
+        a {
+          color: #4191e4;
         }
       `}</style>
     </>

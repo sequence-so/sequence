@@ -92,7 +92,14 @@ const parse = (node: AbstractNode, errors: NodeParseError[]) => {
           return;
       }
     },
-    onEventAttributeNode: (node: EventAttributeNode) => {},
+    onEventAttributeNode: (node: EventAttributeNode) => {
+      if (!node.attribute) {
+        return newParseError(EMPTY_ATTRIBUTE, node);
+      }
+      if (typeof node.expected === "undefined") {
+        return newParseError(EMPTY_EXPECTATION, node);
+      }
+    },
   };
   visit(node, visitor);
 };

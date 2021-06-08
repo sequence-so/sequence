@@ -157,9 +157,9 @@
 .signup_title {
   font-family: IBM Plex Sans;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 36px;
-  margin-top: 60px;
+  margin-top: 1em;
 }
 
 .button {
@@ -409,10 +409,8 @@
 }
 
 .onboarding_box_row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, 200px);
-  column-gap: 1rem;
-  row-gap: 1rem;
+  display: flex;
+  flex-direction: row;
   width: 100%;
   justify-content: space-evenly;
   justify-items: center;
@@ -420,12 +418,15 @@
   align-items: center;
 }
 
+.onboarding_box_row > * + * {
+  margin-left: 1.5rem;
+}
 .onboarding_box {
   display: flex;
   flex-direction: column;
   border-radius: 16px;
-  width: 200px;
-  height: 200px;
+  width: 175px;
+  height: 175px;
   color: white;
   font-style: normal;
   font-weight: 500;
@@ -434,7 +435,6 @@
   padding: 15px 18px 22px 15px;
   background-size: 200% auto;
   transition: all 0.5s;
-  cursor: pointer;
 }
 
 .onboarding_box_red {
@@ -448,10 +448,10 @@
 
 .onboarding_box_red:hover {
   box-shadow: 8px 6px 0px #FFCCCC;
-  margin-left: 3px;
+  /* margin-left: 3px;
   margin-top: 3px;
   margin-right: -3px;
-  margin-bottom: -3px;
+  margin-bottom: -3px; */
 }
 
 .onboarding_box_blue {
@@ -461,10 +461,10 @@
 
 .onboarding_box_blue:hover {
   box-shadow: 8px 6px 0px #CEF5FD;
-  margin-left: 33px;
+  /* margin-left: 33px;
   margin-top: 3px;
   margin-right: -3px;
-  margin-bottom: -3px;
+  margin-bottom: -3px; */
 }
 
 .onboarding_box_purple {
@@ -474,10 +474,10 @@
 
 .onboarding_box_purple:hover {
   box-shadow: 8px 6px 0px #EECEFD;
-  margin-left: 33px;
+  /* margin-left: 33px;
   margin-top: 3px;
   margin-right: -3px;
-  margin-bottom: -3px;
+  margin-bottom: -3px; */
 }
 
 
@@ -688,7 +688,7 @@
   min-width: 300px;
 }
 
-.settings_form { 
+.settings_form {
   display: flex;
   flex-direction: column;
   min-width: 300px;
@@ -782,17 +782,17 @@
 .blinking_circle {
   height:1.25rem;
   width:1.25rem;
-  
+
   border-radius: 4rem;
-  
+
   opacity: 0.0;
   background: #F8D72B;
 }
 
 .blinking_circle_anim {
   -webkit-animation: pulsate 1000ms ease-out;
-  -webkit-animation-iteration-count: infinite; 
-  
+  -webkit-animation-iteration-count: infinite;
+
   -webkit-transition: background-color 300ms linear;
   -moz-transition: background-color 300ms linear;
   -o-transition: background-color 300ms linear;
@@ -804,7 +804,7 @@
   background: #36D71C;
   opacity: 1;
 }
-  
+
 @-webkit-keyframes pulsate {
   0% {opacity: 0.1;}
   40% {opacity: 1.0;}
@@ -863,7 +863,7 @@
   margin-block-start: 10px;
   margin-block-end: 10px;
   font-weight: 500;
-} 
+}
 
 .sidebar_action_button {
   font-size: 16px;

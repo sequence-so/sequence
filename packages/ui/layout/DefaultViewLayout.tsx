@@ -12,15 +12,12 @@ const DefaultViewLayout = (props: Props) => {
           margin-top: 16px;
           display: flex;
           width: 100%;
-          height: 100%;
+          height: auto;
           flex-direction: column;
           min-height: 700px;
         }
-        .container:after {
-          content: "";
-          display: block;
-          min-height: 2em;
-          width: 100%;
+        .container:last-child {
+          padding-bottom: 2em;
         }
       `}</style>
     </>

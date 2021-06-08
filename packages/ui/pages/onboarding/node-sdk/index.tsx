@@ -23,10 +23,8 @@ interface SequenceWebhook {
 }
 
 const NodeSDKPage = () => {
-  const [
-    createWebhook,
-    { loading, data, error },
-  ] = useMutation<SequenceWebhook>(CREATE_SEQUENCE_WEBHOOK);
+  const [createWebhook, { loading, data, error }] =
+    useMutation<SequenceWebhook>(CREATE_SEQUENCE_WEBHOOK);
   const { integrations, loading: loadingIntegrations } = useDidIntegrate({
     pollingInterval: 1000,
   });
@@ -44,24 +42,29 @@ const NodeSDKPage = () => {
       authorization={null}
       content={
         <>
+          <p>Use our Node SDK to track events and user data.</p>
           <p>
-            Need custom integration with Sequence? Use our Node SDK to both
-            capture events from your backend and trigger alerts.
+            Using this library allows for both historical import and setting up
+            a continuous data stream of incoming events.
           </p>
-          <p>
-            For more instructions on how to integrate with our SDK, click here
-            for the Github link.
-          </p>
+          <p>This integration provides a client library over our API.</p>
         </>
       }
       instructions={
         <div style={{ textAlign: "left", width: "100%" }}>
-          <h2>Installation</h2>
+          <h2>Documentation</h2>
           <p>
-            To start with the integration, install the library in your Node
-            project:
+            <a
+              className="default"
+              href="https://sequence.gitbook.io/sequence/node-sdk/node-sdk"
+              target="blank"
+            >
+              Read our Node SDK documentation here.
+            </a>
           </p>
-          <CodeBlock text={"yarn install @sequence/node\n"}></CodeBlock>
+          <h2>Installation</h2>
+          <p>Install the library in your Node project:</p>
+          <CodeBlock text={"yarn install sequence-node\n"}></CodeBlock>
           <p>Add your Sequence to your environment configuration: </p>
           {loading && <CircularProgress></CircularProgress>}
           {error && (
@@ -76,21 +79,40 @@ const NodeSDKPage = () => {
           <CodeBlock
             text={
               <>
-                <span>{`import Sequence from '@sequence/node';`}</span>
+                <span>{`import Sequence from 'sequence-node';`}</span>
                 <br />
                 <br />
                 <span>{`let sequence = new Sequence(process.env.SEQUENCE_API_KEY);`}</span>
                 <br />
                 <br />
-                <span>{`sequence.alert(user.id, 'My Event Name', {`}</span>
+                <span>{`sequence.identify({`}</span>
                 <br />
-                <span>&ensp;{`message: "Tom has entered the building",`}</span>
+                <span>&ensp;{`userId: "1234-5678-9012",`}</span>
                 <br />
-                <span>&ensp;{`data: {`}</span>
+                <span>&ensp;{`traits: {`}</span>
                 <br />
                 <span>&ensp;&ensp;{`  firstName: "Tom",`}</span>
                 <br />
-                <span>&ensp;&ensp;{`  lastName: "Cruise"`}</span>
+                <span>&ensp;&ensp;{`  lastName: "Cruise",`}</span>
+                <br />
+                <span>&ensp;&ensp;{`  widgetsSold: 5`}</span>
+                <br />
+                <span>&ensp;{`}`}</span>
+                <br />
+                <span>{`}`}</span>
+                <br />
+                <br />
+                <span>{`sequence.track({`}</span>
+                <br />
+                <span>&ensp;{`event: "User Registered",`}</span>
+                <br />
+                <span>&ensp;{`properties: {`}</span>
+                <br />
+                <span>&ensp;&ensp;{`  email: "john@smith.com",`}</span>
+                <br />
+                <span>&ensp;&ensp;{`  age: 55,`}</span>
+                <br />
+                <span>&ensp;&ensp;{`  companyName: "The Widget Factory"`}</span>
                 <br />
                 <span>&ensp;{`}`}</span>
                 <br />

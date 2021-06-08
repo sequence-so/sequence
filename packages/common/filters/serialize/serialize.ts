@@ -52,7 +52,6 @@ export const serializeEventAttributeNode = (
     filterKind: node.filterKind,
     eventName: node.eventName,
     expected: node.expected,
-    performed: node.performed,
     attribute: node.attribute || null,
     comparator: serializeComparator(node.comparator!),
   };

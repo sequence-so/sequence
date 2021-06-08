@@ -5,6 +5,7 @@ import moment from "moment";
 import { EmailType } from "pages/emails/[id]";
 import { useMemo, useState } from "react";
 import ServerPaginatedTable from "components/ServerPaginatedTable";
+import { defaultProp } from "services/defaultProp";
 
 export const GET_EMAILS = gql`
   query GetEmails {
@@ -42,7 +43,7 @@ const columns = [
   {
     field: "draft",
     headerName: "Draft",
-    width: 100,
+    width: 150,
     valueGetter: (params) => (params.row.sentCount > 0 ? "Published" : "Draft"),
   },
   {
@@ -64,12 +65,13 @@ const columns = [
 
 interface EmailTableProps {
   onClick?: (email: EmailType) => void;
+  shadow?: boolean;
 }
 
 const EmailTable = (props?: EmailTableProps) => {
   const router = useRouter();
   const [emails, setEmails] = useState<any>();
-
+  const shadow = defaultProp(props.shadow, true);
   const onClick = useMemo(
     () => (param: GridRowParams) => {
       const id = param.id;
@@ -90,12 +92,13 @@ const EmailTable = (props?: EmailTableProps) => {
     <ServerPaginatedTable
       columns={columns}
       gql={GET_EMAILS}
+      onReceivedData={(data) => setEmails(data)}
       getRows={(data) => {
-        setEmails(data);
         return data.emails.nodes;
       }}
       queryOptions={{ fetchPolicy: "no-cache" }}
       onRowClick={onClick}
+      shadow={shadow}
     />
   );
 };

@@ -1,28 +1,32 @@
 import { deserialize, SerializedConditionNode } from "common/filters";
+import { WhereOptions } from "sequelize/types";
 import { AudienceBuilder } from "src/audience";
 import { GraphQLContextType } from "..";
+import { ProductUserAttributes } from "src/models/product_user";
 
 export const productUsers = async (
   root: any,
-  { page, limit }: { page: number; limit: number },
+  { id, page, limit }: { id: string; page: number; limit: number },
   { models, user }: GraphQLContextType
 ) => {
   page = page || 0;
   limit = limit || 10;
+  const where: WhereOptions<ProductUserAttributes> = {
+    userId: user.id,
+  };
+  if (id) {
+    where.id = id;
+  }
   try {
     const productUsers = await models.ProductUser.findAll({
-      where: {
-        userId: user.id,
-      },
+      where,
       limit,
       offset: page * limit,
       order: [["createdAt", "DESC"]],
     });
 
     const count = await models.ProductUser.count({
-      where: {
-        userId: user.id,
-      },
+      where,
     });
 
     return {

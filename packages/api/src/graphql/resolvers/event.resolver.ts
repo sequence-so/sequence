@@ -6,8 +6,8 @@ export const events = async (
     id,
     page,
     limit,
-    distinctId,
-  }: { id: string; page: number; limit: number; distinctId: string },
+    personId,
+  }: { id: string; page: number; limit: number; personId: string },
   { models, user }: GraphQLContextType
 ) => {
   page = page || 0;
@@ -15,9 +15,10 @@ export const events = async (
   try {
     const whereQuery: Record<string, any> = {
       userId: user.id,
+      type: "track",
     };
-    if (distinctId) {
-      whereQuery.distinctId = distinctId;
+    if (personId) {
+      whereQuery.personId = personId;
     }
     if (id) {
       whereQuery.id = id;

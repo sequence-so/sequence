@@ -2,22 +2,16 @@ import { useQuery, gql } from "@apollo/client";
 
 const GET_INTEGRATIONS = gql`
   {
-    getIntegrations {
-      intercom
+    integrations {
       segment
-      postgres
-      discord
       node
     }
   }
 `;
 
 interface IntegrationType {
-  getIntegrations: {
-    intercom: boolean;
+  integrations: {
     segment: boolean;
-    postgres: boolean;
-    discord: boolean;
     node: boolean;
   };
 }
@@ -27,15 +21,16 @@ interface Options {
 }
 
 export const useDidIntegrate = (options?: Options) => {
-  const { loading, error, data: integrations } = useQuery<IntegrationType>(
-    GET_INTEGRATIONS,
-    {
-      fetchPolicy: "no-cache",
-      pollInterval: options?.pollingInterval,
-    }
-  );
+  const {
+    loading,
+    error,
+    data: integrations,
+  } = useQuery<IntegrationType>(GET_INTEGRATIONS, {
+    fetchPolicy: "no-cache",
+    pollInterval: options?.pollingInterval,
+  });
 
-  const returnIntegrations = !loading && !error && integrations.getIntegrations;
+  const returnIntegrations = !loading && !error && integrations.integrations;
 
   return { loading, error, integrations: returnIntegrations };
 };

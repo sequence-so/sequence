@@ -11,6 +11,7 @@ import { faUserFriends } from "@fortawesome/free-solid-svg-icons";
 import DefaultViewLayout from "layout/DefaultViewLayout";
 import AudienceBuilder from "components/AudienceBuilder";
 import { Condition, deserialize } from "common/filters";
+import { PAGE_DEFAULTS } from "constants/page";
 
 const GET_AUDIENCE = gql`
   query GetAudience($id: ID) {
@@ -72,7 +73,7 @@ const AudienceByIdPage = () => {
     ) : (
       <>
         <div className="content">
-          <AudienceBuilder rootNode={nodeRef.current} />
+          <AudienceBuilder name={title} rootNode={nodeRef.current} />
           <ProductUserTable
             productUsers={data.audiences.nodes[0].productUsers}
             rows={data.audiences.rows}
@@ -94,9 +95,9 @@ const AudienceByIdPage = () => {
         <DynamicTitleBar
           title={title}
           onChangeTitleText={onChangeTitleText}
-          subtitle="View and manage your audiences."
+          subtitle={PAGE_DEFAULTS.audiences.id.placeholderTitle}
           showAction={false}
-          placeholderTitle="Untitled Audience"
+          placeholderTitle={PAGE_DEFAULTS.audiences.id.placeholderTitle}
           icon={<FontAwesomeIcon icon={faUserFriends} color={"#4a7da7"} />}
         ></DynamicTitleBar>
         <DefaultViewLayout>{content}</DefaultViewLayout>

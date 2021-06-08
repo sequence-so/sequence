@@ -8,7 +8,9 @@ import DynamicTitleBar from "components/DynamicTitleBar";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DefaultViewLayout from "layout/DefaultViewLayout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { PAGE_DEFAULTS } from "constants/page";
+import GQLErrorMessage from "components/GQLErrorMessage";
 
 const GET_EMAIL_BY_ID = gql`
   query GetEmails($id: ID) {
@@ -25,6 +27,7 @@ const GET_EMAIL_BY_ID = gql`
         sentCount
         createdAt
         updatedAt
+        deletedAt
       }
     }
   }
@@ -45,23 +48,50 @@ export type EmailType = {
 };
 
 type EmailListContentProps = {
-  emails: EmailType[];
+  emails: {
+    page: number;
+    rows: number;
+    nodes: EmailType[];
+  };
 };
 
 const EmailsByIdPage = () => {
   const router = useRouter();
   const id = router.query.id;
-  const { data, loading, error } = useQuery(GET_EMAIL_BY_ID, {
-    variables: {
-      id,
-    },
-    fetchPolicy: "no-cache",
-  });
+  const { data, loading, error } = useQuery<EmailListContentProps>(
+    GET_EMAIL_BY_ID,
+    {
+      variables: {
+        id,
+      },
+      fetchPolicy: "no-cache",
+    }
+  );
   const [title, setTitle] = useState("");
 
   const onChangeTitleText = (text: string) => {
     setTitle(text);
   };
+  useEffect(() => {
+    if (id && data?.emails?.nodes[0].name) {
+      setTitle(data?.emails?.nodes[0].name);
+    }
+  }, [id, data?.emails]);
+
+  let RenderContents: JSX.Element;
+  if (id && data) {
+    if (!data?.emails?.nodes[0].deletedAt) {
+      RenderContents = (
+        <EmailEditor
+          name={title}
+          onChangeName={onChangeTitleText}
+          email={data.emails.nodes[0]}
+        />
+      );
+    } else {
+      RenderContents = <GQLErrorMessage error="This email has been deleted" />;
+    }
+  }
 
   return (
     <DashboardLayout index={1}>
@@ -69,22 +99,16 @@ const EmailsByIdPage = () => {
         <DynamicTitleBar
           title={title}
           onChangeTitleText={onChangeTitleText}
-          subtitle="Create an email to send to a list of customers."
+          subtitle={PAGE_DEFAULTS.emails.id.subtitle}
           showAction={false}
-          placeholderTitle="Untitled Email"
+          placeholderTitle={PAGE_DEFAULTS.emails.id.placeholder}
           icon={<FontAwesomeIcon icon={faEnvelope} color={"#4a7da7"} />}
         ></DynamicTitleBar>
         <DefaultViewLayout>
           <>
             {loading && <CircularProgress />}
-            {error && <p>A fatal error has occured!</p>}
-            {data && (
-              <EmailEditor
-                name={title}
-                onChangeName={onChangeTitleText}
-                email={data.emails.nodes[0]}
-              />
-            )}
+            {error && <GQLErrorMessage error={error.message} />}
+            {RenderContents}
           </>
         </DefaultViewLayout>
         <style jsx>{`

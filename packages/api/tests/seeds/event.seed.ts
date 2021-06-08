@@ -13,9 +13,13 @@ export const build = (
   return {
     ...opts,
     type: "track",
-    distinctId: opts?.distinctId || uuidv4(),
+    personId: opts?.personId || uuidv4(),
     messageId: opts?.messageId || uuidv4(),
     name: opts?.name || faker.random.arrayElement(EVENT_LIST),
+    sentAt: opts?.sentAt || new Date(),
+    context: opts?.context || {},
+    timestamp: opts?.timestamp || new Date(),
+    receivedAt: opts?.receivedAt || new Date(),
   };
 };
 

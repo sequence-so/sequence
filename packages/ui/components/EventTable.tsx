@@ -11,14 +11,14 @@ import Table from "./Table";
 const DEFAULT_LIMIT = 10;
 
 const GET_EVENTS = gql`
-  query GetEvents($page: Int, $limit: Int, $distinctId: ID) {
-    events(page: $page, limit: $limit, distinctId: $distinctId) {
+  query GetEvents($page: Int, $limit: Int, $personId: ID) {
+    events(page: $page, limit: $limit, personId: $personId) {
       nodes {
         id
         name
         type
         source
-        distinctId
+        personId
         properties
         productUser {
           firstName
@@ -36,7 +36,7 @@ const GET_EVENTS = gql`
 interface GetEventsArguments {
   page?: number;
   limit?: number;
-  distinctId?: string;
+  personId?: string;
 }
 
 interface EventTableProps {
@@ -143,6 +143,7 @@ function EventTable(props: EventTableProps) {
       pagination
       paginationMode="server"
       loading={loading}
+      shadow={true}
     ></Table>
   );
 }

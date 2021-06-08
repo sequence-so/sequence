@@ -7,8 +7,6 @@ import { AudienceBuilder } from "src/audience";
 import ProductUser from "src/models/product_user";
 import Audience from "src/models/audience";
 import Email from "src/models/emails";
-import productUserSeed from "tests/seeds/productUser.seed";
-import AudienceProductUser from "src/models/audience_product_user";
 Sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
 
 type CreateCampaignInputArgs = Omit<CampaignCreationAttributes, "userId">;
@@ -94,8 +92,6 @@ const executeCampaign = async (campaign: Campaign, { models }: any) => {
     },
   });
 
-  console.log(emailModel);
-
   try {
     const sendEmailPromises = productUsers
       .map((person) => {
@@ -110,18 +106,11 @@ const executeCampaign = async (campaign: Campaign, { models }: any) => {
         };
       })
       .map((payload) => Sendgrid.send(payload));
-    const result = await Promise.all(sendEmailPromises);
-    console.log(result);
+    await Promise.all(sendEmailPromises);
     await campaign.update({
       sentAt: new Date(),
     });
-    return {
-      nodes: productUsers,
-      page: 0,
-      rows: productUsers.length,
-    };
   } catch (error) {
     console.error(error);
-    return error;
   }
 };

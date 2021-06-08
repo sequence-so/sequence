@@ -16,13 +16,15 @@ import {
   faCog,
   faSignOutAlt,
   faQuestionCircle,
+  faUserCircle,
+  faStar,
 } from "@fortawesome/free-solid-svg-icons";
+import { Tooltip } from "@material-ui/core";
 const iconStyle: React.CSSProperties = {
   width: 15,
   marginRight: 8,
   color: "#4E4F55",
 };
-import NotificationIcon from "@material-ui/icons/Notifications";
 const GET_USER = gql`
   {
     getUser {
@@ -98,29 +100,6 @@ export default function ProminentAppBar() {
     setAnchorEl(null);
   };
 
-  const handleHelp = () => {
-    if (!didBootIntercom) {
-      if (data && data.getUser) {
-        boot({
-          name: `${data.getUser.firstName} ${data.getUser.lastName}`,
-          email: data.getUser.email,
-          avatar: data.getUser.logo,
-          userId: data.getUser.id,
-        });
-        hide();
-      }
-      setDidBootIntercom(true);
-      show();
-      return;
-    }
-    setShowingIntercom(!showingIntercom);
-    if (showingIntercom) {
-      hide();
-    } else {
-      show();
-    }
-  };
-
   const handleSettings = () => {
     handleClose();
     router.push("/settings");
@@ -137,14 +116,20 @@ export default function ProminentAppBar() {
       <AppBar position="static" className={classes.appbar}>
         <Toolbar className={classes.toolbar}>
           <div className={classes.grow} />
-
-          <IconButton aria-label="search" color="inherit" onClick={handleHelp}>
-            <FontAwesomeIcon icon={faQuestionCircle} />
-          </IconButton>
-          <IconButton aria-label="search" color="inherit">
-            <NotificationIcon />
-          </IconButton>
-
+          <a href="https://sequence.gitbook.io/sequence/" target="_blank">
+            <Tooltip title={"Documentation"} placement="bottom">
+              <IconButton aria-label="search" color="inherit">
+                <FontAwesomeIcon icon={faQuestionCircle} />
+              </IconButton>
+            </Tooltip>
+          </a>
+          <a href="https://github.com/sequence-so/sequence" target="_blank">
+            <Tooltip title={"Star on Github"} placement="bottom">
+              <IconButton aria-label="search" color="inherit">
+                <FontAwesomeIcon icon={faStar} />
+              </IconButton>
+            </Tooltip>
+          </a>
           <div
             className={styles.profile}
             style={{
@@ -156,14 +141,19 @@ export default function ProminentAppBar() {
             }}
             onClick={handleClick}
           >
-            {data && data.getUser ? (
+            {data && data.getUser && data.getUser.photo ? (
               <img
                 className={styles.profile_image}
                 width={30}
                 height={30}
                 src={data.getUser.photo}
               />
-            ) : null}
+            ) : (
+              <FontAwesomeIcon
+                icon={faUserCircle}
+                style={{ width: "24px", height: "24px" }}
+              />
+            )}
             <img className={styles.profile_arrow} src={DownArrow} />
           </div>
 
@@ -197,12 +187,17 @@ export default function ProminentAppBar() {
                 paddingTop: 16,
               }}
             >
-              {data && data.getUser && (
+              {data && data.getUser && data.getUser.photo ? (
                 <img
-                  className={styles.profile_circle}
+                  className={styles.profile_image}
                   width={30}
                   height={30}
                   src={data.getUser.photo}
+                />
+              ) : (
+                <FontAwesomeIcon
+                  icon={faUserCircle}
+                  style={{ width: "45px", height: "45px" }}
                 />
               )}
               {data && data.getUser && (

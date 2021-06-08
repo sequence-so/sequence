@@ -1,9 +1,10 @@
-import { InitOptions, STRING, UUID, DATE, Model } from "sequelize";
+import { InitOptions, STRING, UUID, DATE, Model, JSONB } from "sequelize";
 import Sequelize from "sequelize";
 import { v4 as uuidv4 } from "uuid";
 import sequelize from "../database";
 import Event from "./event";
 import User from "./user";
+import { EventContext } from "sequence-node";
 
 const config: InitOptions = {
   tableName: "product_users",
@@ -15,35 +16,64 @@ const config: InitOptions = {
         !(this as ProductUserInstance).email &&
         !(this as ProductUserInstance).externalId
       ) {
-        throw new Error("Both email and externalId cannot be null");
+        return false;
       }
+      return true;
     },
   },
 };
 
-interface ProductUserAttributes {
+export const VALID_KEYS = {
+  browser: 1,
+  browserLanguage: 1,
+  browserVersion: 1,
+  city: 1,
+  companyName: 1,
+  country: 1,
+  createdAt: 1,
+  email: 1,
+  firstName: 1,
+  industry: 1,
+  intercomId: 1,
+  lastName: 1,
+  lastSeenAt: 1,
+  os: 1,
+  phone: 1,
+  photo: 1,
+  region: 1,
+  signedUpAt: 1,
+  title: 1,
+  userId: 1,
+  websiteUrl: 1,
+};
+
+export interface ProductUserAttributes {
   id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  photo: string;
-  phone: string;
-  signedUpAt: Date;
-  lastSeenAt: Date;
   browser: string;
-  browserVersion: string;
   browserLanguage: string;
-  os: string;
-  country: string;
-  region: string;
+  browserVersion: string;
   city: string;
-  title: string;
-  websiteUrl: string;
   companyName: string;
+  context: EventContext;
+  country: string;
+  email: string;
+  externalId: string;
+  firstName: string;
   industry: string;
   intercomId: string;
-  externalId: string;
+  lastName: string;
+  lastSeenAt: Date;
+  os: string;
+  phone: string;
+  photo: string;
+  region: string;
+  signedUpAt: Date | null;
+  title: string;
+  traits: Record<string, any>;
+  websiteUrl: string;
   userId: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface ProductUserCreationAttributes
@@ -56,26 +86,28 @@ class ProductUser extends Model<
   ProductUserCreationAttributes
 > {
   public id!: string;
-  public firstName: string;
-  public lastName: string;
-  public email: string;
-  public photo: string;
-  public phone: string;
-  public signedUpAt: Date;
-  public lastSeenAt: Date;
-  public intercomId: string;
-  public externalId: string;
   public browser: string;
-  public browserVersion: string;
   public browserLanguage: string;
-  public os: string;
-  public country: string;
-  public region: string;
+  public browserVersion: string;
   public city: string;
+  public context: EventContext;
+  public companyName: string;
+  public country: string;
+  public email: string;
+  public externalId: string;
+  public firstName: string;
+  public industry: string;
+  public intercomId: string;
+  public lastName: string;
+  public lastSeenAt: Date;
+  public os: string;
+  public phone: string;
+  public photo: string;
+  public traits: Record<string, any>;
+  public region: string;
+  public signedUpAt: Date | null;
   public title: string;
   public websiteUrl: string;
-  public companyName: string;
-  public industry: string;
   public userId: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -104,11 +136,11 @@ ProductUser.init(
     },
     email: {
       type: STRING,
-      validate: {
-        isEmail: true,
-      },
     },
     photo: {
+      type: STRING,
+    },
+    phone: {
       type: STRING,
     },
     signedUpAt: {
@@ -150,6 +182,18 @@ ProductUser.init(
     industry: {
       type: STRING,
     },
+    traits: {
+      type: JSONB,
+    },
+    context: {
+      type: JSONB,
+      get() {
+        return JSON.parse(this.getDataValue("context"));
+      },
+      set(value) {
+        this.setDataValue("context", JSON.stringify(value));
+      },
+    },
     userId: {
       type: Sequelize.UUID,
       references: {
@@ -168,13 +212,13 @@ ProductUser.belongsTo(User, {
 
 ProductUser.hasMany(Event, {
   as: "events",
-  foreignKey: "distinctId",
+  foreignKey: "personId",
   sourceKey: "externalId",
 });
 
 Event.belongsTo(ProductUser, {
   as: "productUser",
-  foreignKey: "distinctId",
+  foreignKey: "personId",
   targetKey: "externalId",
 });
 

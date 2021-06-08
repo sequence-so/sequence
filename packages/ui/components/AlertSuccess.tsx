@@ -3,6 +3,7 @@ import styles from "../styles/Home.module.css";
 import BlueButton from "./BlueButton";
 import GreenCheckmark from "../public/green_check.svg";
 import { defaultProp } from "../services/defaultProp";
+import { gql, useMutation } from "@apollo/client";
 
 interface Props {
   nextRoute: string;
@@ -10,15 +11,24 @@ interface Props {
   text2?: string;
 }
 
+const UPDATE_USER_ONBOARDED = gql`
+  mutation UpdateUser($onboardedAt: Date) {
+    updateUser(onboardedAt: $onboardedAt) {
+      id
+      onboardedAt
+    }
+  }
+`;
 const AlertSuccess = (props: Props) => {
+  const [updateUser] = useMutation(UPDATE_USER_ONBOARDED);
   const router = useRouter();
   const text1 = defaultProp(
     props.text1,
-    "You’ve configured your alert successfully."
+    "Now that your data is imported, create an Audience or an Email in the dashboard."
   );
   const text2 = defaultProp(
     props.text2,
-    "Click below to explore your dashboard and see how else Hoco can help you improve."
+    "Click below to explore your dashboard and begin sending Email blasts."
   );
   return (
     <div
@@ -38,7 +48,13 @@ const AlertSuccess = (props: Props) => {
       <BlueButton
         text="View Dashboard"
         onClick={(): void => {
-          router.push(props.nextRoute);
+          updateUser({
+            variables: {
+              onboardedAt: new Date(),
+            },
+          }).then((res) => {
+            router.push(props.nextRoute);
+          });
         }}
       />
     </div>

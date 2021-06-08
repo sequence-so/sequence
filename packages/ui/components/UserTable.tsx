@@ -10,7 +10,7 @@ export const columns = [
     headerName: "User",
     width: 200,
     renderCell: (params: GridCellParams) => (
-      <Link href={`/explorer/${params.row.externalId}`}>
+      <Link href={`/explorer/${params.row.id}`}>
         <a>
           <div style={{ display: "inline-flex", alignItems: "center" }}>
             <div className={homeStyles.initials_circle}>
@@ -51,7 +51,7 @@ export const columns = [
   },
 ];
 
-const ProductUserTable = ({ productUsers, rows }) => {
+const PeopleTable = ({ productUsers, rows }) => {
   const classes = useStyles();
 
   return (
@@ -63,12 +63,7 @@ const ProductUserTable = ({ productUsers, rows }) => {
         page={0}
         rowCount={rows}
         className={classes.table}
-        // onPageChange={(params) => {
-        //   setPage(params.page);
-        // }}
         pagination
-        // paginationMode="server"
-        // loading={loading}
         components={{
           ColumnResizeIcon: () => null,
         }}
@@ -82,4 +77,4 @@ const ProductUserTable = ({ productUsers, rows }) => {
   );
 };
 
-export default ProductUserTable;
+export default PeopleTable;

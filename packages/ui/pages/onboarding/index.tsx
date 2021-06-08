@@ -11,10 +11,7 @@ const OnboardingPage = () => {
       <OnboardingLayout index={0}>
         <div className="content">
           <h1>Welcome to Sequence!</h1>
-          <p>
-            Sequence alerts you of important user behavior so you can convert
-            your free trials more effectively.
-          </p>
+          <p>Sequence is an open-core email marketing automation platform.</p>
           <p>Setup is simple:</p>
 
           <div className={classnames(styles.onboarding_box_row)}>
@@ -26,9 +23,8 @@ const OnboardingPage = () => {
             >
               <div className={styles.onboarding_box_number}>1.</div>
               <div className={styles.onboarding_box_content}>
-                Connect to <br />
-                Your
-                <br /> Datasources
+                Import <br />
+                Your Data
               </div>
             </div>
             <div
@@ -39,9 +35,9 @@ const OnboardingPage = () => {
             >
               <div className={styles.onboarding_box_number}>2.</div>
               <div className={styles.onboarding_box_content}>
-                Configure <br />
-                Key Product <br />
-                Events
+                Segment <br />
+                Your <br />
+                Users
               </div>
             </div>
             <div
@@ -52,9 +48,9 @@ const OnboardingPage = () => {
             >
               <div className={styles.onboarding_box_number}>3.</div>
               <div className={styles.onboarding_box_content}>
-                Create an
-                <br /> Alert and Be <br />
-                Notified
+                Send an
+                <br /> Email <br />
+                Blast
               </div>
             </div>
           </div>

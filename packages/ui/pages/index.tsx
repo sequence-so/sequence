@@ -1,17 +1,17 @@
 import Head from "next/head";
-import SignupButton from "../components/SignupButton";
-import styles from "../styles/Home.module.css";
-import LogoColor from "../public/logo_color.svg";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import styles from "../styles/Home.module.css";
+import LogoColor from "../public/logo_color.svg";
+import LoginForm from "components/login/LoginForm";
+import Link from "next/link";
+import Wordmark from "components/Wordmark";
 
 export default function Login() {
   const [domain, setDomain] = useState("");
   const router = useRouter();
 
   useEffect(() => {
-    const href = window.location.href;
     setDomain(process.env.NEXT_PUBLIC_API_URL);
   }, []);
 
@@ -20,10 +20,39 @@ export default function Login() {
       return;
     }
     if (localStorage.token) {
-      router.push("/campaigns");
+      router.push("/blasts");
     }
   }, [router.isReady]);
 
+  const onSubmitLogin = (email: string, password: string) => {
+    let headers = new Headers();
+    headers.append("Accept", "application/json");
+    headers.append("Content-Type", "application/json");
+    const form = new FormData();
+    form.append("email", email);
+    form.append("password", password);
+    return fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    })
+      .then(async (res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        const result = await res.json();
+        throw result;
+      })
+      .then((data) => {
+        localStorage.token = data.token;
+        setTimeout(() => {
+          window.location = data.url;
+        });
+      });
+  };
   return (
     <div className={styles.login_container}>
       <Head>
@@ -65,16 +94,17 @@ export default function Login() {
         <img
           className={styles.signup_logo}
           src={LogoColor}
-          width={120}
-          height={120}
+          width={80}
+          height={80}
         />
-        <h2 className={styles.signup_title}>Signup</h2>
-        <Link href={domain + "/auth/google"} passHref>
-          <SignupButton />
+        <h2 className={styles.signup_title}>Login</h2>
+        <LoginForm type="login" perform={onSubmitLogin} />
+        <Link href="/signup">
+          <a style={{ marginTop: "1em", color: "#4191E4" }}>
+            <p>Don't have an account? Click to sign up.</p>
+          </a>
         </Link>
-        <p className={styles.login_footer}>
-          Copyright © 2021 Sequence Technologies
-        </p>
+        <Wordmark />
       </div>
       <div className={styles.signup_right}></div>
     </div>
