@@ -27,7 +27,7 @@ export const NODE_OPTION_EVENT_ATTRIBUTE = {
 };
 export const NODE_OPTION_USER_ATTRIBUTE = {
   value: FilterKind.UserAttribute,
-  label: "Person Attribute",
+  label: "User Attribute",
 };
 
 export const DEFAULT_OPERATOR_VALUE = {
