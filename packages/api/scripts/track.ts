@@ -1,5 +1,5 @@
 const app = require("../src/app").default;
-import SequenceHttpHandler from "../src/routes/sequenceWebhook.http";
+import SequenceHttpHandler from "../src/routes/sequence.http";
 import { v4 as uuidv4 } from "uuid";
 import SequenceWebhook from "../src/models/sequence_webhook";
 import moment from "moment";
@@ -38,19 +38,19 @@ const runTest = async () => {
     sentAt: new Date(),
   });
 
-  route.onEvent(
-    {
-      body: {
-        batch: Array.from({ length: 40 }, () => createEvent()),
-      },
-      headers: {
-        authorization: `Bearer ${hook.token}`,
-      },
-    } as any,
-    {
-      json: () => {},
-    } as any
-  );
+  // route.onEvent(
+  //   {
+  //     body: {
+  //       batch: Array.from({ length: 40 }, () => createEvent()),
+  //     },
+  //     headers: {
+  //       authorization: `Bearer ${hook.token}`,
+  //     },
+  //   } as any,
+  //   {
+  //     json: () => {},
+  //   } as any
+  // );
 };
 
 runTest();
