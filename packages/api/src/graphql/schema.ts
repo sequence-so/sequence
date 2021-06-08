@@ -145,6 +145,7 @@ const typeDefs = gql`
     lastName: String
     email: String
     photo: String
+    onboardedAt: Date
     createdAt: Date
     updatedAt: Date
   }
@@ -188,6 +189,7 @@ const typeDefs = gql`
       from: String
       fromName: String
     ): Email
+    updateUser(firstName: String, lastName: String, onboardedAt: Date): User
   }
 `;
 

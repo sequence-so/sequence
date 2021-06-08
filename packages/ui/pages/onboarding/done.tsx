@@ -3,8 +3,8 @@ import AlertSuccess from "../../components/AlertSuccess";
 
 const DonePage = () => {
   return (
-    <OnboardingLayout index={4}>
-      <AlertSuccess nextRoute={"/alerts"} />
+    <OnboardingLayout index={2}>
+      <AlertSuccess nextRoute={"/blasts"} />
     </OnboardingLayout>
   );
 };

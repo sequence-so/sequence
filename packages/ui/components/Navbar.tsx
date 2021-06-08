@@ -17,7 +17,9 @@ import {
   faSignOutAlt,
   faQuestionCircle,
   faUserCircle,
+  faStar,
 } from "@fortawesome/free-solid-svg-icons";
+import { Tooltip } from "@material-ui/core";
 const iconStyle: React.CSSProperties = {
   width: 15,
   marginRight: 8,
@@ -98,29 +100,6 @@ export default function ProminentAppBar() {
     setAnchorEl(null);
   };
 
-  const handleHelp = () => {
-    if (!didBootIntercom) {
-      if (data && data.getUser) {
-        boot({
-          name: `${data.getUser.firstName} ${data.getUser.lastName}`,
-          email: data.getUser.email,
-          avatar: data.getUser.logo,
-          userId: data.getUser.id,
-        });
-        hide();
-      }
-      setDidBootIntercom(true);
-      show();
-      return;
-    }
-    setShowingIntercom(!showingIntercom);
-    if (showingIntercom) {
-      hide();
-    } else {
-      show();
-    }
-  };
-
   const handleSettings = () => {
     handleClose();
     router.push("/settings");
@@ -137,9 +116,20 @@ export default function ProminentAppBar() {
       <AppBar position="static" className={classes.appbar}>
         <Toolbar className={classes.toolbar}>
           <div className={classes.grow} />
-          <IconButton aria-label="search" color="inherit" onClick={handleHelp}>
-            <FontAwesomeIcon icon={faQuestionCircle} />
-          </IconButton>
+          <a href="https://sequence.gitbook.io/sequence/" target="_blank">
+            <Tooltip title={"Documentation"} placement="bottom">
+              <IconButton aria-label="search" color="inherit">
+                <FontAwesomeIcon icon={faQuestionCircle} />
+              </IconButton>
+            </Tooltip>
+          </a>
+          <a href="https://github.com/sequence-so/sequence" target="_blank">
+            <Tooltip title={"Star on Github"} placement="bottom">
+              <IconButton aria-label="search" color="inherit">
+                <FontAwesomeIcon icon={faStar} />
+              </IconButton>
+            </Tooltip>
+          </a>
           <div
             className={styles.profile}
             style={{

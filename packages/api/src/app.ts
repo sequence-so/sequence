@@ -14,6 +14,7 @@ import schema from "./graphql/schema";
 import SequelizeModels from "./models/index";
 import Routes from "./routes";
 import resolvers from "./graphql/resolvers";
+import logger from "./utils/logger";
 
 const app = express();
 
@@ -66,7 +67,7 @@ const server = new ApolloServer({
     };
   },
   formatError(err) {
-    console.log("Error occured processing request:", err);
+    logger.error("Error occured processing request:", err);
     return {
       message: err.message,
       // code: err.originalError && err.originalError.code,

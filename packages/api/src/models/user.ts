@@ -3,6 +3,7 @@ import { Model } from "sequelize-typescript";
 import sequelize from "../database";
 import { v4 as uuidv4 } from "uuid";
 import { hash } from "src/utils/password";
+import { DATE } from "sequelize";
 
 const config: InitOptions = {
   tableName: "users",
@@ -20,12 +21,13 @@ export interface UserAttributes {
   password: string;
   email: string;
   photo: string;
+  onboardedAt: Date;
 }
 
 export interface UserCreationAttributes
   extends Optional<
     UserAttributes,
-    "id" | "firstName" | "lastName" | "photo" | "password"
+    "id" | "firstName" | "lastName" | "photo" | "password" | "onboardedAt"
   > {}
 
 class User extends Model<UserAttributes, UserCreationAttributes> {
@@ -72,6 +74,7 @@ User.init(
     password: {
       type: STRING,
     },
+    onboardedAt: DATE,
   },
   config
 );

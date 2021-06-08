@@ -18,7 +18,14 @@ passport.use(
       done: CallableFunction
     ) {
       const user = await User.findOne({
-        attributes: ["id", "email", "password", "firstName", "lastName"],
+        attributes: [
+          "id",
+          "email",
+          "password",
+          "firstName",
+          "lastName",
+          "onboardedAt",
+        ],
         where: {
           email: username,
         },

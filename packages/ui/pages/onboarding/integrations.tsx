@@ -35,7 +35,7 @@ const IntegrationsPage = () => {
           <BlueButton
             text="Next"
             onClick={(): void => {
-              router.push("/onboarding/alert");
+              router.push("/onboarding/done");
             }}
           />
         </div>
