@@ -1,7 +1,7 @@
 {
   "name": "sequence.so",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Marketing automation tool for data-driven marketers.",
   "homepage": "https://sequence.so",
   "scripts": {
