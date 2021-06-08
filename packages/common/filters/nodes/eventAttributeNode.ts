@@ -7,7 +7,8 @@ class EventAttributeNode extends AbstractFilterNode {
   eventName: string | undefined;
   expected: any;
   private constructor(eventName?: any) {
-    super("name", eventName);
+    super("name");
+    this.eventName = eventName;
   }
   static new(eventName?: string) {
     return new EventAttributeNode(eventName);

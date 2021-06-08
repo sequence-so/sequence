@@ -67,12 +67,12 @@ abstract class AbstractFilterNode extends AbstractNode {
     this.expected = date;
     return this;
   }
-  isDate(attribute: string) {
-    this.comparator = DateTypeComparator.new(attribute, true);
+  isDate(attribute?: string) {
+    this.comparator = DateTypeComparator.new(attribute!, true);
     return this;
   }
-  isNotDate(attribute: string) {
-    this.comparator = DateTypeComparator.new(attribute, false);
+  isNotDate(attribute?: string) {
+    this.comparator = DateTypeComparator.new(attribute!, false);
     return this;
   }
   equals(expected?: any) {
