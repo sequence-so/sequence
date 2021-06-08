@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import classNames from "classnames";
 import { createGlobalState } from "react-hooks-global-state";
 import { useRouter } from "next/router";
+import { SIDEBAR_LIST } from "constants/page";
 interface Props {
   children: React.ReactElement;
   index: number;
@@ -14,21 +15,7 @@ const initialState = { navigationIndex: 0, isSidebarOpen: true };
 export const { useGlobalState } = createGlobalState(initialState);
 
 const getSidebarIndex = (pathname: string) => {
-  if (pathname.indexOf("explorer") > -1) {
-    return 3;
-  }
-  if (pathname.indexOf("settings") > -1) {
-    return 4;
-  }
-  if (pathname.indexOf("blasts") > -1) {
-    return 0;
-  }
-  if (pathname.indexOf("audiences") > -1) {
-    return 1;
-  }
-  if (pathname.indexOf("emails") > -1) {
-    return 2;
-  }
+  return SIDEBAR_LIST.findIndex((elem) => elem.route.indexOf(pathname) > -1);
 };
 
 const DashboardLayout = (props: Props) => {

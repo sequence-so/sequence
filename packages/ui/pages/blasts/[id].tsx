@@ -15,6 +15,7 @@ import { GridCellParams } from "@material-ui/data-grid";
 import GQLErrorMessage from "components/GQLErrorMessage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { PAGE_DEFAULTS } from "constants/page";
 
 const DynamicReactJson = dynamic(import("react-json-view"), { ssr: false });
 
@@ -167,7 +168,7 @@ const BlastByIdPage = () => {
           <DynamicTitleBar
             title={data?.campaigns?.nodes[0].name}
             onChangeTitleText={(text: string) => {}}
-            subtitle="View the details of this Blast."
+            subtitle={PAGE_DEFAULTS.blasts.id.subtitle}
             showAction={false}
           />
           {content}

@@ -14,6 +14,7 @@ import DefaultViewLayout from "layout/DefaultViewLayout";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentAlt, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { PAGE_DEFAULTS } from "constants/page";
 
 export interface CampaignType {
   id: string;
@@ -197,8 +198,8 @@ const EmailBuilderPage = () => {
         <DynamicTitleBar
           title={title}
           onChangeTitleText={onChangeTitleText}
-          subtitle="Send a message to your Audience."
-          placeholderTitle="Untitled Blast"
+          subtitle={PAGE_DEFAULTS.blasts.create.subtitle}
+          placeholderTitle={PAGE_DEFAULTS.blasts.create.placeholderTitle}
           showAction={false}
           icon={<FontAwesomeIcon icon={faCommentAlt} color={"#4a7da7"} />}
         ></DynamicTitleBar>
