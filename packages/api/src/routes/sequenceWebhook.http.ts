@@ -1,23 +1,28 @@
-import { Application, NextFunction, Request, Response } from "express";
-import { APIEventPayload } from "sequence-lib";
+import { Application, Request, Response } from "express";
+import { EventPayload } from "sequence-node";
 import SequenceWebhook from "../models/sequence_webhook";
 import WebhookExecution from "../models/webhook_execution";
-import Event from "../models/event";
-import track from "../events/track.event";
-import alias from "../events/alias.event";
+import { track, identify } from "src/events";
+import logger from "src/utils/logger";
 
 interface WebhookPayload {
-  batch: APIEventPayload[];
+  batch: EventPayload[];
 }
 
-class SequenceWebhookRoute {
+/**
+ * Handles events coming from a Sequence client library or direct API integration.
+ */
+class SequenceHttpHandler {
   constructor(app: Application) {
     app.post("/event/batch", async (req, res) => {
       return this.onEvent(req, res);
     });
   }
   async onEvent(req: Request, res: Response) {
-    console.log("Received batch event:" + JSON.stringify(req.body));
+    logger.info(
+      "SequenceHttpHandler.onEvent Received batch event:" +
+        JSON.stringify(req.body)
+    );
     const authorization = req.headers.authorization;
     const token = authorization.split("Bearer ")[1];
 
@@ -49,15 +54,21 @@ class SequenceWebhookRoute {
       success: true,
     });
 
-    const insertRows: APIEventPayload[] = [];
+    const insertRows: EventPayload[] = [];
 
     for (let idx = 0, len = body.batch.length; idx < len; idx++) {
       const elem = body.batch[idx];
       insertRows.push(elem);
       if (elem.type === "track") {
-        track(elem, webhook.userId, execution.type, execution.id);
-      } else if (elem.type === "alias") {
-        alias(elem, webhook.userId, execution.type, execution.id);
+        track(elem, {
+          userId: webhook.userId,
+          source: execution.type,
+          sourceId: execution.id,
+        });
+      } else if (elem.type === "identify") {
+        identify(elem, {
+          userId: webhook.userId,
+        });
       } else {
         throw new Error(`Invalid type provided: ${elem.type}`);
       }
@@ -65,4 +76,4 @@ class SequenceWebhookRoute {
   }
 }
 
-export default SequenceWebhookRoute;
+export default SequenceHttpHandler;

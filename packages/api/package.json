@@ -98,12 +98,13 @@
     "sequelize-cli": "^6.2.0",
     "sequelize-cli-typescript": "^3.2.0-c",
     "sequelize-typescript": "^2.1.0",
-    "sequence-lib": "^0.0.2",
+    "sequence-node": "^0.2.3",
     "ts-node": "^9.1.1",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^4.3.2",
     "ui": "^0.1.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "winston": "^3.3.3"
   },
   "engines": {
     "node": ">=14.0.0"

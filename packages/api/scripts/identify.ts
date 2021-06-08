@@ -22,26 +22,24 @@ const runTest = async () => {
   const hook = await SequenceWebhook.findOne();
 
   const createEvent = (): EventPayload => ({
-    type: "track",
-    event: eventNames[Math.floor(Math.random() * eventNames.length)],
-    userId: "6319fea8-80d1-4488-8a7b-2d524e3c1f2f",
+    type: "identify",
+    userId: uuidv4(),
     properties: {
-      bullshit: "yes",
-      DoIt: 123,
-      hithere: 123.55,
-      boy: null as any,
+      firstName: "John",
+      lastName: "Doe",
+      email: "john@doe.com",
     },
     messageId: uuidv4(),
     timestamp: new Date(),
+    sentAt: new Date(),
     context: {},
     receivedAt: null,
-    sentAt: new Date(),
   });
 
   route.onEvent(
     {
       body: {
-        batch: Array.from({ length: 40 }, () => createEvent()),
+        batch: Array.from({ length: 1 }, () => createEvent()),
       },
       headers: {
         authorization: `Bearer ${hook.token}`,
