@@ -69,14 +69,6 @@ const ITEMS = [
     },
   },
   {
-    section: "Create an Alert",
-    icon: <FontAwesomeIcon icon={faBell} style={iconStyle} />,
-  },
-  {
-    section: "Configure the Message",
-    icon: <FontAwesomeIcon icon={faEnvelope} style={iconStyle} />,
-  },
-  {
     section: "Done",
     icon: <FontAwesomeIcon icon={faCheck} style={iconStyle} />,
   },
