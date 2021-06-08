@@ -6,7 +6,7 @@ Sequence uses a GraphQL API for frontend requests. You have access to that API t
 
 You can find the [full schema reference here](https://github.com/sequence-so/sequence/blob/main/packages/api/src/graphql/schema.ts).
 
-To use the API, login and get an Authorization token for your user. It will be accessible from your browser under `localStorage.token`. You can evaluate this expression in your console to get the value once you're logged in. Then in your request headers, add `Authorization: Bearer {token}`.
+To use the API, login and get an Authorization token for your user. It will be accessible from your browser under `localStorage.token`. You can evaluate this expression in your console to get the value once you're logged in. Then in your request headers, add `Authorization: {token}`.
 
 The API is available at `http://{sequence_api}/graphql`. We also expose the GraphQL explorer which has more schema details. 
 

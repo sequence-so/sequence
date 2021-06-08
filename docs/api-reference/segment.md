@@ -1,31 +1,41 @@
-# Event
+---
+description: For the integration with Segment.
+---
 
-{% api-method method="post" host="https://api.cakes.com" path="/event/batch" %}
+# Segment
+
+{% api-method method="post" host="http://sequence.so" path="/event/segment" %}
 {% api-method-summary %}
-Create Event
+Capture Event
 {% endapi-method-summary %}
 
 {% api-method-description %}
-Create an Event associated with a particular Person. Based off the Segment specification, we currently support the following event types:  
-- Track  
-- Identify  
-  
-Note: Events with anonymous users are not currently supported.
+Captures an event from a Segment custom webhook flow. \(Scroll past the Request definition to read more on this\).  
 {% endapi-method-description %}
 
 {% api-method-spec %}
 {% api-method-request %}
+{% api-method-path-parameters %}
+{% api-method-parameter name="id" type="string" %}
+ID of the cake to get, for free of course.
+{% endapi-method-parameter %}
+{% endapi-method-path-parameters %}
+
 {% api-method-headers %}
 {% api-method-parameter name="Authentication" type="string" required=true %}
-Form of Authentication: Bearer {token}
+Authentication token to track down who is emptying our stocks.
 {% endapi-method-parameter %}
 {% endapi-method-headers %}
 
-{% api-method-body-parameters %}
-{% api-method-parameter name="batch" type="array" required=true %}
-Event payload, either a "track" or "identify" call, following the Segment event specification. 
+{% api-method-query-parameters %}
+{% api-method-parameter name="recipe" type="string" %}
+The API will do its best to find a cake matching the provided recipe.
 {% endapi-method-parameter %}
-{% endapi-method-body-parameters %}
+
+{% api-method-parameter name="gluten" type="boolean" %}
+Whether the cake should be gluten-free or not.
+{% endapi-method-parameter %}
+{% endapi-method-query-parameters %}
 {% endapi-method-request %}
 
 {% api-method-response %}
@@ -52,5 +62,7 @@ Could not find a cake matching this query.
 {% endapi-method-spec %}
 {% endapi-method %}
 
-### 
+For more information on setting up the Segment integration, read below:
+
+{% page-ref page="../importing-data.md" %}
 

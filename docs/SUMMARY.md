@@ -9,6 +9,8 @@
 
 * [Person](api-reference/create-person.md)
 * [Event](api-reference/create-event.md)
+* [Segment](api-reference/segment.md)
+* [Identify](api-reference/identify.md)
 * [GraphQL API](api-reference/graphql-api.md)
 
 ## Audience
@@ -39,4 +41,8 @@
 ## Support
 
 * [Support](support/support.md)
+
+## Node SDK
+
+* [Node SDK](node-sdk/node-sdk.md)
 
