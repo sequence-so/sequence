@@ -24,11 +24,11 @@ const AlertSuccess = (props: Props) => {
   const router = useRouter();
   const text1 = defaultProp(
     props.text1,
-    "You’ve configured your alert successfully."
+    "Now that your data is imported, create an Audience or an Email the dashboard."
   );
   const text2 = defaultProp(
     props.text2,
-    "Click below to explore your dashboard and see how else Hoco can help you improve."
+    "Click below to explore your dashboard and begin sending Email blasts."
   );
   return (
     <div

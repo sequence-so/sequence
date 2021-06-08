@@ -51,12 +51,15 @@ const SegmentPage = () => {
       authorization={null}
       content={
         <>
-          <p>Use our Node SDK to track events and user data.</p>
           <p>
-            Using this library allows for both historical import and setting up
-            a continuous data stream of incoming events.
+            Connecting via Segment will import data <b>moving forward</b> (no
+            historical import).
           </p>
-          <p>This integration provides a client library over our API.</p>
+          <p>
+            The setup requires that you run Sequence on a publicly accessible
+            server in order to send data from Segment into Sequence. This is
+            done by creating a Segment custom webhook integration.
+          </p>
         </>
       }
       instructions={
@@ -105,6 +108,7 @@ const SegmentPage = () => {
               <span style={{ textAlign: "center" }}>Webhook Settings</span>
             </h3>
             <a
+              className="default"
               href="https://app.segment.com/"
               target="_blank"
               rel="noopener noreferrer"
