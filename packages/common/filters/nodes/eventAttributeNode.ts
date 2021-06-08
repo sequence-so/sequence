@@ -6,7 +6,6 @@ class EventAttributeNode extends AbstractFilterNode {
   filterKind: FilterKind.EventAttribute = FilterKind.EventAttribute;
   eventName: string | undefined;
   expected: any;
-  performed: boolean | undefined;
   private constructor(eventName?: any) {
     super("name", eventName);
   }
@@ -16,11 +15,15 @@ class EventAttributeNode extends AbstractFilterNode {
   get table() {
     return "events";
   }
-  setPerformed(performed: boolean | undefined) {
-    this.performed = performed;
+  public setAttribute(attribute: string) {
+    this.attribute = attribute;
     return this;
   }
-  toString() {
+  public setExpected(expected: any) {
+    this.expected = expected;
+    return this;
+  }
+  public toString() {
     let label = `EventAttribute`;
     if (this.attribute) {
       label += `.${this.attribute}`;

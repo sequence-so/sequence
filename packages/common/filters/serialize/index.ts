@@ -60,7 +60,6 @@ export interface SerializedEventAttributeNode extends SerializedFilterNode {
   filterKind: FilterKind.EventAttribute;
   eventName: string | undefined;
   expected: any;
-  performed: boolean | undefined;
 }
 
 export interface SerializedEmailNode extends SerializedFilterNode {

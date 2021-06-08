@@ -6,48 +6,60 @@ interface Props {
   productUser: ProductUser;
 }
 
-const DetailSidebar = (props: Props) => {
-  const attributeList = useMemo(
-    () =>
-      PRODUCT_USER_COLUMN_MAPPING.filter(
-        ({ field }) => field !== "firstName" && field !== "lastName"
-      ).map((elem) => {
-        const field = elem.field;
-        const label = elem.headerName;
-        const value = props.productUser[field] ? props.productUser[field] : "-";
-        let render: JSX.Element = null;
-        if (elem.renderCell) {
-          render = elem.renderCell({ row: props.productUser } as any);
-        }
-        return { field, label, value, render };
-      }),
-    []
-  );
-  const RenderAttributeList = attributeList.map(
-    ({ field, label, value, render }) => {
-      return (
-        <div key={field}>
-          <p className="attribute-label">{label}</p>
-          <p className="attribute-value">{render ? render : value}</p>
-          <style jsx>{`
-            p {
-              margin-block-start: 0px;
-              margin-block-end: 0px;
-            }
-            .attribute-label {
-              color: #4e4f55;
-              font-weight: 600;
-              text-transform: uppercase;
-            }
-            .attribute-value {
-              color: #4e4f55;
-              margin-block-end: 14px;
-            }
-          `}</style>
-        </div>
-      );
+const getAttributeList = (productUser: ProductUser) => {
+  const reservedTraits = PRODUCT_USER_COLUMN_MAPPING.filter(
+    ({ field }) => field !== "firstName" && field !== "lastName"
+  ).map((elem) => {
+    const field = elem.field;
+    const label = elem.headerName;
+    const value = productUser[field] ? productUser[field] : "-";
+    let render: JSX.Element = null;
+    if (elem.renderCell) {
+      render = elem.renderCell({ row: productUser } as any);
     }
+    return { field, label, value, render };
+  });
+  const customTraits = Object.keys(productUser.traits || {}).map((key) => {
+    let value: string = productUser.traits[key];
+    if (Array.isArray(productUser.traits[key])) {
+      value = productUser.traits[key].join(", ");
+    }
+    return { field: key, label: key, value };
+  });
+  return { reserved: reservedTraits, custom: customTraits };
+};
+
+const AttributeListItem = ({ field, label, value, render }) => {
+  return (
+    <div key={field}>
+      <p className="attribute-label">{label}</p>
+      <p className="attribute-value">{render ? render : value}</p>
+      <style jsx>{`
+        p {
+          margin-block-start: 0px;
+          margin-block-end: 0px;
+        }
+        .attribute-label {
+          color: #4e4f55;
+          font-weight: 600;
+          text-transform: uppercase;
+        }
+        .attribute-value {
+          color: #4e4f55;
+          margin-block-end: 14px;
+        }
+      `}</style>
+    </div>
   );
+};
+
+const DetailSidebar = (props: Props) => {
+  const attributeList = useMemo(() => getAttributeList(props.productUser), []);
+  let RenderAttributeList: JSX.Element[] =
+    attributeList.reserved.map(AttributeListItem);
+  if (attributeList.custom) {
+    RenderAttributeList.push(...attributeList.custom.map(AttributeListItem));
+  }
   return (
     <div className="sidebar">
       <div className="top">

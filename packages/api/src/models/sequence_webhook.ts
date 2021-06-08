@@ -73,4 +73,4 @@ export type SequenceWebhookModelStatic = typeof SequenceWebhook & {
 
 export type SequenceWebhookInstance = SequenceWebhook;
 
-export default SequenceWebhook as SequenceWebhookModelStatic;
+export default SequenceWebhook;

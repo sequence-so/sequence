@@ -1,5 +1,6 @@
 import {
   AttributeFilter,
+  EventAttribute,
   EventFilter,
   FilterKind,
   NodeKind,
@@ -9,6 +10,7 @@ import RenderUserAttributeFilter from "./filters/RenderUserAttributeFilter";
 import RenderEventFilter from "./filters/RenderEventFilter";
 import { RenderNodeProps } from "./RenderNode";
 import RenderCondition from "./RenderCondition";
+import RenderEventAttributeFilter from "./filters/RenderEventAttributeFilter";
 
 const RenderNodeByKind = (props: RenderNodeProps) => {
   const node = props.node;
@@ -19,6 +21,10 @@ const RenderNodeByKind = (props: RenderNodeProps) => {
   let filterNode = node as AbstractFilterNode;
   if (filterNode.filterKind === FilterKind.Event) {
     return <RenderEventFilter {...props} node={node as EventFilter} />;
+  } else if (filterNode.filterKind === FilterKind.EventAttribute) {
+    return (
+      <RenderEventAttributeFilter {...props} node={node as EventAttribute} />
+    );
   } else if (filterNode.filterKind === FilterKind.UserAttribute) {
     return (
       <RenderUserAttributeFilter {...props} node={node as AttributeFilter} />

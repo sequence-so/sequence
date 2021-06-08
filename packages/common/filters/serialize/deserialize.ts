@@ -67,8 +67,9 @@ export const deserializeValue = (node: SerializedValueNode) => {
         .setId(node.id)
         .setComparatorId(node.comparator.id);
     case FilterKind.EventAttribute:
-      return EventAttributeNode.new(node.attribute!)
-        .setPerformed(node.performed)
+      return EventAttributeNode.new(node.eventName!)
+        .setAttribute(node.attribute!)
+        .setExpected(node.expected)
         .setComparator(deserializeComparator(node.comparator))
         .setId(node.id)
         .setComparatorId(node.comparator.id);

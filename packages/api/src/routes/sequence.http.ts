@@ -1,55 +1,29 @@
 import { Application, Request, Response } from "express";
-import SegmentWebook from "../models/segment_webhook";
-import SegmentProcessor from "src/services/segmentProcessor";
-import SegmentWebhook from "../models/segment_webhook";
+import SequenceWebhook from "../models/sequence_webhook";
+import { HttpResponse } from "./segment.http";
+import SequenceProcessor from "src/services/sequenceProcessor";
 import SequenceError from "src/error/SequenceError";
 
-export interface HttpResponse extends Record<string, any> {
-  success: boolean;
-}
-
 /**
- * Handle HTTP requests for Segment data import routes.
+ * Handles events coming from a Sequence client library or direct API integration.
  */
-class SegmentHttpHandler {
-  processor: SegmentProcessor;
+class SequenceHttpHandler {
+  processor: SequenceProcessor;
   constructor(app: Application) {
-    this.processor = new SegmentProcessor();
+    this.processor = new SequenceProcessor();
     this.registerRoutes(app);
   }
-  /**
-   * Registers the routes.
-   *
-   * @param app Application
-   */
   registerRoutes(app: Application) {
     app.post(
-      "/event/segment/subscription",
-      this.withAuthentication(this.processor.process.bind(this.processor))
-    );
-    app.post(
-      "/event/segment",
+      "/event/batch",
       this.withAuthentication(this.processor.process.bind(this.processor))
     );
   }
-  async getSegmentWebhookForAuthToken(req: Request): Promise<SegmentWebook> {
+  async getSequenceWebhookForAuthToken(req: Request): Promise<SequenceWebhook> {
     const authorization = req.headers.authorization;
-    return SegmentWebook.findOne({
+    return SequenceWebhook.findOne({
       where: {
         token: authorization,
-      },
-    });
-  }
-  async authenticate(req: Request) {
-    const authorization = req.headers.authorization;
-    const passwordString = authorization.split("Basic ")[1];
-
-    const parsedString = Buffer.from(passwordString, "base64").toString("utf8");
-    const finalToken = parsedString.substr(0, parsedString.length - 1);
-
-    return SegmentWebook.findOne({
-      where: {
-        token: finalToken,
       },
     });
   }
@@ -61,10 +35,10 @@ class SegmentHttpHandler {
    * @returns Response
    */
   withAuthentication(
-    handler: (value: SegmentWebhook, body: any) => Promise<HttpResponse>
+    handler: (value: SequenceWebhook, body: any) => Promise<HttpResponse>
   ) {
     return async (request: Request, response: Response) => {
-      const webhook = await this.getSegmentWebhookForAuthToken(request);
+      const webhook = await this.getSequenceWebhookForAuthToken(request);
       if (!webhook) {
         return response
           .status(401)
@@ -89,4 +63,4 @@ class SegmentHttpHandler {
   }
 }
 
-export default SegmentHttpHandler;
+export default SequenceHttpHandler;

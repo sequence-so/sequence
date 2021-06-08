@@ -99,27 +99,28 @@ const typeDefs = gql`
   }
   type ProductUser {
     id: ID!
-    firstName: String
-    lastName: String
-    email: String
-    photo: String
-    phone: String
-    signedUpAt: Date
-    lastSeenAt: Date
     browser: String
-    browserVersion: String
     browserLanguage: String
-    os: String
-    country: String
-    region: String
+    browserVersion: String
     city: String
-    title: String
-    websiteUrl: String
     companyName: String
+    country: String
+    email: String
+    externalId: String
+    firstName: String
     industry: String
     intercomId: String
-    externalId: String
+    lastName: String
+    lastSeenAt: Date
+    os: String
+    phone: String
+    photo: String
+    region: String
+    signedUpAt: Date
+    traits: JSONObject
+    title: String
     userId: ID
+    websiteUrl: String
     user: User
     createdAt: Date
     updatedAt: Date

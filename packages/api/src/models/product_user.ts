@@ -16,35 +16,35 @@ const config: InitOptions = {
         !(this as ProductUserInstance).email &&
         !(this as ProductUserInstance).externalId
       ) {
-        throw new Error("Both email and externalId cannot be null");
+        return false;
       }
+      return true;
     },
   },
 };
 
 export const VALID_KEYS = {
-  firstName: 1,
-  lastName: 1,
-  email: 1,
-  photo: 1,
-  phone: 1,
-  signedUpAt: 1,
-  lastSeenAt: 1,
   browser: 1,
-  browserVersion: 1,
   browserLanguage: 1,
-  os: 1,
-  country: 1,
-  region: 1,
+  browserVersion: 1,
   city: 1,
-  title: 1,
-  websiteUrl: 1,
   companyName: 1,
+  country: 1,
+  createdAt: 1,
+  email: 1,
+  firstName: 1,
   industry: 1,
   intercomId: 1,
-  externalId: 1,
+  lastName: 1,
+  lastSeenAt: 1,
+  os: 1,
+  phone: 1,
+  photo: 1,
+  region: 1,
+  signedUpAt: 1,
+  title: 1,
   userId: 1,
-  createdAt: 1,
+  websiteUrl: 1,
 };
 
 export interface ProductUserAttributes {
@@ -136,9 +136,6 @@ ProductUser.init(
     },
     email: {
       type: STRING,
-      validate: {
-        isEmail: true,
-      },
     },
     photo: {
       type: STRING,
@@ -187,12 +184,14 @@ ProductUser.init(
     },
     traits: {
       type: JSONB,
-      get() {
-        return JSON.parse(this.getDataValue("traits"));
-      },
-      set(value) {
-        this.setDataValue("traits", JSON.stringify(value));
-      },
+      // get() {
+      //   // return JSON.parse(this.getDataValue("traits"));
+      //   return this.getDataValue("traits");
+      // },
+      // set(value) {
+      //   // this.setDataValue("traits", JSON.stringify(value));
+      //   this.setDataValue("traits", value);
+      // },
     },
     context: {
       type: JSONB,

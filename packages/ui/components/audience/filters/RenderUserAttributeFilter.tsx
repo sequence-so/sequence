@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Select from "components/common/Select";
+import Select, { Createable } from "components/common/Select";
 import { AttributeFilter } from "common/filters";
 import OperatorsSelect from "../OperatorsSelect";
 import { RenderNodeProps } from "../RenderNode";
@@ -15,7 +15,7 @@ const RenderUserAttributeFilterInner = ({ node }: Props) => {
 
   return (
     <>
-      <Select
+      <Createable
         value={currentValue}
         options={node.getFilterOptions()}
         onChange={(option) => {

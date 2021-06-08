@@ -52,6 +52,7 @@ export const GET_PRODUCT_USER = gql`
         lastSeenAt
         signedUpAt
         photo
+        traits
         browser
         externalId
         createdAt
@@ -69,6 +70,7 @@ export interface ProductUser {
   personId: string;
   firstName: string;
   lastName: string;
+  traits: Record<string, any>;
   photo: string;
   phone: string;
   signedUpAt: Date;

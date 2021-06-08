@@ -129,7 +129,10 @@ export const identify = async (
     upsertAttrs.region = traits.region;
   }
   if (Object.keys(customTraits).length > 0) {
-    upsertAttrs.traits = merge(productUser.traits, customTraits);
+    // https://github.com/sequelize/sequelize/issues/2862#issuecomment-108677901
+    // I love this ORM!
+    productUser.set("traits", merge(productUser.traits, customTraits));
+    productUser.changed("traits", true);
   }
   if (event.context) {
     upsertAttrs.context = event.context;
@@ -143,5 +146,6 @@ export const identify = async (
   if (traits.browserLanguage) {
     upsertAttrs.browserLanguage = traits.browserLanguage;
   }
-  return productUser.update(upsertAttrs);
+  productUser.set(upsertAttrs);
+  return productUser.save();
 };

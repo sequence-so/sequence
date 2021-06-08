@@ -1,6 +1,6 @@
 import { GraphQLScalarType, Kind } from "graphql";
 import { GraphQLJSONObject } from "graphql-type-json";
-
+import isNull from "lodash/isnull";
 import * as AudienceResolvers from "./resolvers/audience.resolver";
 import * as CampaignResolvers from "./resolvers/campaign.resolver";
 import * as CustomPropertyResolvers from "./resolvers/customProperty.resolver";
@@ -19,6 +19,7 @@ import * as SegmentMutations from "./mutations/segment.mutation";
 import * as WebhookMutations from "./mutations/webhook.mutation";
 import { GraphQLContextType } from ".";
 import Audience from "src/models/audience";
+import ProductUser from "src/models/product_user";
 
 const resolvers = {
   Query: {
@@ -75,6 +76,14 @@ const resolvers = {
         },
       });
       return productUsers;
+    },
+  },
+  ProductUser: {
+    traits: async (root: ProductUser) => {
+      if (isNull(root.traits)) {
+        return null;
+      }
+      return root.traits;
     },
   },
 };
