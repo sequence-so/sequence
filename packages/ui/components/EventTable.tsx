@@ -110,7 +110,6 @@ function EventTable(props: EventTableProps) {
   const [rowCount, setRowCount] = useState(0);
   const [limit, setLimit] = useState(DEFAULT_LIMIT);
 
-  console.log(props.variables);
   const { loading, error, data } = useQuery<GetEvents>(GET_EVENTS, {
     variables: {
       page,

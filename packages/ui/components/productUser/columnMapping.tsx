@@ -37,13 +37,13 @@ export const PRODUCT_USER_COLUMN_MAPPING: GridColumns = [
     ),
   },
   {
-    field: "lastSeenAt",
+    field: "updatedAt",
     headerName: "Last Seen At",
     width: DEFAULT_WIDTH,
     renderCell: (params) => (
       <span>
         {params.row.signedUpAt
-          ? moment((params.row as any).signedUpAt as string).fromNow()
+          ? moment((params.row as any).updatedAt as string).fromNow()
           : ""}
       </span>
     ),

@@ -184,14 +184,6 @@ ProductUser.init(
     },
     traits: {
       type: JSONB,
-      // get() {
-      //   // return JSON.parse(this.getDataValue("traits"));
-      //   return this.getDataValue("traits");
-      // },
-      // set(value) {
-      //   // this.setDataValue("traits", JSON.stringify(value));
-      //   this.setDataValue("traits", value);
-      // },
     },
     context: {
       type: JSONB,

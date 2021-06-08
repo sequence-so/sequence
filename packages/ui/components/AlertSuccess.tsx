@@ -24,7 +24,7 @@ const AlertSuccess = (props: Props) => {
   const router = useRouter();
   const text1 = defaultProp(
     props.text1,
-    "Now that your data is imported, create an Audience or an Email the dashboard."
+    "Now that your data is imported, create an Audience or an Email in the dashboard."
   );
   const text2 = defaultProp(
     props.text2,
