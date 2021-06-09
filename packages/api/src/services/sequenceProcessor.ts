@@ -3,7 +3,7 @@ import { track, identify } from "src/events";
 import SequenceWebhook from "src/models/sequence_webhook";
 import WebhookExecution from "../models/webhook_execution";
 import Event from "../models/event";
-import SequenceError from "src/error/SequenceError";
+import SequenceError from "src/error/sequenceError";
 import logger from "src/utils/logger";
 import { HttpResponse } from "src/routes/segment.http";
 import { EventPayload } from "sequence-node";

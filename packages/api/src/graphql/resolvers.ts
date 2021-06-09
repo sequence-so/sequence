@@ -1,6 +1,6 @@
 import { GraphQLScalarType, Kind } from "graphql";
 import { GraphQLJSONObject } from "graphql-type-json";
-import isNull from "lodash/isnull";
+import { isNull } from "lodash";
 import * as AudienceResolvers from "./resolvers/audience.resolver";
 import * as CampaignResolvers from "./resolvers/campaign.resolver";
 import * as CustomPropertyResolvers from "./resolvers/customProperty.resolver";

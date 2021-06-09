@@ -2,7 +2,7 @@ import { Application, Request, Response } from "express";
 import SequenceWebhook from "../models/sequence_webhook";
 import { HttpResponse } from "./segment.http";
 import SequenceProcessor from "src/services/sequenceProcessor";
-import SequenceError from "src/error/SequenceError";
+import SequenceError from "src/error/sequenceError";
 
 /**
  * Handles events coming from a Sequence client library or direct API integration.

@@ -30,6 +30,7 @@ app.use(
       "https://my.sequence.so",
       "https://dev.sequence.so",
       "http://localhost:8000",
+      "http://0.0.0.0:8000",
     ],
     credentials: true,
   })
@@ -84,6 +85,7 @@ server.applyMiddleware({
       "https://my.sequence.so",
       "https://dev.sequence.so",
       "http://localhost:8000",
+      "http://0.0.0.0:8000",
     ],
     credentials: true,
   },

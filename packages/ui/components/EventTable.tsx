@@ -4,11 +4,31 @@ import { GridCellParams, GridColumns } from "@material-ui/data-grid";
 import moment from "moment";
 import Link from "next/link";
 import { useState } from "react";
-import { GetEvents } from "../pages/alerts/history";
 import homeStyles from "../styles/Home.module.css";
 import Table from "./Table";
 
 const DEFAULT_LIMIT = 10;
+
+interface GetEvents {
+  events: {
+    nodes: {
+      id: string;
+      name: string;
+      type: string;
+      source: string;
+      personId: string;
+      properties: string;
+      productUser: {
+        firstName: string;
+        lastName: string;
+      };
+      createdAt: Date;
+      updatedAt: Date;
+    }[];
+    page: number;
+    rows: number;
+  };
+}
 
 const GET_EVENTS = gql`
   query GetEvents($page: Int, $limit: Int, $personId: ID) {
