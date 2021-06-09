@@ -1,5 +1,5 @@
 # Sequence
-Sequence is an open-core email marketing automation tool. 
+Sequence is an open source email marketing automation tool. 
 
 
 ![Image of Sequence](./docs/.gitbook/assets/my-movie-4.gif)
