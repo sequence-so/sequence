@@ -2,7 +2,7 @@
 Sequence is an open source email marketing automation tool. 
 
 
-![Image of Sequence](./docs/.gitbook/assets/my-movie-4.gif)
+![Image of Sequence](./docs/.gitbook/assets/my-movie-4%20(1).gif)
 
 ## Features
 - **Segment your customers** by Events or User Attributes via our Audience Builder
