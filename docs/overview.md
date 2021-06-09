@@ -6,7 +6,7 @@ description: What is Sequence?
 
 ### Today
 
-Sequence is an open-core email marketing automation tool. It allows you to send a one-off email to a list of people. 
+Sequence is an open-source email marketing automation tool. It allows you to send a one-off email to a list of people. 
 
 ### The Vision
 
@@ -30,7 +30,7 @@ Our vision is to create a marketing automation software that puts data teams and
 3. **Native integration with BI tools.** For teams that already have a BI tool, we will integrate with their existing BI tool's query library so marketers can see customer attributes and segments as quickly as data scientists can write SQL. 
 4. **Create A/B tests and track campaign performance.** Setup A/B tests for your campaigns and measure impact on growth and revenue in a statistically meaningful way. 
 
-### Why Open-Core?
+### Why Open-Source?
 
 Our vision is possible only with direct integration into our customers' data warehouse. We believe that the next generation of SaaS marketing products will operate within private clouds, rather than requiring expensive ETL for both incoming and outgoing data. This means that the code should be auditable by companies to provide trust in our software. 
 
