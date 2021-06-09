@@ -1,10 +1,14 @@
+---
+description: Running Sequence.
+---
+
 # Quick Start
 
 ### Sequence
 
-Sequence is an open-core email marketing automation tool. 
+[Sequence](https://github.com/sequence-so/sequence) is an open source email marketing automation tool. 
 
-![](.gitbook/assets/my-movie-4.gif)
+![](.gitbook/assets/my-movie-4%20%281%29.gif)
 
 #### Features
 
@@ -24,6 +28,8 @@ Sequence is an open-core email marketing automation tool.
 Setting up Sequence with **Docker Compose** is easy:
 
 ```
+git clone https://github.com/sequence-so/sequence
+cd sequence
 ./build/copy_env # Copy sample environment variables
 docker compose up
 ```
@@ -35,4 +41,10 @@ Open `http://0.0.0.0:8000` to see the application.
 Read about **Importing Data** to begin using Sequence.
 
 {% page-ref page="importing-data.md" %}
+
+### Motivation
+
+Read more about our vision below:
+
+{% page-ref page="overview.md" %}
 
