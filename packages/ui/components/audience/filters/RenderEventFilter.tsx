@@ -1,21 +1,28 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { EventFilter } from "common/filters";
-import { GET_UNIQUE_EVENTS } from "pages/audiences";
 import { RenderNodeProps } from "../RenderNode";
 import { CircularProgress } from "@material-ui/core";
 import Select from "components/common/Select";
+import { GET_UNIQUE_EVENTS } from "pages/audiences/create";
+import { AudienceBuilderContext } from "components/AudienceBuilder";
 
 interface Props extends RenderNodeProps {
   node: EventFilter;
 }
 
 const RenderEventFilter = ({ node }: Props) => {
+  const audienceBuilderContext = useContext(AudienceBuilderContext);
+  const editable = audienceBuilderContext.editable;
   const { data, loading, error } = useQuery(GET_UNIQUE_EVENTS);
-  const [eventType, setEventType] =
-    useState<{ label: string; value: string } | null>();
-  const [currentValue, setCurrentValue] =
-    useState<{ label: string; value: string } | null>(null);
+  const [eventType, setEventType] = useState<{
+    label: string;
+    value: string;
+  } | null>();
+  const [currentValue, setCurrentValue] = useState<{
+    label: string;
+    value: string;
+  } | null>(null);
 
   useEffect(() => {
     if (data?.uniqueEventNames) {
@@ -52,7 +59,9 @@ const RenderEventFilter = ({ node }: Props) => {
         onChange={(event) => {
           setEventType(event);
           node.expected = event.value;
+          audienceBuilderContext.onChange();
         }}
+        isDisabled={!editable}
       />
       <Select
         value={currentValue}
@@ -61,7 +70,9 @@ const RenderEventFilter = ({ node }: Props) => {
           const perform = option.value as string;
           node[option.value]();
           setCurrentValue(option);
+          audienceBuilderContext.onChange();
         }}
+        isDisabled={!editable}
         styles={{
           container: (provided) => ({
             ...provided,

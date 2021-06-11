@@ -1,7 +1,7 @@
 import Sequelize, { InitOptions, Optional, UUID, Model } from "sequelize";
 import sequelize from "../database";
 import { v4 as uuidv4 } from "uuid";
-import User from "./user";
+import User from "./user.model";
 
 const config: InitOptions = {
   tableName: "sent_emails",
@@ -21,17 +21,16 @@ export interface SentEmailAttributes {
   updatedAt: Date;
 }
 
-export interface SentEmailCreationAttributes
-  extends Optional<
-    SentEmailAttributes,
-    | "id"
-    | "error"
-    | "deliveryStatus"
-    | "erroredAt"
-    | "deliveredAt"
-    | "createdAt"
-    | "updatedAt"
-  > {}
+export type SentEmailCreationAttributes = Optional<
+  SentEmailAttributes,
+  | "id"
+  | "error"
+  | "deliveryStatus"
+  | "erroredAt"
+  | "deliveredAt"
+  | "createdAt"
+  | "updatedAt"
+>;
 
 class SentEmail extends Model<
   SentEmailAttributes,

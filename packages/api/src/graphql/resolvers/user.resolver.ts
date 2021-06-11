@@ -29,7 +29,7 @@ export const integrations = async (
       userId: user.id,
     },
   });
-  let integrations: any = {
+  const integrations: any = {
     intercom: intercom ? true : false,
     segment: segmentExecution ? true : false,
     node: node ? true : false,

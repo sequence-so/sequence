@@ -1,5 +1,5 @@
 import { Application, Request, Response } from "express";
-import SequenceWebhook from "../models/sequence_webhook";
+import SequenceWebhook from "../models/sequenceWebhook.model";
 import { HttpResponse } from "./segment.http";
 import SequenceProcessor from "src/services/sequenceProcessor";
 import SequenceError from "src/error/sequenceError";
@@ -49,7 +49,7 @@ class SequenceHttpHandler {
         return response.json(result);
       } catch (error) {
         if ((error as SequenceError).statusCode) {
-          let sequenceError = error as SequenceError;
+          const sequenceError = error as SequenceError;
           return response
             .status(sequenceError.statusCode)
             .json(sequenceError.payload);

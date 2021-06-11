@@ -8,12 +8,12 @@ import {
   RelativeDate,
 } from "common/filters";
 import { AudienceBuilder } from "src/audience";
-import Event from "src/models/event";
-import ProductUser from "src/models/product_user";
+import Event from "src/models/event.model";
+import ProductUser from "src/models/productUser.model";
 import productUserSeed from "tests/seeds/productUser.seed";
 import userSeed from "tests/seeds/user.seed";
 import eventSeed from "tests/seeds/event.seed";
-import User from "src/models/user";
+import User from "src/models/user.model";
 const AND = Condition.and;
 
 describe("event filter", () => {
@@ -49,8 +49,8 @@ describe("event filter", () => {
       },
       group: "personId",
     });
-    const node = AND([EventFilter.new("Signed In").hasBeenPerformed()]);
-    let builder = new AudienceBuilder(node, user.id);
+    const node = AND(EventFilter.new("Signed In").hasBeenPerformed());
+    const builder = new AudienceBuilder(node, user.id);
     builder.build();
     const audience = await builder.execute();
     expect(audience.length).to.eq(eventCount.length).to.eq(1);
@@ -76,8 +76,8 @@ describe("event filter", () => {
       ],
     });
 
-    const node = AND([EventFilter.new("Signed In").hasNotBeenPerformed()]);
-    let builder = new AudienceBuilder(node, user.id);
+    const node = AND(EventFilter.new("Signed In").hasNotBeenPerformed());
+    const builder = new AudienceBuilder(node, user.id);
     builder.build();
     const audience = await builder.execute();
     expect(audience.length).to.eq(eventCount.length);
@@ -104,8 +104,8 @@ describe("attribute filter", () => {
       city: "New York City",
       userId: user.id,
     });
-    const node = AND([AttributeFilter.new("city").is("New York City")]);
-    let builder = new AudienceBuilder(node, user.id);
+    const node = AND(AttributeFilter.new("city").is("New York City"));
+    const builder = new AudienceBuilder(node, user.id);
     builder.build();
     const audience = await builder.execute();
     expect(audience.length).to.eq(2);
@@ -127,16 +127,16 @@ describe("attribute filter", () => {
       city: "New York City",
       signedUpAt: moment().subtract(3, "month").toDate(),
     });
-    const signedUpbefore10DaysAgo = AND([
+    const signedUpbefore10DaysAgo = AND(
       AttributeFilter.new("signedUpAt").dateBefore(
         RelativeDate.from(-10, new Date())
-      ),
-    ]);
-    const signedUpbefore40DaysAgo = AND([
+      )
+    );
+    const signedUpbefore40DaysAgo = AND(
       AttributeFilter.new("signedUpAt").dateBefore(
         RelativeDate.from(-40, new Date())
-      ),
-    ]);
+      )
+    );
 
     const audience = await new AudienceBuilder(signedUpbefore10DaysAgo, user.id)
       .build()
@@ -169,12 +169,11 @@ describe("attribute filter", () => {
       city: "New York City",
       signedUpAt: moment().subtract(5, "days").toDate(),
     });
-    const signedUpAfterYesterday = AND([
+    const signedUpAfterYesterday = AND(
       AttributeFilter.new("signedUpAt").dateAfter(
         RelativeDate.from(-1, new Date())
-      ),
-    ]);
-    signedUpAfterYesterday.print();
+      )
+    );
     const audience = await new AudienceBuilder(signedUpAfterYesterday, user.id)
       .build()
       .execute();
@@ -213,12 +212,11 @@ describe("event attribute", () => {
         color: "green",
       },
     });
-    const clickedAButtonEvent = AND([
+    const clickedAButtonEvent = AND(
       EventAttribute.new("Clicked a Button")
         .setAttribute("color")
-        .equals("green"),
-    ]);
-    clickedAButtonEvent.print();
+        .equals("green")
+    );
     const audience = await new AudienceBuilder(clickedAButtonEvent, user.id)
       .build()
       .execute();
@@ -253,11 +251,11 @@ describe("event attribute", () => {
       name: "Onboarding Started",
     });
 
-    const onboardingEvent = AND([
+    const onboardingEvent = AND(
       EventAttribute.new("Onboarding Started")
         .setAttribute("createdAt")
-        .isDate("createdAt"),
-    ]);
+        .isDate("createdAt")
+    );
     const audience = await new AudienceBuilder(onboardingEvent, user.id)
       .build()
       .execute();
@@ -277,20 +275,20 @@ describe("event attribute", () => {
       name: "Onboarding Started",
     });
 
-    const onboardingEvent = AND([
+    const onboardingEvent = AND(
       EventAttribute.new("Onboarding Started")
         .setAttribute("signedUpAt")
-        .isNotDate("signedUpAt"),
-    ]);
+        .isNotDate("signedUpAt")
+    );
     const audience = await new AudienceBuilder(onboardingEvent, user.id)
       .build()
       .execute();
     expect(audience.length).to.eq(0);
-    const onboardingEvent2 = AND([
+    const onboardingEvent2 = AND(
       EventAttribute.new("Onboarding Started")
         .setAttribute("name")
-        .isNotDate("name"),
-    ]);
+        .isNotDate("name")
+    );
     const audience2 = await new AudienceBuilder(onboardingEvent2, user.id)
       .build()
       .execute();

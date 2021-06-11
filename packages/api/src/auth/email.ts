@@ -1,7 +1,7 @@
 import express from "express";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import User from "../models/user";
+import User from "../models/user.model";
 import { verify } from "src/utils/password";
 
 passport.use(

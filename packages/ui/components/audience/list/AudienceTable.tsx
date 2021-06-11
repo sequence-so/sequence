@@ -1,4 +1,4 @@
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { CircularProgress } from "@material-ui/core";
 import moment from "moment";
 import { useRouter } from "next/router";
@@ -6,37 +6,11 @@ import Table from "components/Table";
 import { GridRowParams } from "@material-ui/data-grid";
 import { useMemo } from "react";
 import { defaultProp } from "services/defaultProp";
-
-const GET_AUDIENCES = gql`
-  query GetAudiences {
-    audiences {
-      page
-      rows
-      nodes {
-        id
-        name
-        node
-        count
-        executedAt
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-
-export type Audience = {
-  id: string;
-  name: string;
-  node: string;
-  count: number;
-  createdAt: Date;
-  updatedAt: Date;
-  executedAt: Date;
-};
+import { GET_AUDIENCES } from "../AudienceQueries";
+import { GetAudiences_audiences_nodes } from "__generated__/GetAudiences";
 
 interface Props {
-  onClick?: (audience: Audience) => void;
+  onClick?: (audience: GetAudiences_audiences_nodes) => void;
   shadow?: boolean;
 }
 

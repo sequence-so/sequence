@@ -3,9 +3,9 @@ import { track } from "src/events";
 import userSeed from "tests/seeds/user.seed";
 import { SEGMENT_WEBHOOK_ID } from "src/services/segmentProcessor";
 import { v4 } from "uuid";
-import User from "src/models/user";
+import User from "src/models/user.model";
 import moment from "moment";
-import Event from "src/models/event";
+import Event from "src/models/event.model";
 
 let user: User;
 describe("track", () => {

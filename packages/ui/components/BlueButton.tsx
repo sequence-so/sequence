@@ -1,7 +1,7 @@
 import React, { MouseEventHandler } from "react";
 import classNames from "classnames";
 import { defaultProp } from "../services/defaultProp";
-import styles from "../styles/Home.module.css";
+import styles from "styles/Home.module.css";
 
 interface Props
   extends React.DetailedHTMLProps<

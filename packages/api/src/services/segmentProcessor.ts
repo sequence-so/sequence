@@ -6,10 +6,10 @@ import {
   track,
   identify,
 } from "src/events";
-import SegmentWebhook from "src/models/segment_webhook";
-import SegmentWebook from "../models/segment_webhook";
-import WebhookExecution from "../models/webhook_execution";
-import Event from "../models/event";
+import SegmentWebhook from "../models/segmentWebhook.model";
+import SegmentWebook from "../models/segmentWebhook.model";
+import WebhookExecution from "../models/webhookExecution.model";
+import Event from "../models/event.model";
 import SequenceError from "src/error/sequenceError";
 import logger from "src/utils/logger";
 import { HttpResponse } from "src/routes/segment.http";

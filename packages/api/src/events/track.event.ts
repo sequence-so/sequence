@@ -1,5 +1,5 @@
 import { EventPayload } from "sequence-node";
-import Event, { EventCreationAttributes } from "../models/event";
+import Event, { EventCreationAttributes } from "../models/event.model";
 
 /**
  * Saves the `track` event type to the database.

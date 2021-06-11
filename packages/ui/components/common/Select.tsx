@@ -1,27 +1,33 @@
-import Select, { Props } from "react-select";
+import ReactSelect, { Props } from "react-select";
 import CreatableSelect from "react-select/creatable";
 
-const styles = {
-  container: (provided) => ({
-    ...provided,
-    width: 200,
-    outline: "none",
-    background: "white",
-    "&:hover": {
-      cursor: "pointer",
-    },
-    display: "inline-block",
-    marginRight: 10,
-    marginBottom: 10,
-  }),
+interface SelectProps extends Props {
+  containerWidth?: number | string;
+}
+
+const styles = (props: SelectProps) => {
+  return {
+    container: (provided) => ({
+      ...provided,
+      width: props.containerWidth || 200,
+      outline: "none",
+      background: "white",
+      "&:hover": {
+        cursor: "pointer",
+      },
+      display: "inline-block",
+      marginRight: 10,
+      marginBottom: 10,
+    }),
+  };
 };
 
-const CommonSelect = (props: Props) => {
-  return <Select styles={styles} {...props} />;
+const Select = (props: SelectProps) => {
+  return <ReactSelect styles={styles(props)} {...props} />;
 };
 
-export const Createable = (props: Props) => {
-  return <CreatableSelect styles={styles} {...props} />;
+export const Createable = (props: SelectProps) => {
+  return <CreatableSelect styles={styles(props)} {...props} />;
 };
 
-export default CommonSelect;
+export default Select;

@@ -5,12 +5,6 @@ import AudienceTable from "components/audience/list/AudienceTable";
 import DefaultViewLayout from "layout/DefaultViewLayout";
 import { PAGE_DEFAULTS } from "constants/page";
 
-export const GET_UNIQUE_EVENTS = gql`
-  query UniqueEvents {
-    uniqueEventNames
-  }
-`;
-
 const AudiencesListContent = () => {
   return (
     <>
@@ -39,7 +33,10 @@ const AudiencesList = () => {
   return (
     <DashboardLayout index={0}>
       <>
-        <TitleBar {...PAGE_DEFAULTS.audiences.index}></TitleBar>
+        <TitleBar
+          icon={PAGE_DEFAULTS.audiences.icon}
+          {...PAGE_DEFAULTS.audiences.index}
+        ></TitleBar>
         <DefaultViewLayout>
           <AudiencesListContent />
         </DefaultViewLayout>

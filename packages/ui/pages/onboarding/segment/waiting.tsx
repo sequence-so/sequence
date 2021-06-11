@@ -13,37 +13,17 @@ import DownArrow from "../../../public/down_arrow.svg";
 import BlueButton from "../../../components/BlueButton";
 import OnboardingLayout from "../../../layout/OnboardingLayout";
 import classNames from "classnames";
+import { GET_USER } from "components/ProfileDropdown";
 
 const initialState = { token: "" };
 const { useGlobalState } = createGlobalState(initialState);
 
-const GET_USER = gql`
-  {
-    getUser {
-      id
-      firstName
-      lastName
-      email
-      photo
-    }
-  }
-`;
-
 const GET_SEGMENT_WEBHOOK = gql`
-  {
+  query GetSegmentWebhook {
     getSegmentWebhook {
       id
       token
       receivedDataAt
-    }
-  }
-`;
-
-const CREATE_SEGMENT_WEBHOOK = gql`
-  mutation createSegmentWebhook {
-    createSegmentWebhook {
-      id
-      token
     }
   }
 `;

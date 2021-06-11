@@ -1,97 +1,72 @@
-import { useEffect, useRef, useState } from "react";
-import MEditor from "@monaco-editor/react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import EmailRenderer from "./EmailRenderer";
-import { EmailType } from "pages/emails/[id]";
-import EmailTextArea from "./EmailTextArea";
+import RichEmailEditor from "./RichEmailEditor";
 import CreateInput from "components/common/CreateInput";
-import { gql, useMutation } from "@apollo/client";
-import { CircularProgress, Input, TextField } from "@material-ui/core";
+import { useMutation } from "@apollo/client";
+import { CircularProgress } from "@material-ui/core";
 import debounce from "lodash/debounce";
 import { useRouter } from "next/router";
 import styles from "styles/Home.module.css";
 import classNames from "classnames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { defaultProp } from "services/defaultProp";
+import { CREATE_EMAIL, DELETE_EMAIL, UPDATE_EMAIL } from "./EmailQueries";
+import { UpdateEmail, UpdateEmailVariables } from "__generated__/UpdateEmail";
+import { DeleteEmail, DeleteEmailVariables } from "__generated__/DeleteEmail";
+import {
+  CreateEmail,
+  CreateEmailVariables,
+  CreateEmail_createEmail,
+} from "__generated__/CreateEmail";
+import TestEmailButton from "./TestEmailButton";
+import SavingIndicator from "components/SavingIndicator";
+import CodeEmailEditor from "./CodeEmailEditor";
+import PreviewCodeEmailButton from "./PreviewCodeEmailButton";
 
-const CREATE_EMAIL = gql`
-  mutation CreateEmail(
-    $name: String
-    $bodyHtml: String
-    $bodyText: String
-    $subject: String
-    $from: String
-    $fromName: String
-  ) {
-    createEmail(
-      name: $name
-      bodyHtml: $bodyHtml
-      bodyText: $bodyText
-      subject: $subject
-      from: $from
-      fromName: $fromName
-    ) {
-      id
-      bodyHtml
-    }
-  }
-`;
-const UPDATE_EMAIL = gql`
-  mutation UpdateEmail(
-    $id: ID!
-    $name: String
-    $bodyHtml: String
-    $bodyText: String
-    $subject: String
-    $from: String
-    $fromName: String
-  ) {
-    updateEmail(
-      id: $id
-      name: $name
-      bodyHtml: $bodyHtml
-      bodyText: $bodyText
-      subject: $subject
-      from: $from
-      fromName: $fromName
-    ) {
-      id
-      bodyHtml
-    }
-  }
-`;
-
-const DELETE_EMAIL = gql`
-  mutation DeleteEmail($id: ID!) {
-    deleteEmail(id: $id) {
-      success
-    }
-  }
-`;
+type Email = CreateEmail_createEmail;
 
 interface EmailEditorInnerProps {
-  email: EmailType;
+  email: Email;
   name: string;
   onChangeName: (text: string) => void;
+  renderWrapper?: boolean;
+  renderDeleteEmail?: boolean;
 }
 
-const EmailEditorInner = (props: EmailEditorInnerProps) => {
+type EmailKind = "code" | "rich";
+
+export const EmailEditorInner = (props: EmailEditorInnerProps) => {
+  const renderWrapper = defaultProp(props.renderWrapper, true);
+  const renderDeleteEmail = defaultProp(props.renderDeleteEmail, true);
   const router = useRouter();
-  const [updateEmail, { error: updateEmailError }] = useMutation(UPDATE_EMAIL);
-  const [deleteEmail] = useMutation(DELETE_EMAIL, {
-    onCompleted() {
-      router.push("/emails");
-    },
-  });
-  const [renderState, setRenderState] = useState<"rich" | "code">("rich");
+  const [updateEmail, { loading: updateEmailLoading }] = useMutation<
+    UpdateEmail,
+    UpdateEmailVariables
+  >(UPDATE_EMAIL);
+  const [deleteEmail] = useMutation<DeleteEmail, DeleteEmailVariables>(
+    DELETE_EMAIL,
+    {
+      onCompleted() {
+        router.push("/emails");
+      },
+    }
+  );
+  const [emailKind, setEmailKind] = useState<EmailKind>(
+    props.email.kind as EmailKind
+  );
   const [html, setHtml] = useState<string>(props.email?.bodyHtml || "");
   const [subject, setSubject] = useState(props.email?.subject || "");
   const [emailName, setEmailName] = useState(props.name || "");
-  const updateFunc = (values: any) => updateEmail(values);
+  const updateFunc = (values: { variables: UpdateEmailVariables }) =>
+    updateEmail(values);
   const debouncedUpdate = useRef<any>(
     debounce((values) => {
       updateFunc(values);
     }, 1000)
   );
+
+  // On name update from props
   useEffect(() => {
     if (props.name !== emailName) {
       setEmailName(props.name);
@@ -101,13 +76,29 @@ const EmailEditorInner = (props: EmailEditorInnerProps) => {
           name: props.name,
           bodyHtml: html,
           bodyText: "",
-          from: "helson@sequence.so",
-          fromName: "Helson",
           subject,
+          kind: emailKind,
         },
       });
     }
   }, [props.name]);
+
+  // If the whole email changes, e.g. template is updated
+  useEffect(() => {
+    setHtml(props.email.bodyHtml);
+    setSubject(props.email.subject);
+    setEmailName(props.email.name);
+    debouncedUpdate.current({
+      variables: {
+        id: props.email.id,
+        name: props.email.name,
+        bodyHtml: props.email.bodyHtml,
+        subject: props.email.subject,
+        bodyText: "",
+        kind: props.email.kind,
+      },
+    });
+  }, [props.email]);
 
   const onDeleteEmail = () => {
     deleteEmail({
@@ -117,6 +108,26 @@ const EmailEditorInner = (props: EmailEditorInnerProps) => {
     });
   };
 
+  const toggleEmailKind = useCallback(() => {
+    let nextEmailKind: EmailKind;
+    if (emailKind === "rich") {
+      nextEmailKind = "code";
+    } else {
+      nextEmailKind = "rich";
+    }
+    setEmailKind(nextEmailKind);
+    debouncedUpdate.current({
+      variables: {
+        id: props.email.id,
+        name: emailName,
+        bodyHtml: html,
+        bodyText: "",
+        subject: subject,
+        kind: nextEmailKind,
+      },
+    });
+  }, [emailKind, emailName, html, subject]);
+
   useEffect(() => {
     return () => {
       debouncedUpdate.current.cancel();
@@ -125,12 +136,12 @@ const EmailEditorInner = (props: EmailEditorInnerProps) => {
 
   return (
     <>
-      <div className={"wrapper"}>
+      <div className={renderWrapper ? "wrapper" : ""}>
         <div className={"editor_wrapper"}>
           <div className="editor-text-area">
             <p style={{ fontWeight: 500, marginBlockEnd: 14 }}>Subject:</p>
             <CreateInput
-              defaultValue={subject}
+              value={subject}
               placeholder="Subject"
               onChangeText={(value) => {
                 setSubject(value);
@@ -140,18 +151,19 @@ const EmailEditorInner = (props: EmailEditorInnerProps) => {
                     name: emailName,
                     bodyHtml: html,
                     bodyText: "",
-                    from: "helson@sequence.so",
-                    fromName: "Helson",
                     subject: value,
+                    kind: emailKind,
                   },
                 });
               }}
               style={{ marginBottom: 14, width: "100%" }}
             ></CreateInput>
-            {renderState === "rich" && (
-              <EmailTextArea
+            {emailKind === "rich" && (
+              <RichEmailEditor
                 value={html}
+                onChangeModes={toggleEmailKind}
                 onChange={(text) => {
+                  console.log("setHtml:" + text);
                   setHtml(text);
                   debouncedUpdate.current({
                     variables: {
@@ -159,17 +171,17 @@ const EmailEditorInner = (props: EmailEditorInnerProps) => {
                       name: emailName,
                       bodyHtml: text,
                       bodyText: "",
-                      from: "helson@sequence.so",
-                      fromName: "Helson",
                       subject,
+                      kind: emailKind,
                     },
                   });
                 }}
               />
             )}
-            {renderState === "code" && (
-              <MEditor
-                value={html}
+            {emailKind === "code" && (
+              <CodeEmailEditor
+                html={html}
+                onChangeModes={toggleEmailKind}
                 onChange={(newValue) => {
                   setHtml(newValue);
                   debouncedUpdate.current({
@@ -178,47 +190,54 @@ const EmailEditorInner = (props: EmailEditorInnerProps) => {
                       name: emailName,
                       bodyHtml: newValue,
                       bodyText: "",
-                      from: "helson@sequence.so",
-                      fromName: "Helson",
                       subject,
+                      kind: emailKind,
                     },
                   });
-                }}
-                height="400px"
-                defaultLanguage="html"
-                language="sql"
-                options={{
-                  minimap: { enabled: false },
-                  selectOnLineNumbers: false,
-                  cursorStyle: "line",
-                  lineNumbers: "off",
-                  wordWrapColumn: 60,
-                  wordWrap: "wordWrapColumn",
                 }}
               />
             )}
           </div>
-          <div className="editor-preview-area">
-            <p>Preview your email here:</p>
-            <p>
-              <span className="bold">To:</span>
-              {" Example Contact <example@test.com>"}
-            </p>
-            <p>
-              <span className="bold">Subject: </span>
-              {subject}
-            </p>
-            <EmailRenderer html={html} />
-          </div>
+          {emailKind === "rich" && (
+            <div className="editor-preview-area">
+              <p>Preview your email here:</p>
+              <p>
+                <span className="bold">To:</span>
+                {" Example Contact <example@test.com>"}
+              </p>
+              <p>
+                <span className="bold">Subject: </span>
+                {subject}
+              </p>
+              <EmailRenderer html={html} />
+            </div>
+          )}
         </div>
-        <div className="delete-wrapper">
-          <p
-            className={classNames(styles.go_back, styles.bold_text, "delete")}
-            onClick={onDeleteEmail}
-          >
-            <FontAwesomeIcon icon={faTimes} width={10} />
-            <span>Delete</span>
-          </p>
+        <div className="bottom-row">
+          <SavingIndicator
+            saveText="Email saved."
+            isSaving={updateEmailLoading}
+          />
+          <div className="align-right">
+            <TestEmailButton emailId={props.email.id} />
+            {emailKind === "code" && <PreviewCodeEmailButton html={html} />}
+
+            {renderDeleteEmail && (
+              <div className="delete-wrapper">
+                <p
+                  className={classNames(
+                    styles.go_back,
+                    styles.bold_text,
+                    "delete"
+                  )}
+                  onClick={onDeleteEmail}
+                >
+                  <FontAwesomeIcon icon={faTimes} width={10} />
+                  <span>Delete</span>
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
       <style jsx>
@@ -252,6 +271,7 @@ const EmailEditorInner = (props: EmailEditorInnerProps) => {
           }
           .editor-text-area {
             min-width: 500px;
+            ${emailKind === "code" ? "width: 100%" : ""}
           }
           .editor-preview-area {
             display: flex;
@@ -262,6 +282,13 @@ const EmailEditorInner = (props: EmailEditorInnerProps) => {
             border-radius: 8px;
             background: #f7f9fb;
           }
+          .editor-preview-area-code {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #b6b6b8;
+            padding: 1em;
+            width: 100%;
+          }
           .delete-wrapper {
             display: flex;
             align-items: flex-end;
@@ -270,6 +297,16 @@ const EmailEditorInner = (props: EmailEditorInnerProps) => {
             color: #55585c;
             margin-left: auto;
           }
+          .bottom-row {
+            margin-top: 8px;
+            display: flex;
+            flex-direction: row;
+          }
+          .align-right {
+            margin-left: auto;
+            display: flex;
+            flex-direction: row;
+          }
         `}
       </style>
     </>
@@ -277,13 +314,16 @@ const EmailEditorInner = (props: EmailEditorInnerProps) => {
 };
 
 interface Props {
-  email?: EmailType;
+  email?: Email;
   name: string;
   onChangeName: (text: string) => void;
 }
 
 const EmailEditor = (props: Props) => {
-  const [createEmail, { data, loading, error }] = useMutation(CREATE_EMAIL);
+  const [createEmail, { data, loading, error }] = useMutation<
+    CreateEmail,
+    CreateEmailVariables
+  >(CREATE_EMAIL);
 
   useEffect(() => {
     if (!props.email) {

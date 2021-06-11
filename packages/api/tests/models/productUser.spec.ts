@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import ProductUser from "src/models/product_user";
+import ProductUser from "src/models/productUser.model";
 import userSeed from "tests/seeds/user.seed";
 
 describe("product user", () => {

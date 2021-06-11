@@ -8,7 +8,9 @@ declare module "passport-jwt-cookiecombo";
 
 import { SequelizeOptions } from "sequelize-typescript";
 declare module "src/config/config.js" {
-  development: SequelizeOptions;
-  local: SequelizeOptions;
-  production: SequelizeOptions;
+  export = {
+    development: SequelizeOptions,
+    local: SequelizeOptions,
+    production: SequelizeOptions,
+  };
 }

@@ -4,63 +4,15 @@ import { GridCellParams, GridColumns } from "@material-ui/data-grid";
 import moment from "moment";
 import Link from "next/link";
 import { useState } from "react";
+import { GetEvents, GetEventsVariables } from "__generated__/GetEvents";
 import homeStyles from "../styles/Home.module.css";
+import { GET_EVENTS } from "./events/EventQueries";
 import Table from "./Table";
 
 const DEFAULT_LIMIT = 10;
 
-interface GetEvents {
-  events: {
-    nodes: {
-      id: string;
-      name: string;
-      type: string;
-      source: string;
-      personId: string;
-      properties: string;
-      productUser: {
-        firstName: string;
-        lastName: string;
-      };
-      createdAt: Date;
-      updatedAt: Date;
-    }[];
-    page: number;
-    rows: number;
-  };
-}
-
-const GET_EVENTS = gql`
-  query GetEvents($page: Int, $limit: Int, $personId: ID) {
-    events(page: $page, limit: $limit, personId: $personId) {
-      nodes {
-        id
-        name
-        type
-        source
-        personId
-        properties
-        productUser {
-          firstName
-          lastName
-        }
-        createdAt
-        updatedAt
-      }
-      page
-      rows
-    }
-  }
-`;
-
-interface GetEventsArguments {
-  page?: number;
-  limit?: number;
-  personId?: string;
-}
-
 interface EventTableProps {
-  variables?: GetEventsArguments;
+  variables?: GetEventsVariables;
   columns?: GridColumns;
 }
 
@@ -127,29 +79,29 @@ export const EVENTS_TABLE_COLUMNS = [
 
 function EventTable(props: EventTableProps) {
   const [page, setPage] = useState(0);
-  const [rowCount, setRowCount] = useState(0);
+  const [rowCount, setRowCount] = useState<number | null>(null);
   const [limit, setLimit] = useState(DEFAULT_LIMIT);
 
-  const { loading, error, data } = useQuery<GetEvents>(GET_EVENTS, {
-    variables: {
-      page,
-      limit,
-      ...props.variables,
-    },
-    onCompleted(data) {
-      setRowCount(data.events.rows);
-    },
-  });
+  const { loading, error, data } = useQuery<GetEvents, GetEventsVariables>(
+    GET_EVENTS,
+    {
+      variables: {
+        page,
+        limit,
+        ...props.variables,
+      },
+      onCompleted(data) {
+        setRowCount(data.events.rows);
+      },
+    }
+  );
 
-  if (loading) {
-    return <CircularProgress />;
-  }
   if (error) {
     return <p>{JSON.stringify(error)}</p>;
   }
-  return (
+  return rowCount !== null ? (
     <Table
-      rows={data.events.nodes}
+      rows={data ? data.events.nodes : []}
       columns={props.columns ?? EVENTS_TABLE_COLUMNS}
       pageSize={limit}
       page={page}
@@ -164,7 +116,10 @@ function EventTable(props: EventTableProps) {
       paginationMode="server"
       loading={loading}
       shadow={true}
+      autoHeight={true}
     ></Table>
+  ) : (
+    <CircularProgress />
   );
 }
 

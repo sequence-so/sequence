@@ -1,17 +1,31 @@
-import { useState } from "react";
-import Select, { Createable } from "components/common/Select";
+import { useContext, useEffect, useState } from "react";
+import { Createable } from "components/common/Select";
 import { AttributeFilter } from "common/filters";
 import OperatorsSelect from "../OperatorsSelect";
 import { RenderNodeProps } from "../RenderNode";
-import CreateInput from "components/common/CreateInput";
+import { AudienceBuilderContext } from "components/AudienceBuilder";
 
 interface Props extends RenderNodeProps {
   node: AttributeFilter;
 }
 
 const RenderUserAttributeFilterInner = ({ node }: Props) => {
-  const [currentValue, setCurrentValue] =
-    useState<{ label: string; value: string } | null>(null);
+  const audienceBuilderContext = useContext(AudienceBuilderContext);
+  const editable = audienceBuilderContext.editable;
+  const [currentValue, setCurrentValue] = useState<{
+    label: string;
+    value: string;
+  } | null>(null);
+
+  useEffect(() => {
+    if (typeof node.attribute !== "undefined") {
+      const filterOptions = node.getFilterOptions();
+      const foundOption = filterOptions.find((f) => f.value === node.attribute);
+      if (foundOption) {
+        setCurrentValue(foundOption);
+      }
+    }
+  }, []);
 
   return (
     <>
@@ -21,9 +35,11 @@ const RenderUserAttributeFilterInner = ({ node }: Props) => {
         onChange={(option) => {
           node.setAttribute(option.value);
           setCurrentValue(option);
+          audienceBuilderContext.onChange();
         }}
+        isDisabled={!editable}
       />
-      <OperatorsSelect node={node} />
+      <OperatorsSelect editable={editable} node={node} />
     </>
   );
 };

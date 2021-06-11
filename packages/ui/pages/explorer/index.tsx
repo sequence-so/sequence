@@ -3,14 +3,7 @@ import { makeStyles } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import SearchIcon from "@material-ui/icons/Search";
-import {
-  DataGrid,
-  GridColumns,
-  GridPageChangeParams,
-  GridRowParams,
-} from "@material-ui/data-grid";
-import gql from "graphql-tag";
-import { useQuery } from "@apollo/client";
+import { GridColumns, GridRowParams } from "@material-ui/data-grid";
 import classNames from "classnames";
 import { useRouter } from "next/router";
 import DashboardLayout from "layout/DashboardLayout";
@@ -18,74 +11,9 @@ import TitleBar from "layout/TitleBar";
 import DefaultViewLayout from "layout/DefaultViewLayout";
 import { PRODUCT_USER_COLUMN_MAPPING } from "components/productUser/columnMapping";
 import { PAGE_DEFAULTS } from "constants/page";
-
-export const GET_PRODUCT_USERS = gql`
-  query GetProductUsers($page: Int, $limit: Int) {
-    productUsers(page: $page, limit: $limit) {
-      nodes {
-        id
-        firstName
-        lastName
-        email
-        lastSeenAt
-        signedUpAt
-        photo
-        browser
-        externalId
-        createdAt
-        updatedAt
-      }
-      page
-      rows
-    }
-  }
-`;
-
-export const GET_PRODUCT_USER = gql`
-  query GetProductUsers($id: String) {
-    productUsers(id: $id) {
-      nodes {
-        id
-        firstName
-        lastName
-        email
-        lastSeenAt
-        signedUpAt
-        photo
-        traits
-        browser
-        externalId
-        createdAt
-        updatedAt
-      }
-      page
-      rows
-    }
-  }
-`;
-
-export interface ProductUser {
-  id: string;
-  email: string;
-  personId: string;
-  firstName: string;
-  lastName: string;
-  traits: Record<string, any>;
-  photo: string;
-  phone: string;
-  signedUpAt: Date;
-  lastSeenAt: Date;
-  intercomId: string;
-  externalId: string;
-  userId: string;
-}
-export interface GetProductUsers {
-  productUsers: {
-    nodes: ProductUser[];
-    page: number;
-    rows: number;
-  };
-}
+import { GET_PRODUCT_USERS } from "components/explorer/ExplorerQueries";
+import { GetProductUsers } from "__generated__/GetProductUsers";
+import ServerPaginatedTable from "components/ServerPaginatedTable";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -185,23 +113,6 @@ const SearchBar = () => {
 const UserExplorerPage = () => {
   const classes = useStyles();
   const router = useRouter();
-  const [page, setPage] = useState(0);
-  const [rowCount, setRowCount] = useState(0);
-  const [columnData, setColumnData] = useState<GridColumns>(
-    PRODUCT_USER_COLUMN_MAPPING
-  );
-  const { loading, error, data } = useQuery<GetProductUsers>(
-    GET_PRODUCT_USERS,
-    {
-      variables: {
-        page,
-        limit: 10,
-      },
-      onCompleted(data) {
-        setRowCount(data.productUsers.rows);
-      },
-    }
-  );
 
   const components = useMemo(
     () => ({
@@ -219,13 +130,6 @@ const UserExplorerPage = () => {
     []
   );
 
-  const onPageChange = useMemo(
-    () => (params: GridPageChangeParams) => {
-      setPage(params.page);
-    },
-    []
-  );
-
   const onRowClick = (param: GridRowParams) => {
     console.log(param.row);
     router.push(`/explorer/${param.row.id}`);
@@ -235,30 +139,21 @@ const UserExplorerPage = () => {
     <DashboardLayout index={2}>
       <>
         <TitleBar
+          icon={PAGE_DEFAULTS.explorer.icon}
           title={PAGE_DEFAULTS.explorer.index.title}
           showAction={false}
           subtitle={PAGE_DEFAULTS.explorer.index.subtitle}
         ></TitleBar>
         <DefaultViewLayout>
-          <>
-            {data?.productUsers?.nodes && rowCount > 0 && columnData.length && (
-              <DataGrid
-                rows={data?.productUsers?.nodes || []}
-                columns={columnData}
-                pageSize={10}
-                page={page}
-                rowCount={rowCount}
-                className={classes.table}
-                onPageChange={onPageChange}
-                onRowClick={onRowClick}
-                pagination
-                paginationMode="server"
-                loading={loading}
-                components={components}
-                componentsProps={componentsProp}
-              />
-            )}
-          </>
+          <ServerPaginatedTable<GetProductUsers>
+            gql={GET_PRODUCT_USERS}
+            shadow={true}
+            getRows={(data) => data.productUsers.nodes}
+            onRowClick={onRowClick}
+            columns={PRODUCT_USER_COLUMN_MAPPING}
+            components={components}
+            componentsProps={componentsProp}
+          />
         </DefaultViewLayout>
       </>
     </DashboardLayout>

@@ -1,33 +1,31 @@
 # Based off of https://nextjs.org/docs/deployment#docker-image
 # Install dependencies for all subprojects
 FROM node:alpine AS base
-WORKDIR /app
+WORKDIR /app/packages/ui
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
-# Install lerna
-RUN yarn global add lerna
-# Root package.json for all modules
-COPY package.json yarn.lock ./
 # Install dependencies
+COPY packages/ui/package.json packages/ui/yarn.lock ./
 RUN yarn install --frozen-lockfile
-# Copy files from ui and common
-COPY packages/common ./packages/common
-COPY packages/ui ./packages/ui
-# Install all subpackages' node_modules with lerna
-COPY lerna.json tsconfig.json ./
-RUN yarn run bootstrap
-
+WORKDIR /app/packages/common
+# Install dependencies
+COPY packages/common/package.json packages/common/yarn.lock ./
+RUN yarn install --frozen-lockfile
 
 # Install UI dependencies
 FROM node:alpine AS ui-builder
 RUN apk add --no-cache libc6-compat
 WORKDIR /app/packages/ui
 # Copy from common and ui and build ui project
-COPY --from=base /app/packages/common /app/packages/common
-COPY --from=base /app/packages/ui .
+COPY /packages/ui /app/packages/ui
+COPY /packages/common /app/packages/common
+COPY --from=base /app/packages/ui/node_modules /app/packages/ui/node_modules
+COPY --from=base /app/packages/common/node_modules /app/packages/common/node_modules
 # Envs are required at build time
-ARG NEXT_PUBLIC_API_URL=http://0.0.0.0:3000/graphql
+ARG NEXT_PUBLIC_API_URL=http://0.0.0.0:3000
+ARG NEXT_PRIVATE_API_URL=http://api:3000/graphql
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV NEXT_PRIVATE_API_URL=$NEXT_PRIVATE_API_URL
 RUN yarn build && yarn install --production --ignore-scripts --prefer-offline
 
 

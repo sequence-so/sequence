@@ -95,7 +95,7 @@ describe("serialize", () => {
   });
   it("should serialize an event filter", () => {
     const node = EventFilter.new("Sign Up").hasBeenPerformed();
-    const condition = Condition.and([node]);
+    const condition = Condition.and(node);
     expect(serialize(condition)).to.deep.eq({
       id: condition.id,
       nodeKind: NodeKind.Condition,
@@ -121,7 +121,7 @@ describe("serialize", () => {
   });
   it("should serialize attribute filter", () => {
     const filter = AttributeFilterNode.new("city").contains("Lake");
-    const node = Condition.and([filter]);
+    const node = Condition.and(filter);
     expect(serialize(node)).to.deep.eq({
       id: node.id,
       nodeKind: NodeKind.Condition,
@@ -146,12 +146,12 @@ describe("serialize", () => {
   });
   it("should serialize mixed conditions", () => {
     const node = Condition.or();
-    const first = Condition.and([
-      EventFilterNode.new("Invite Sent").hasBeenPerformed(),
-    ]);
-    const second = Condition.and([
-      EventFilterNode.new("Invite Sent").hasNotBeenPerformed(),
-    ]);
+    const first = Condition.and(
+      EventFilterNode.new("Invite Sent").hasBeenPerformed()
+    );
+    const second = Condition.and(
+      EventFilterNode.new("Invite Sent").hasNotBeenPerformed()
+    );
     node.addChild(first);
     node.addChild(second);
     const result = serialize(node);

@@ -1,31 +1,12 @@
-import gql from "graphql-tag";
 import { GridRowParams } from "@material-ui/data-grid";
 import { useRouter } from "next/router";
 import moment from "moment";
-import { EmailType } from "pages/emails/[id]";
 import { useMemo, useState } from "react";
 import ServerPaginatedTable from "components/ServerPaginatedTable";
 import { defaultProp } from "services/defaultProp";
-
-export const GET_EMAILS = gql`
-  query GetEmails {
-    emails {
-      page
-      rows
-      nodes {
-        id
-        name
-        from
-        fromName
-        bodyHtml
-        subject
-        sentCount
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
+import { GET_EMAILS } from "../EmailQueries";
+import { GetEmails_emails_nodes } from "__generated__/GetEmails";
+import { GetEmailsById } from "__generated__/GetEmailsById";
 
 const columns = [
   {
@@ -64,7 +45,7 @@ const columns = [
 ];
 
 interface EmailTableProps {
-  onClick?: (email: EmailType) => void;
+  onClick?: (email: GetEmails_emails_nodes) => void;
   shadow?: boolean;
 }
 
@@ -89,7 +70,7 @@ const EmailTable = (props?: EmailTableProps) => {
   );
 
   return (
-    <ServerPaginatedTable
+    <ServerPaginatedTable<GetEmailsById>
       columns={columns}
       gql={GET_EMAILS}
       onReceivedData={(data) => setEmails(data)}

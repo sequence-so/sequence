@@ -5,10 +5,12 @@ import { useRouter } from "next/router";
 import EventTable, { EVENTS_TABLE_COLUMNS } from "../../components/EventTable";
 import DashboardLayout from "../../layout/DashboardLayout";
 import TitleBar from "../../layout/TitleBar";
-import { GetProductUsers, GET_PRODUCT_USER } from "pages/explorer/index";
 import { CircularProgress } from "@material-ui/core";
 import { getFullName } from "utils/getFullName";
 import GQLErrorMessage from "components/GQLErrorMessage";
+import { useState } from "react";
+import { GET_PRODUCT_USER } from "components/explorer/ExplorerQueries";
+import { GetProductUser } from "__generated__/GetProductUser";
 
 const USER_EVENTS_TABLE_COLUMNS = [...EVENTS_TABLE_COLUMNS].filter(
   (k) => k.field !== "full_name"
@@ -18,13 +20,17 @@ USER_EVENTS_TABLE_COLUMNS[0].width = 250;
 const User = () => {
   const router = useRouter();
   const id = router.query.id as string;
-  const { data, loading, error } = useQuery<GetProductUsers>(GET_PRODUCT_USER, {
+  const [externalId, setExternalId] = useState("");
+  const { data, loading, error } = useQuery<GetProductUser>(GET_PRODUCT_USER, {
     variables: { id },
+    onCompleted(data) {
+      setExternalId(data.productUsers.nodes[0].externalId);
+    },
   });
 
-  const RenderContents = id && (
+  const RenderContents = id && externalId && (
     <EventTable
-      variables={{ personId: id }}
+      variables={{ personId: externalId }}
       columns={USER_EVENTS_TABLE_COLUMNS}
     />
   );

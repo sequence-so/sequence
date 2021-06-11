@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { DetailedHTMLProps, InputHTMLAttributes, useState } from "react";
 import { defaultProp } from "services/defaultProp";
 
@@ -15,10 +16,16 @@ const TitleInput = (props: Props) => {
   const [value, setValue] = useState(defaultProp(props.defaultValue, ""));
   const onChangeText = defaultProp(props.onChangeText, () => {});
 
+  const propsCopy = {
+    ...props,
+  };
+  delete propsCopy.className;
+  delete propsCopy.onChangeText;
+
   return (
     <>
       <input
-        className="name-input"
+        className={classNames("name-input", props.className)}
         placeholder="Name this email"
         value={value}
         onChange={(e) => {
@@ -26,12 +33,12 @@ const TitleInput = (props: Props) => {
           setValue(text);
           onChangeText(text);
         }}
-        {...props}
+        {...propsCopy}
       />
       <style jsx>{`
         .name-input {
-          margin-block-start: 0.67em;
-          margin-block-end: 0.67em;
+          margin-block-start: 17px;
+          margin-block-end: 17px;
           height: 37px;
           border: 0;
           font-family: "IBM Plex Sans";
@@ -48,18 +55,18 @@ const TitleInput = (props: Props) => {
         }
         .name-input::placeholder {
           /* Chrome, Firefox, Opera, Safari 10.1+ */
-          color: #7d7d7d;
+          color: var(--title-input-placeholder);
           opacity: 1; /* Firefox */
         }
 
         .name-input:-ms-input-placeholder {
           /* Internet Explorer 10-11 */
-          color: #7d7d7d;
+          color: var(--title-input-placeholder);
         }
 
         .name-input::-ms-input-placeholder {
           /* Microsoft Edge */
-          color: #7d7d7d;
+          color: var(--title-input-placeholder);
         }
       `}</style>
     </>

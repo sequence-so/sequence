@@ -10,26 +10,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DefaultViewLayout from "layout/DefaultViewLayout";
 import { useState } from "react";
 
-const GET_EMAIL_BY_ID = gql`
-  query GetEmails($id: ID) {
-    emails(id: $id) {
-      page
-      rows
-      nodes {
-        id
-        name
-        from
-        fromName
-        bodyHtml
-        subject
-        sentCount
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
-
 export type EmailType = {
   id: string;
   name: string;
@@ -42,10 +22,6 @@ export type EmailType = {
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
-};
-
-type EmailListContentProps = {
-  emails: EmailType[];
 };
 
 const CreateEmailPage = () => {

@@ -47,9 +47,6 @@ const parse = (node: AbstractNode, errors: NodeParseError[]) => {
       if (depth >= MAX_DEPTH) {
         return newParseError(MAX_CONDITION_DEPTH_REACHED, node);
       }
-      if (!node.children.length) {
-        return newParseError(EMPTY_CONDITION, node);
-      }
     },
     onPageFilterNode() {},
     onEndCondition(node: ConditionNode) {},
@@ -76,14 +73,14 @@ const parse = (node: AbstractNode, errors: NodeParseError[]) => {
       comparator: AbstractComparatorNode,
       node: AbstractNode
     ) => {
-      if (!comparator.operator) {
-        return newParseError(EMPTY_OPERATOR, comparator);
+      if (!comparator?.operator) {
+        return newParseError(EMPTY_OPERATOR, node);
       }
       switch (comparator.comparatorKind) {
         case ComparatorKind.String:
         case ComparatorKind.Number:
           if (typeof comparator.operator === "undefined") {
-            return newParseError(OPERATOR_NOT_FOUND, comparator);
+            return newParseError(OPERATOR_NOT_FOUND, node);
           }
           break;
         case ComparatorKind.IsTimestamp:

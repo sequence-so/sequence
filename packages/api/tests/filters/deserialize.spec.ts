@@ -68,12 +68,12 @@ describe("deserialize", () => {
           nodeKind: NodeKind.Condition,
         })
       ).to.deep.eq(
-        Condition.and([
+        Condition.and(
           EventFilterNode.new("Logout")
             .hasBeenPerformed()
             .setId("def")
-            .setComparatorId("ghi"),
-        ]).setId("abc")
+            .setComparatorId("ghi")
+        ).setId("abc")
       );
       expect(
         deserialize({
@@ -99,12 +99,12 @@ describe("deserialize", () => {
           nodeKind: NodeKind.Condition,
         })
       ).to.deep.eq(
-        Condition.and([
+        Condition.and(
           EventFilterNode.new("Logout")
             .hasNotBeenPerformed()
             .setId("def")
-            .setComparatorId("ghi"),
-        ]).setId("abc")
+            .setComparatorId("ghi")
+        ).setId("abc")
       );
     });
     it("should deserialize AttributeNode", () => {
@@ -132,11 +132,11 @@ describe("deserialize", () => {
           nodeKind: NodeKind.Condition,
         })
       ).to.deep.eq(
-        Condition.and([
+        Condition.and(
           AttributeFilterNode.new("firstName", "Thomas")
             .setId("def")
-            .setComparatorId("ghi"),
-        ]).setId("abc")
+            .setComparatorId("ghi")
+        ).setId("abc")
       );
     });
   });
