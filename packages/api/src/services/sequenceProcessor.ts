@@ -1,8 +1,8 @@
 import moment from "moment";
 import { track, identify } from "src/events";
-import SequenceWebhook from "src/models/sequence_webhook";
-import WebhookExecution from "../models/webhook_execution";
-import Event from "../models/event";
+import SequenceWebhook from "../models/sequenceWebhook.model";
+import WebhookExecution from "../models/webhookExecution.model";
+import Event from "../models/event.model";
 import SequenceError from "src/error/sequenceError";
 import logger from "src/utils/logger";
 import { HttpResponse } from "src/routes/segment.http";
@@ -33,7 +33,7 @@ class SequenceProcessor {
     try {
       execution = await this.logWebhookEvent(webhook, body);
       for (let idx = 0, len = body.batch.length; idx < len; idx++) {
-        let elem = body.batch[idx];
+        const elem = body.batch[idx];
         await this.handleEvent(elem, execution);
       }
     } catch (error) {
@@ -111,7 +111,7 @@ class SequenceProcessor {
           context: event.context,
           messageId: event.messageId,
           receivedAt: new Date(),
-          sentAt: moment(event.sentAt).toDate(),
+          sentAt: moment(event.sentAt || new Date()).toDate(),
           timestamp: moment(event.timestamp).toDate(),
         },
         {
@@ -128,7 +128,7 @@ class SequenceProcessor {
           messageId: event.messageId,
           properties: event.properties,
           receivedAt: new Date(),
-          sentAt: moment(event.sentAt).toDate(),
+          sentAt: moment(event.sentAt || new Date()).toDate(),
           timestamp: moment(event.timestamp).toDate(),
         },
         {

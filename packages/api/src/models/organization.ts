@@ -2,7 +2,7 @@ import { InitOptions, Optional, STRING, UUID } from "sequelize";
 import { Model } from "sequelize-typescript";
 import sequelize from "../database";
 import { v4 as uuidv4 } from "uuid";
-import User from "./user";
+import User from "./user.model";
 
 const config: InitOptions = {
   tableName: "organizations",
@@ -17,8 +17,7 @@ interface OrganizationAttributes {
   ownerId: string;
 }
 
-interface OrganizationCreationAttributes
-  extends Optional<OrganizationAttributes, "id"> {}
+type OrganizationCreationAttributes = Optional<OrganizationAttributes, "id">;
 
 class Organization extends Model<
   OrganizationAttributes,

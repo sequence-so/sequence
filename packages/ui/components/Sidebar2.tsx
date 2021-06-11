@@ -10,25 +10,19 @@ import {
   faArrowRight,
   faArrowLeft,
   faPlusCircle,
-  faUserFriends,
-  faEnvelope,
-  faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
 import { useGlobalState } from "../layout/DashboardLayout";
 import BlueButton from "./BlueButton";
 import { makeStyles, Menu, MenuItem } from "@material-ui/core";
 import Fade from "@material-ui/core/Fade";
 import { useRouter } from "next/router";
+import { PAGE_DEFAULTS } from "constants/page";
 
 interface SidebarProps {
   index: number;
   items: SidebarItemProp[];
   onClick: (index: number) => void;
 }
-
-const iconStyle: React.CSSProperties = {
-  width: 15,
-};
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -109,7 +103,7 @@ const NewActionMenu = ({
         style={{ paddingTop: 10, paddingBottom: 10 }}
       >
         <>
-          <FontAwesomeIcon icon={faPaperPlane} style={iconStyle} />
+          {PAGE_DEFAULTS.blasts.icon}
           <span style={{ marginLeft: 8 }}>Send Blast</span>
         </>
       </MenuItem>
@@ -118,7 +112,7 @@ const NewActionMenu = ({
         style={{ paddingTop: 10, paddingBottom: 10 }}
       >
         <>
-          <FontAwesomeIcon icon={faUserFriends} style={iconStyle} />
+          {PAGE_DEFAULTS.audiences.icon}
           <span style={{ marginLeft: 8 }}>New Audience</span>
         </>
       </MenuItem>
@@ -127,7 +121,7 @@ const NewActionMenu = ({
         style={{ paddingTop: 10, paddingBottom: 10 }}
       >
         <>
-          <FontAwesomeIcon icon={faEnvelope} style={iconStyle} />
+          {PAGE_DEFAULTS.emails.icon}
           <span style={{ marginLeft: 8 }}>New Email</span>
         </>
       </MenuItem>
@@ -160,9 +154,9 @@ const Sidebar = (props: SidebarProps) => {
         style={{
           display: !isSidebarOpen ? "initial" : "none",
           height: 28,
-          marginTop: 47,
-          marginBottom: 29,
-          marginLeft: 4,
+          marginTop: 24,
+          marginBottom: 18,
+          alignSelf: "center",
         }}
       />
       <BlueButton
@@ -181,6 +175,10 @@ const Sidebar = (props: SidebarProps) => {
       ></BlueButton>
       <NewActionMenu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
       {props.items.map(({ section, icon, style, renderIcon }, idx) => {
+        let newStyle = { ...style };
+        if (!isSidebarOpen) {
+          newStyle.marginBottom = 8;
+        }
         return (
           <SidebarItem
             key={section}
@@ -191,7 +189,7 @@ const Sidebar = (props: SidebarProps) => {
               props.onClick(idx);
             }}
             renderIcon={renderIcon}
-            style={style}
+            style={newStyle}
             isSidebarOpen={isSidebarOpen}
           />
         );

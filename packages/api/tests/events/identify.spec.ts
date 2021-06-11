@@ -2,9 +2,9 @@ import { expect } from "chai";
 import { identify } from "src/events";
 import userSeed from "tests/seeds/user.seed";
 import { v4 } from "uuid";
-import User from "src/models/user";
+import User from "src/models/user.model";
 import moment from "moment";
-import ProductUser from "src/models/product_user";
+import ProductUser from "src/models/productUser.model";
 
 let user: User;
 let mark: ProductUser;

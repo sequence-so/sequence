@@ -1,36 +1,26 @@
-import DashboardLayout from "../../layout/DashboardLayout";
-import { gql, useMutation } from "@apollo/client";
-import AudienceTable, {
-  Audience,
-} from "components/audience/list/AudienceTable";
 import { useMemo, useState } from "react";
-import { EmailType } from "pages/emails/[id]";
-import EmailTable from "components/email/list/EmailTable";
-import BlueButton from "components/BlueButton";
-import TitleInput from "components/input/TitleInput";
-import { Tooltip } from "@material-ui/core";
-import DynamicTitleBar from "components/DynamicTitleBar";
-import DefaultViewLayout from "layout/DefaultViewLayout";
+import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCommentAlt, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faCommentAlt } from "@fortawesome/free-solid-svg-icons";
+import { Tooltip } from "@material-ui/core";
+import DashboardLayout from "layout/DashboardLayout";
+import AudienceTable from "components/audience/list/AudienceTable";
+import EmailTable from "components/email/list/EmailTable";
+import BlueButton from "components/BlueButton";
+import DynamicTitleBar from "components/DynamicTitleBar";
+import DefaultViewLayout from "layout/DefaultViewLayout";
 import { PAGE_DEFAULTS } from "constants/page";
+import { GetAudienceById_audiences_nodes } from "__generated__/GetAudienceById";
+import { GetEmails_emails_nodes } from "__generated__/GetEmails";
+import { CreateBlast, CreateBlastVariables } from "__generated__/CreateBlast";
 
-export interface CampaignType {
-  id: string;
-  name: string;
-  sentAt: Date;
-  userId: string;
-  emailId: string;
-  audienceId: string;
-  audience: Audience;
-  createdAt: Date;
-  updatedAt: Date;
-}
+type Audience = GetAudienceById_audiences_nodes;
+type Email = GetEmails_emails_nodes;
 
-const CREATE_CAMPAIGN = gql`
-  mutation CreateCampaign($name: String, $emailId: ID, $audienceId: ID) {
-    createCampaign(name: $name, emailId: $emailId, audienceId: $audienceId) {
+const CREATE_BLAST = gql`
+  mutation CreateBlast($name: String, $emailId: ID, $audienceId: ID) {
+    createBlast(name: $name, emailId: $emailId, audienceId: $audienceId) {
       id
       name
       sentAt
@@ -43,29 +33,28 @@ const CREATE_CAMPAIGN = gql`
   }
 `;
 
-type CreateCampaignQuery = {
-  createCampaign: CampaignType;
-};
-
-type CampaignBuilderContentProps = {
+type BlastBuilderContentProps = {
   title: string;
   onChangeTitle: (text: string) => void;
 };
 
-const CampaignBuilderContent = (props: CampaignBuilderContentProps) => {
+const BlastBuilderContent = (props: BlastBuilderContentProps) => {
   const [audience, setAudience] = useState<Audience>();
-  const [email, setEmail] = useState<EmailType>();
+  const [email, setEmail] = useState<Email>();
   const router = useRouter();
-  const [createCampaign] = useMutation<CreateCampaignQuery>(CREATE_CAMPAIGN, {
-    onCompleted(data) {
-      setTimeout(() => {
-        router.push(`/blasts/${data.createCampaign.id}`);
-      }, 1000);
-    },
-  });
+  const [createBlast] = useMutation<CreateBlast, CreateBlastVariables>(
+    CREATE_BLAST,
+    {
+      onCompleted(data) {
+        setTimeout(() => {
+          router.push(`/blasts/${data.createBlast.id}`);
+        }, 1000);
+      },
+    }
+  );
 
   const onClickSendEmail = (): void => {
-    createCampaign({
+    createBlast({
       variables: {
         audienceId: audience.id,
         emailId: email.id,
@@ -78,7 +67,7 @@ const CampaignBuilderContent = (props: CampaignBuilderContentProps) => {
     : !!!email
     ? "No email selected"
     : !!!props.title
-    ? "No campaign name provided"
+    ? "No blast name provided"
     : "";
 
   const SendBlastButton = (
@@ -204,7 +193,7 @@ const EmailBuilderPage = () => {
           icon={<FontAwesomeIcon icon={faCommentAlt} color={"#4a7da7"} />}
         ></DynamicTitleBar>
         <DefaultViewLayout>
-          <CampaignBuilderContent
+          <BlastBuilderContent
             title={title}
             onChangeTitle={onChangeTitleText}
           />

@@ -19,7 +19,7 @@ class QueryResult<T extends Identifiable> {
       return this;
     }
 
-    let promises: Promise<QueryResult<T>>[] = [];
+    const promises: Promise<QueryResult<T>>[] = [];
     this.children.forEach((child) => {
       promises.push(child.execute());
     });

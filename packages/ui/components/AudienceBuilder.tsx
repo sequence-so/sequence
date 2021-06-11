@@ -1,64 +1,32 @@
-import { useRef, useState } from "react";
+import React, { useState } from "react";
 import { Condition, NodeParseError, parse, serialize } from "common/filters";
 import BlueButton from "./BlueButton";
 import RenderCondition from "./audience/RenderCondition";
-import gql from "graphql-tag";
 import { useMutation } from "@apollo/client";
 import { CircularProgress, makeStyles } from "@material-ui/core";
-import ProductUserTable from "./UserTable";
+import ProductUserTable from "./ProductUserTable";
 import { useRouter } from "next/router";
+import { defaultProp } from "services/defaultProp";
+import { CREATE_AUDIENCE, EXECUTE_AUDIENCE } from "./audience/AudienceQueries";
+import {
+  ExecuteAudience,
+  ExecuteAudienceVariables,
+} from "__generated__/ExecuteAudience";
+import {
+  CreateAudience,
+  CreateAudienceVariables,
+} from "__generated__/CreateAudience";
 
 interface Props {
   id?: string;
   rootNode: Condition;
   name: string;
+  renderQueryButton?: boolean;
+  editable?: boolean;
+  renderTitle?: boolean;
+  onChange?: () => void;
+  validateOnBlur?: boolean;
 }
-
-const EXECUTE_AUDIENCE = gql`
-  mutation ExecuteAudience($audience: String) {
-    executeAudience(audience: $audience) {
-      page
-      rows
-      nodes {
-        id
-        firstName
-        lastName
-        email
-        photo
-        phone
-        signedUpAt
-        lastSeenAt
-        browser
-        browserVersion
-        browserLanguage
-        os
-        country
-        region
-        city
-        title
-        websiteUrl
-        companyName
-        industry
-        intercomId
-        externalId
-      }
-    }
-  }
-`;
-
-const CREATE_AUDIENCE = gql`
-  mutation CreateAudience($name: String!, $node: String!) {
-    createAudience(name: $name, node: $node) {
-      id
-      name
-      node
-      count
-      createdAt
-      updatedAt
-      executedAt
-    }
-  }
-`;
 
 export const useStyles = makeStyles((theme) => ({
   root: {
@@ -130,8 +98,22 @@ export const useStyles = makeStyles((theme) => ({
   },
 }));
 
+export type AudienceBuilderContextType = {
+  onChange: () => void;
+  editable: boolean;
+};
+
+export const AudienceBuilderContext =
+  React.createContext<AudienceBuilderContextType>({
+    onChange: () => {},
+    editable: true,
+  });
+
 const AudienceBuilder = (props: Props) => {
-  const rootNode = useRef(props.rootNode);
+  const renderQueryButton = defaultProp(props.renderQueryButton, true);
+  const editable = defaultProp(props.editable, true);
+  const renderTitle = defaultProp(props.renderTitle, true);
+  const rootNode = props.rootNode;
   const [parseErrors, setParseErrors] = useState<NodeParseError[]>([]);
   const [
     executeAudienceQuery,
@@ -140,7 +122,7 @@ const AudienceBuilder = (props: Props) => {
       loading: executeAudienceLoading,
       error: executeAudienceError,
     },
-  ] = useMutation(EXECUTE_AUDIENCE);
+  ] = useMutation<ExecuteAudience, ExecuteAudienceVariables>(EXECUTE_AUDIENCE);
   const [
     createAudience,
     {
@@ -148,20 +130,35 @@ const AudienceBuilder = (props: Props) => {
       loading: createAudienceLoading,
       error: createAudienceError,
     },
-  ] = useMutation(CREATE_AUDIENCE);
+  ] = useMutation<CreateAudience, CreateAudienceVariables>(CREATE_AUDIENCE);
   const [didExecute, setDidExecute] = useState(false);
   const [serializedAudienceData, setSerializedAudienceData] = useState("");
   const showSave = didExecute && !!!executeAudienceError;
   const router = useRouter();
 
-  const onClickExecuteAudience = () => {
+  const validate = () => {
     const errors: NodeParseError[] = [];
-    parse(rootNode.current, errors);
+    parse(rootNode, errors);
+    setParseErrors(errors);
     if (errors.length) {
-      setParseErrors(errors);
+      return false;
+    }
+    return true;
+  };
+
+  const onChange = defaultProp(props.onChange, () => {});
+  const internalOnChange = (): void => {
+    if (props.validateOnBlur) {
+      validate();
+    }
+    onChange();
+  };
+
+  const onClickExecuteAudience = () => {
+    if (!validate()) {
       return;
     }
-    const serializedData = serialize(rootNode.current);
+    const serializedData = serialize(rootNode);
     const serializedDataAsString = JSON.stringify(serializedData);
     setSerializedAudienceData(serializedDataAsString);
     executeAudienceQuery({
@@ -184,62 +181,74 @@ const AudienceBuilder = (props: Props) => {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
-      <h3>AUDIENCE CONDITIONS</h3>
-      <RenderCondition
-        node={rootNode.current}
-        depth={0}
-        remove={() => {}}
-        errors={parseErrors}
-      />
-      <div>
-        <BlueButton
-          text={
-            executeAudienceLoading ? (
-              <>
-                <CircularProgress
-                  size={14}
-                  color={"white" as any}
-                  style={{ marginRight: 2 }}
-                />{" "}
-                Query Users
-              </>
-            ) : (
-              "Query Users"
-            )
-          }
-          disabled={executeAudienceLoading}
-          style={{
-            marginLeft: 0,
-          }}
-          onClick={onClickExecuteAudience}
-        />
+    <AudienceBuilderContext.Provider
+      value={{ onChange: internalOnChange, editable }}
+    >
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        {renderTitle && <h3>AUDIENCE RULES</h3>}
+        <div className="audience-container">
+          <RenderCondition
+            node={rootNode}
+            depth={0}
+            remove={() => {}}
+            errors={parseErrors}
+          />
+        </div>
+        <div>
+          {renderQueryButton && (
+            <BlueButton
+              text={
+                executeAudienceLoading ? (
+                  <>
+                    <CircularProgress
+                      size={14}
+                      color={"white" as any}
+                      style={{ marginRight: 2 }}
+                    />{" "}
+                    Query Users
+                  </>
+                ) : (
+                  "Query Users"
+                )
+              }
+              disabled={executeAudienceLoading}
+              style={{
+                marginLeft: 0,
+              }}
+              onClick={onClickExecuteAudience}
+            />
+          )}
+        </div>
+        {executeAudienceData?.executeAudience?.nodes && (
+          <ProductUserTable
+            productUsers={executeAudienceData.executeAudience.nodes}
+            rows={executeAudienceData.executeAudience.rows}
+          />
+        )}
+        {showSave && (
+          <BlueButton
+            text="Save Audience"
+            disabled={createAudienceLoading}
+            onClick={onSaveAudience}
+          ></BlueButton>
+        )}
+        {createAudienceError && <p>{createAudienceError.message}</p>}
+        <style jsx>
+          {`
+            .audience-container {
+              width: 100%;
+              height: 100%;
+            }
+            h3 {
+              margin-block-start: 0px;
+              margin-block-end: 1em;
+              color: #4e4f55;
+              font-weight: 600;
+            }
+          `}
+        </style>
       </div>
-      {executeAudienceData?.executeAudience?.nodes && (
-        <ProductUserTable
-          productUsers={executeAudienceData.executeAudience.nodes}
-          rows={executeAudienceData.executeAudience.rows}
-        />
-      )}
-      {showSave && (
-        <BlueButton
-          text="Save Audience"
-          disabled={createAudienceLoading}
-          onClick={onSaveAudience}
-        ></BlueButton>
-      )}
-      {createAudienceError && <p>{createAudienceError.message}</p>}
-      <style jsx>
-        {`
-          h3 {
-            margin-block-start: 0px;
-            margin-block-end: 1em;
-            color: #4e4f55;
-            font-weight: 600;
-          }
-        `}
-      </style>
-    </div>
+    </AudienceBuilderContext.Provider>
   );
 };
 

@@ -47,14 +47,17 @@ export const events = async (
 };
 
 export const uniqueEventNames = async (
-  root: any,
-  _: any,
+  _1: any,
+  _2: any,
   { models, user }: GraphQLContextType
-) => {
+): Promise<string[]> => {
   try {
     const events = await models.Event.findAll({
       attributes: ["name"],
       group: "name",
+      where: {
+        userId: user.id,
+      },
     });
 
     return events.map((e) => e.name);

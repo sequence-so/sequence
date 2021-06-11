@@ -14,7 +14,7 @@ interface Props {
   hierarchy?: { name: string; route?: string }[];
   onChangeTitleText: (text: string) => void;
   placeholderTitle?: string;
-  icon?: JSX.Element;
+  icon?: string | JSX.Element;
 }
 
 const DynamicTitleBar = (props: Props) => {
@@ -30,7 +30,15 @@ const DynamicTitleBar = (props: Props) => {
     <div className={styles.title_bar_container}>
       <div className={styles.title_text}>
         <div className={styles.title_text_wrapper}>
-          {props.icon ?? null}
+          {props.icon && (
+            <span className={styles.title_icon}>
+              {typeof props.icon === "string" ? (
+                <img src={props.icon} />
+              ) : (
+                props.icon
+              )}
+            </span>
+          )}
           <TitleInput
             value={props.title}
             onChangeText={onChangeTitleText}

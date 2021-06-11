@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import styles from "../styles/Home.module.css";
 import DashboardSidebar from "../components/DashboardSidebar";
-import ProfileDropdown from "../components/ProfileDropdown";
 import classNames from "classnames";
 import { createGlobalState } from "react-hooks-global-state";
 import { useRouter } from "next/router";

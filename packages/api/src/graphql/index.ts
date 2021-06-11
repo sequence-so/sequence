@@ -1,5 +1,7 @@
-import User from "../models/user";
+import User from "../models/user.model";
 import Models from "../models/index";
+import App from "src/app";
+import Repositories from "src/repositories";
 
 export type GraphQLContextType = {
   models: typeof Models;
@@ -7,4 +9,6 @@ export type GraphQLContextType = {
   dataLoaders: {
     productUserLoader: any;
   };
+  app: App;
+  repositories: Repositories;
 };

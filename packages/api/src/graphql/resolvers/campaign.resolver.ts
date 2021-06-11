@@ -23,7 +23,6 @@ export const campaigns = async (
     limit,
     offset: page * limit,
     order: [["createdAt", "DESC"]],
-    include: ["audience", "email"],
   });
 
   const count = await models.Campaign.count({

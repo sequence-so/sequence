@@ -2,8 +2,8 @@ import { useQuery, gql } from "@apollo/client";
 import styles from "../styles/Home.module.css";
 import DownArrow from "../public/down_arrow.svg";
 
-const GET_USER = gql`
-  {
+export const GET_USER = gql`
+  query GetUser {
     getUser {
       id
       firstName

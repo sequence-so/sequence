@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface Props
   extends React.DetailedHTMLProps<
@@ -11,6 +11,10 @@ interface Props
 
 const CreateInput = (props: Props) => {
   const [state, setState] = useState(props.defaultValue || "");
+
+  useEffect(() => {
+    setState(props.value as string);
+  }, [props.value]);
 
   return (
     <>
@@ -29,11 +33,11 @@ const CreateInput = (props: Props) => {
           height: 38px;
           color: hsl(0, 0%, 20%);
           border: 1px solid hsl(0, 0%, 80%);
-          font-family: 'IBM Plex Sans';
+          font-family: "IBM Plex Sans";
+          font-size: 16px;
         }
         .create-input:focus {
           border-color: #2684ff;
-        }
         }
       `}</style>
     </>

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import {
   ConditionNodeKind,
   NodeParseError,
@@ -17,6 +17,8 @@ import filterStyles from "styles/filter.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip } from "@material-ui/core";
+import { defaultProp } from "services/defaultProp";
+import { AudienceBuilderContext } from "components/AudienceBuilder";
 
 interface RenderConditionProps {
   node: Condition;
@@ -39,7 +41,10 @@ const RenderCondition = ({
   depth,
   remove: removeSelf,
   errors,
+  ...otherProps
 }: RenderConditionProps) => {
+  const audienceBuilderContext = useContext(AudienceBuilderContext);
+  const editable = defaultProp(audienceBuilderContext.editable, true);
   const conditionNode = node;
   const [conditionKind, setConditionKind] = useState(node.conditionKind);
   const [filters, setFilters] = useState<FilterState[]>(
@@ -47,6 +52,9 @@ const RenderCondition = ({
   );
 
   const addChild = (value: string) => {
+    if (!editable) {
+      return;
+    }
     const insertion = mapCreateFilterToNode(value);
     const nextFilters = [...filters];
     nextFilters.push({
@@ -55,19 +63,27 @@ const RenderCondition = ({
     });
     setFilters(nextFilters);
     conditionNode.children.push(insertion);
+    audienceBuilderContext.onChange();
   };
 
   const remove = (id: string) => () => {
+    if (!editable) {
+      return;
+    }
     const copy = [...filters];
     const idx = copy.findIndex((c) => c.id === id);
     if (idx !== -1) {
       copy.splice(idx, 1);
       setFilters(copy);
       conditionNode.children.splice(idx, 1);
+      audienceBuilderContext.onChange();
     }
   };
 
   const setCondition = ({ value }) => {
+    if (!editable) {
+      return;
+    }
     if (value === ConditionNodeKind.AND) {
       node.conditionKind = ConditionNodeKind.AND;
       setConditionKind(ConditionNodeKind.AND);
@@ -75,9 +91,13 @@ const RenderCondition = ({
       node.conditionKind = ConditionNodeKind.OR;
       setConditionKind(ConditionNodeKind.OR);
     }
+    audienceBuilderContext.onChange();
   };
 
   const onChangeChildNodeKind = (id: string) => (nodeKind: any) => {
+    if (!editable) {
+      return;
+    }
     const insertion = mapCreateFilterToNode(nodeKind);
     const nextFilters = [...filters];
     const idx = nextFilters.findIndex((filter) => filter.id === id);
@@ -88,6 +108,7 @@ const RenderCondition = ({
       });
       setFilters(nextFilters);
       conditionNode.children.splice(idx, 1, insertion);
+      audienceBuilderContext.onChange();
     }
   };
 
@@ -132,10 +153,11 @@ const RenderCondition = ({
                 label:
                   conditionKind === ConditionNodeKind.AND ? "All" : "One of",
               }}
+              isDisabled={!editable}
               onChange={setCondition}
             />
             <span>of the following conditions match</span>
-            {depth > 0 && (
+            {depth > 0 && editable && (
               <Tooltip title={"Delete filter"} placement="bottom">
                 <span
                   style={{ marginLeft: "auto" }}
@@ -152,12 +174,16 @@ const RenderCondition = ({
         <div style={{ display: "flex", flexDirection: "column" }}>
           {RenderFilters}
           <div style={{ display: "flex", flexDirection: "row" }}>
-            <RenderConditionKind
-              idx={0}
-              node={conditionNode}
-              style={{ marginRight: 10 }}
-            />
-            <CreateFilter parent={conditionNode} addChild={addChild} />
+            {editable && (
+              <>
+                <RenderConditionKind
+                  idx={0}
+                  node={conditionNode}
+                  style={{ marginRight: 10 }}
+                />
+                <CreateFilter parent={conditionNode} addChild={addChild} />
+              </>
+            )}
           </div>
         </div>
       </div>

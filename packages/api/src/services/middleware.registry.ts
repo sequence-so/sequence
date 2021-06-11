@@ -8,5 +8,5 @@ class Middleware {
   }
 }
 
-let instance = new Middleware();
+const instance = new Middleware();
 export default instance;

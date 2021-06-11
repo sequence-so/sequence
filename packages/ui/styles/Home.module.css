@@ -497,7 +497,7 @@
 
 .blue_button {
   background: #4E94E5;
-  border: 1px solid #1A60B2;
+  border: none;
   color: white;
   display: flex;
   flex-direction: row;
@@ -507,8 +507,6 @@
   min-width: 200px;
   margin: 20px;
   cursor: pointer;
-  /* padding-top: 1rem;
-  padding-bottom: 1rem; */
 }
 
 .blue_button:disabled {
@@ -837,6 +835,15 @@
   font-size: 1.75rem;
 }
 
+.title_icon {
+  margin-right: 8px;
+  color: var(--icon-blue);
+}
+
+.title_icon > svg {
+  min-width: 19px;
+}
+
 .title_text > p {
   font-size: 1rem;
   color: #4E4F55;
@@ -850,7 +857,7 @@
 }
 
 .title_text_wrapper > * + * {
-  margin-left: 8px;
+  /* margin-left: 8px; */
 }
 
 .title_action_button  {
@@ -877,7 +884,8 @@
   margin-top: 0px;
   height: 38px;
   border: none;
-  width: 60px;
+  width: 61px;
+  margin-bottom: 8px;
   min-width: 60px;
   border-radius: 0px;
 }
@@ -991,4 +999,12 @@
 .editor_icon:hover {
   background: #EFF1F2;
   border-radius: 4px;
+}
+
+.campaign_title_input {
+  background: none;
+}
+
+.campaign_title_input:hover {
+  background-color: rgba(106, 106, 106, 0.194) !important;
 }

@@ -1,48 +1,60 @@
 import { GraphQLScalarType, Kind } from "graphql";
 import { GraphQLJSONObject } from "graphql-type-json";
 import { isNull } from "lodash";
-import * as AudienceResolvers from "./resolvers/audience.resolver";
-import * as CampaignResolvers from "./resolvers/campaign.resolver";
-import * as CustomPropertyResolvers from "./resolvers/customProperty.resolver";
-import * as EmailResolvers from "./resolvers/email.resolver";
-import * as EventResolvers from "./resolvers/event.resolver";
-import * as IntercomResolvers from "./resolvers/intercom.resolver";
-import * as ProductUserResolvers from "./resolvers/productUser.resolver";
-import * as SegmentResolvers from "./resolvers/segment.resolver";
-import * as UserResolvers from "./resolvers/user.resolver";
-
-import * as AudienceMutations from "./mutations/audience.mutation";
-import * as CampaignMutations from "./mutations/campaign.mutation";
-import * as EmailMutations from "./mutations/email.mutation";
-import * as IntercomMutations from "./mutations/intercom.mutation";
-import * as SegmentMutations from "./mutations/segment.mutation";
-import * as WebhookMutations from "./mutations/webhook.mutation";
-import * as UserMutations from "./mutations/user.mutation";
 import { GraphQLContextType } from ".";
-import Audience from "src/models/audience";
-import ProductUser from "src/models/product_user";
+import Audience from "src/models/audience.model";
+import ProductUser from "../models/productUser.model";
+import Campaign from "src/models/campaign.model";
+import CampaignNode from "../models/campaignNode.model";
+import CampaignNodeEdge from "../models/campaignNodeEdge.model";
+import { Op } from "sequelize";
+
+import * as AudienceResolver from "./resolvers/audience.resolver";
+import * as BlastResolver from "./resolvers/blast.resolver";
+import * as CampaignNodes from "./resolvers/campaignNode.resolver";
+import * as CampaignResolver from "./resolvers/campaign.resolver";
+import * as EmailResolver from "./resolvers/email.resolver";
+import * as EventResolver from "./resolvers/event.resolver";
+import * as SegmentResolver from "./resolvers/segment.resolver";
+import * as UserResolver from "./resolvers/user.resolver";
+import * as ProductUserResolver from "./resolvers/productUser.resolver";
+
+import * as AudienceMutation from "./mutations/audience.mutation";
+import * as BlastMutation from "./mutations/blast.mutation";
+import * as CampaignMutation from "./mutations/campaign.mutation";
+import * as CampaignNodeMutation from "./mutations/campaignNode.mutation";
+import * as CampaignNodeEdgeMutation from "./mutations/campaignNodeEdge.mutation";
+import * as EmailMutation from "./mutations/email.mutation";
+import * as SegmentMutation from "./mutations/segment.mutation";
+import * as UserMutation from "./mutations/user.mutation";
+import * as WebhookMutation from "./mutations/webhook.mutation";
+
+const Query = {
+  ...AudienceResolver,
+  ...BlastResolver,
+  ...CampaignResolver,
+  ...CampaignNodes,
+  ...EmailResolver,
+  ...EventResolver,
+  ...SegmentResolver,
+  ...UserResolver,
+  ...ProductUserResolver,
+};
+const Mutation = {
+  ...AudienceMutation,
+  ...BlastMutation,
+  ...CampaignMutation,
+  ...CampaignNodeMutation,
+  ...CampaignNodeEdgeMutation,
+  ...EmailMutation,
+  ...SegmentMutation,
+  ...UserMutation,
+  ...WebhookMutation,
+};
 
 const resolvers = {
-  Query: {
-    ...AudienceResolvers,
-    ...CampaignResolvers,
-    ...CustomPropertyResolvers,
-    ...EmailResolvers,
-    ...EventResolvers,
-    ...IntercomResolvers,
-    ...ProductUserResolvers,
-    ...SegmentResolvers,
-    ...UserResolvers,
-  },
-  Mutation: {
-    ...AudienceMutations,
-    ...CampaignMutations,
-    ...EmailMutations,
-    ...IntercomMutations,
-    ...SegmentMutations,
-    ...WebhookMutations,
-    ...UserMutations,
-  },
+  Query,
+  Mutation,
   JSONObject: GraphQLJSONObject,
   Date: new GraphQLScalarType({
     name: "Date",
@@ -89,6 +101,59 @@ const resolvers = {
         return null;
       }
       return root.traits;
+    },
+  },
+  Campaign: {
+    campaignNodes: async (root: Campaign, _: any, ctx: GraphQLContextType) => {
+      const id = root.id;
+      return CampaignNode.findAll({
+        where: {
+          userId: ctx.user.id,
+          campaignId: id,
+        },
+      });
+    },
+    campaignNodeEdges: async (
+      root: Campaign,
+      _: any,
+      ctx: GraphQLContextType
+    ) => {
+      const id = root.id;
+      const nodes = await CampaignNode.findAll({
+        where: {
+          userId: ctx.user.id,
+          campaignId: id,
+        },
+      });
+      return CampaignNodeEdge.findAll({
+        where: {
+          [Op.or]: [
+            {
+              fromId: nodes.map((n) => n.id),
+            },
+            {
+              toId: nodes.map((n) => n.id),
+            },
+          ],
+        },
+      });
+    },
+  },
+  CampaignNode: {
+    campaignNodeStates: async (
+      root: CampaignNode,
+      _: any,
+      ctx: GraphQLContextType
+    ) => {
+      const campaignNodeId = root.id;
+      const campaignId = root.campaignId;
+      const campaignNodeStates = await ctx.models.CampaignNodeState.findAll({
+        where: {
+          campaignNodeId,
+          campaignId,
+        },
+      });
+      return campaignNodeStates;
     },
   },
 };

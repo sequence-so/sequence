@@ -10,10 +10,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "invariant": "^2.2.4",
+    "sequence-graph-data-structure": "^2.0.6",
     "typescript": "^4.3.2",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@types/invariant": "^2.2.34",
     "@types/node": "^15.6.1",
     "@types/uuid": "^8.3.0",
     "ts-node": "^10.0.0"

@@ -1,11 +1,11 @@
 import faker from "faker";
-import User, { UserCreationAttributes } from "src/models/user";
+import User, { UserCreationAttributes } from "src/models/user.model";
 
 export const build = (
   opts?: UserCreationAttributes
 ): UserCreationAttributes => {
-  let firstName = opts?.firstName || faker.name.firstName();
-  let lastName = opts?.lastName || faker.name.lastName();
+  const firstName = opts?.firstName || faker.name.firstName();
+  const lastName = opts?.lastName || faker.name.lastName();
 
   return {
     ...opts,

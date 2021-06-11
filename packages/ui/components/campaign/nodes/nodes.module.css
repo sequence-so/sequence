@@ -1,0 +1,10 @@
+.invalid_to_connection {
+  background-color: #ff7777;
+}
+
+.selected {
+  background-color: #ffffeb;
+  border: 1px solid var(--primary-blue);
+  box-shadow: inset 0px 0px 0px 2px var(--primary-blue),
+    var(--big-box-shadow);
+}

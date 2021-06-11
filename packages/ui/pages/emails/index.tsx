@@ -2,16 +2,15 @@ import DashboardLayout from "../../layout/DashboardLayout";
 import TitleBar from "../../layout/TitleBar";
 import EmailTable from "components/email/list/EmailTable";
 import DefaultViewLayout from "layout/DefaultViewLayout";
+import { PAGE_DEFAULTS } from "constants/page";
 
 const EmailsIndexPage = () => {
   return (
     <DashboardLayout index={1}>
       <>
         <TitleBar
-          title="Emails"
-          subtitle="View all of the emails you've created and sent to customers."
-          actionUrl="/emails/create"
-          actionText="+ Create Email"
+          icon={PAGE_DEFAULTS.emails.icon}
+          {...PAGE_DEFAULTS.emails.index}
         ></TitleBar>
         <DefaultViewLayout>
           <EmailTable />

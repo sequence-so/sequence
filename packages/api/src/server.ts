@@ -1,10 +1,9 @@
-import app from "./app";
+import App from "./app";
+import appConfig from "./config/appConfig";
 
-app.get("/", (req, res) => res.json({ success: true }));
+const app = new App(appConfig);
 
-const server = app.listen(process.env.PORT, () =>
-  console.log(`Sequence API listening on port ${process.env.PORT}`)
-);
+const server = app.listen();
 
 function exitHandler(options: any, exitCode: number) {
   if (options.cleanup) {
@@ -25,6 +24,6 @@ process.on("SIGUSR2", exitHandler.bind(null, { exit: true, cleanup: true }));
 
 //catches uncaught exceptions
 process.on("uncaughtException", (error) => {
-  console.error(error);
+  console.error("[Server] Uncaught exception:" + error);
   exitHandler({ exit: true, cleanup: true }, -1);
 });

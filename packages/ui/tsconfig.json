@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2015",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": false,
     "skipLibCheck": true,
@@ -16,14 +16,18 @@
     "baseUrl": ".",
     "outDir": "dist",
     "paths": {
+      "campaign": ["../common/campaign"],
+      "campaign/*": ["../common/campaign/*"],
+      "common/*": ["../common/*"],
       "components/*": ["components/*"],
+      "filters/*": ["../common/filters/*"],
+      "filters": ["../common/filters"],
       "hooks/*": ["hooks/*"],
       "layout/*": ["layout/*"],
       "pages/*": ["pages/*"],
       "public/*": ["public/*"],
       "services/*": ["services/*"],
-      "styles/*": ["styles/*"],
-      "common/*": ["../common/*"]
+      "styles/*": ["styles/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

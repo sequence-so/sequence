@@ -28,10 +28,21 @@ const logout = () => {
 const errorLink = onError(({ networkError }) => {
   if (networkError && (networkError as ServerParseError).statusCode) {
     const error = networkError as ServerParseError;
+    if ((networkError as any).result?.errors) {
+      let error = (networkError as any).result?.errors[0];
+      if (
+        error?.message === "You are not authorized to perform this request."
+      ) {
+        logout();
+      }
+    }
     if (error.statusCode === 401) {
       logout();
     }
-    if (error.message.indexOf("Context creation failed: jwt expired") > -1) {
+    if (
+      error.message.indexOf("You are not authorized to perform this request.") >
+      -1
+    ) {
       logout();
     }
   }

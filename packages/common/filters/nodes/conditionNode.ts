@@ -18,11 +18,11 @@ class ConditionNode extends AbstractNode {
     this.children = children || [];
     return this;
   }
-  static and(children?: AbstractNode[]) {
+  static and(...children: AbstractNode[]) {
     let instance = new ConditionNode(ConditionNodeKind.AND, children);
     return instance;
   }
-  static or(children?: AbstractNode[]) {
+  static or(...children: AbstractNode[]) {
     let instance = new ConditionNode(ConditionNodeKind.OR, children);
     return instance;
   }

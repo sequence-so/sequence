@@ -1,13 +1,13 @@
 import { GraphQLContextType } from "..";
-import Campaign, { CampaignCreationAttributes } from "src/models/campaigns";
-import Sendgrid from "@sendgrid/mail";
-import mustache from "mustache";
-import { Condition } from "common/filters";
-import { AudienceBuilder } from "src/audience";
-import ProductUser from "src/models/product_user";
-import Audience from "src/models/audience";
-import Email from "src/models/emails";
-Sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
+import {
+  CampaignCreationAttributes,
+  CampaignStateEnum,
+} from "src/models/campaign.model";
+import SequenceError, {
+  FORBIDDEN_ERROR,
+  MODEL_NOT_FOUND,
+} from "src/error/sequenceError";
+import CampaignNodeEvaluator from "src/services/campaigns/campaignNodeEvaluator";
 
 type CreateCampaignInputArgs = Omit<CampaignCreationAttributes, "userId">;
 
@@ -16,101 +16,108 @@ type UpdateCampaignInputArgs = CreateCampaignInputArgs & {
 };
 
 export const createCampaign = async (
-  root: any,
-  { name, audienceId, emailId, sentAt }: CreateCampaignInputArgs,
-  { models, user }: GraphQLContextType
+  _: any,
+  args: CreateCampaignInputArgs,
+  { user, repositories }: GraphQLContextType
 ) => {
-  const campaign: Campaign = await models.Campaign.create({
+  return repositories.campaignRepository.createCampaign({
     userId: user.id,
-    name,
-    audienceId,
-    emailId,
-    sentAt,
+    name: args.name,
+    state: CampaignStateEnum.PENDING,
+    isDraft: true,
   });
-  executeCampaign(campaign, { models, user });
-  return campaign;
 };
 
 export const updateCampaign = async (
   root: any,
   args: UpdateCampaignInputArgs,
-  { models, user }: GraphQLContextType
+  { user, repositories }: GraphQLContextType
 ) => {
-  let id = args.id;
-  let campaign: Campaign;
+  return repositories.campaignRepository.updateCampaign(args.id, user.id, args);
+};
 
-  campaign = await models.Campaign.findOne({
+export const launchCampaign = async (
+  root: any,
+  args: UpdateCampaignInputArgs,
+  { models, user, app }: GraphQLContextType
+) => {
+  const campaign = await models.Campaign.findOne({
     where: {
+      id: args.id,
       userId: user.id,
-      id,
     },
   });
 
   if (!campaign) {
-    throw new Error("No campaign found");
+    throw new SequenceError("No campaign found", MODEL_NOT_FOUND);
   }
 
-  const updateArgs = { ...args };
-  delete updateArgs.id;
-  campaign = await campaign.update(updateArgs);
+  if (campaign.stoppedAt) {
+    throw new SequenceError(
+      "Resuming a campaign is not supported yet",
+      FORBIDDEN_ERROR
+    );
+  }
+
+  if (campaign.launchedAt) {
+    throw new SequenceError("Cannot launch a campaign twice", FORBIDDEN_ERROR);
+  }
+
+  // 1. update campaign status
+  await campaign.update({
+    state: CampaignStateEnum.RUNNING,
+    launchedAt: new Date(),
+    isDraft: false,
+  });
+
+  // 2. execute the first campaign steps
+  const campaignNodeEvaluator = new CampaignNodeEvaluator(
+    app,
+    user.id,
+    campaign.id
+  );
+  await campaignNodeEvaluator.build();
+  await campaignNodeEvaluator.evaluateCampaignEntryNodes();
   return campaign;
 };
 
-const executeCampaign = async (campaign: Campaign, { models }: any) => {
-  let parsedAudience: object;
-  let rootNode: Condition;
-  let builder: AudienceBuilder;
-  let productUsers: ProductUser[];
-  let audienceModel: Audience;
-  let emailModel: Email;
-  let audience: Audience;
-
-  audience = await models.Audience.findOne({
+export const stopCampaign = async (
+  root: any,
+  args: UpdateCampaignInputArgs,
+  { models, user, app }: GraphQLContextType
+) => {
+  const campaign = await models.Campaign.findOne({
     where: {
-      id: campaign.audienceId,
+      id: args.id,
+      userId: user.id,
     },
-    include: ["productUsers"],
   });
-  if (!audience) {
-    throw new Error("No audience found");
+
+  if (!campaign) {
+    throw new SequenceError("No campaign found", MODEL_NOT_FOUND);
   }
-  const audienceProductUsers = await models.AudienceProductUser.findAll({
-    where: {
-      audienceId: campaign.audienceId,
-    },
-    include: ["productUser"],
-  });
 
-  productUsers = audienceProductUsers.map((audienceProductUser: any) => {
-    return (audienceProductUser as any).productUser as ProductUser;
-  });
-
-  emailModel = await models.Email.findOne({
-    where: {
-      userId: audience.userId,
-      id: campaign.emailId,
-    },
-  });
-
-  try {
-    const sendEmailPromises = productUsers
-      .map((person) => {
-        const renderedHtml = mustache.render(emailModel.bodyHtml, person);
-        const renderedSubject = mustache.render(emailModel.subject, person);
-        console.log({ renderedHtml, renderedSubject });
-        return {
-          from: "helson@sequence.so",
-          html: renderedHtml,
-          subject: renderedSubject,
-          to: person.email,
-        };
-      })
-      .map((payload) => Sendgrid.send(payload));
-    await Promise.all(sendEmailPromises);
-    await campaign.update({
-      sentAt: new Date(),
-    });
-  } catch (error) {
-    console.error(error);
+  if (campaign.stoppedAt) {
+    return campaign;
   }
+
+  // Stop the campaign
+  await campaign.update({
+    state: CampaignStateEnum.STOPPED,
+    stoppedAt: new Date(),
+  });
+
+  // Stop the campaign node state
+  await models.CampaignNodeState.update(
+    {
+      state: CampaignStateEnum.STOPPED,
+    },
+    {
+      where: {
+        campaignId: args.id,
+      },
+    }
+  );
+
+  return campaign;
 };

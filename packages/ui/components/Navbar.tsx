@@ -20,27 +20,18 @@ import {
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip } from "@material-ui/core";
+import { GET_USER } from "./ProfileDropdown";
 const iconStyle: React.CSSProperties = {
   width: 15,
   marginRight: 8,
   color: "#4E4F55",
 };
-const GET_USER = gql`
-  {
-    getUser {
-      id
-      firstName
-      lastName
-      email
-      photo
-    }
-  }
-`;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     fontFamily: "IBM Plex Sans",
     color: "#4E4F55",
+    zIndex: 99,
   },
   menu: {
     "& .MuiList-root": {
@@ -55,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
   appbar: {
     boxShadow: "none",
-    borderBottom: "1px solid #DDDDDD",
+    borderBottom: "1px solid #D0D0D0",
   },
   toolbar: {
     minHeight: 50,

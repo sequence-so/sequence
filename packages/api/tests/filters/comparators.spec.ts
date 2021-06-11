@@ -133,8 +133,6 @@ describe("comparators", () => {
       const expectation = {
         [Op[Operators.lt]]: referenceFmt,
       };
-      // console.log(inspect(expectation, true, null));
-      // console.log(inspect(query, true, null));
       expect(isEqual(query, expectation)).to.be.true;
     });
   });
