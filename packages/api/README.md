@@ -7,3 +7,6 @@ https://heroku.com/deploy?template=https://github.com/heroku/node-js-getting-sta
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/heroku/node-js-getting-started)
 https://heroku.com/deploy?template=https://github.com/sequence-so/sequence/tree/main/packages/api
+
+## Building
+Reference: https://github.com/TypeStrong/ts-loader/blob/main/REFERENCES.md

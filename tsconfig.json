@@ -20,5 +20,10 @@
     },
     "typeRoots": ["./node_modules/@types", "../../node_modules/@types"]
   },
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "exclude": ["node_modules", "**/*.spec.ts"],
+  "references": [
+    { "path": "./packages/common" },
+    { "path": "./packages/api" },
+    { "path": "./packages/ui" }
+  ]
 }

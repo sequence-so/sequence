@@ -1,49 +1,41 @@
 # Install dependencies for all subprojects
 FROM node:alpine AS base
 WORKDIR /app
+# Install 'libc6-compat'
 RUN apk add --no-cache libc6-compat
 # Install lerna
 RUN yarn global add lerna
 # Root package.json for all modules
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
-COPY packages/api ./packages/api
 COPY packages/common ./packages/common
+COPY packages/api ./packages/api
 COPY lerna.json tsconfig.json ./
 RUN yarn run bootstrap
+
 
 # Build API
 FROM node:alpine AS api-builder
 WORKDIR /app
-COPY --from=base /app .
+COPY --from=base /app/ .
 WORKDIR /app/packages/api
 RUN yarn build && yarn install --production --ignore-scripts --prefer-offline
 
-# # Build Common
-FROM node:alpine AS common-builder
-WORKDIR /app
-COPY --from=base /app .
-WORKDIR /app/packages/common
-RUN yarn build && yarn install --production --ignore-scripts --prefer-offline
 
 # Production image, copy all the files and run next
 FROM node:alpine AS runner
-WORKDIR /app
-
-ENV NODE_ENV production
-
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nodejs -u 1001
-
-COPY --from=api-builder /app .
-# TODO: Make less shit
-COPY --from=common-builder /app/packages/dist /app/packages/api/dist/common
 WORKDIR /app/packages/api
-
-USER node
-
-# EXPOSE 3000
-
-# ENV PORT 3000
-
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nodeuser -u 1001
+# Copy only necessary files
+COPY --from=api-builder --chown=nodeuser /app/packages/api/dist /dist
+COPY --from=api-builder /app/packages/api/.env /.env
+COPY --from=api-builder /app/packages/api/package.json /package.json
+COPY --from=api-builder /app/packages/api/tsconfig.json /tsconfig.json
+COPY --from=api-builder /app/packages/api/node_modules /node_modules
+USER nodeuser
+ARG PORT=3000
+ENV NODE_ENV production
+ENV PORT $PORT
+EXPOSE $PORT
 CMD ["yarn", "migrate-and-start"]
