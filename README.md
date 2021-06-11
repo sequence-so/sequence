@@ -30,8 +30,8 @@ Open `http://0.0.0.0:8000` to see the application.
 
 **Requirements**
 
-* Node version 14 and greater
-* Postgres version 11 and greater
+* Node ≥15.0.0
+* Postgres ≥11
 
 **Recommended**
 

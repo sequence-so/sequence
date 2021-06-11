@@ -1,7 +1,7 @@
 {
   "name": "sequence-ui",
   "version": "0.1.0",
-  "description": "Frontend for Sequence.",
+  "description": "Frontend server for Sequence",
   "private": true,
   "repository": {
     "type": "git",
