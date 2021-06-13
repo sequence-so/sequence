@@ -20,11 +20,25 @@ const config =
   SequelizeConfig.development;
 
 export const dbConfig = config;
+
+const createSequelize = (...args: any[]) => {
+  const instance = new Sequelize(...args);
+  instance
+    .authenticate()
+    .then(() => console.log("Sequence: database connection succesful"))
+    .catch((error) => {
+      console.log(
+        `Environment variable DB_SSL=true required to connect to this database.`
+      );
+    });
+  return instance;
+};
+
 let sequelize: Sequelize;
 if (dbConfig.url) {
-  sequelize = new Sequelize(dbConfig.url, { ...(config as any), ...options });
+  sequelize = createSequelize(dbConfig.url, { ...(config as any), ...options });
 } else {
-  sequelize = new Sequelize({ ...(config as any), ...options });
+  sequelize = createSequelize({ ...(config as any), ...options });
 }
 
 export default sequelize;
