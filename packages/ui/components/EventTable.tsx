@@ -127,7 +127,7 @@ export const EVENTS_TABLE_COLUMNS = [
 
 function EventTable(props: EventTableProps) {
   const [page, setPage] = useState(0);
-  const [rowCount, setRowCount] = useState(0);
+  const [rowCount, setRowCount] = useState<number | null>(null);
   const [limit, setLimit] = useState(DEFAULT_LIMIT);
 
   const { loading, error, data } = useQuery<GetEvents>(GET_EVENTS, {
@@ -141,15 +141,12 @@ function EventTable(props: EventTableProps) {
     },
   });
 
-  if (loading) {
-    return <CircularProgress />;
-  }
   if (error) {
     return <p>{JSON.stringify(error)}</p>;
   }
-  return (
+  return rowCount !== null ? (
     <Table
-      rows={data.events.nodes}
+      rows={data ? data.events.nodes : []}
       columns={props.columns ?? EVENTS_TABLE_COLUMNS}
       pageSize={limit}
       page={page}
@@ -164,7 +161,10 @@ function EventTable(props: EventTableProps) {
       paginationMode="server"
       loading={loading}
       shadow={true}
+      autoHeight={true}
     ></Table>
+  ) : (
+    <CircularProgress />
   );
 }
 
