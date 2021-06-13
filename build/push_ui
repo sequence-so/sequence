@@ -1,0 +1,14 @@
+IMAGE="sequenceso/sequence-ui"
+TAG=$(git log --pretty=format:'%h' -n 1)
+APP=$HEROKU_UI_APP
+PROCESS_TYPE="web"
+
+docker build --tag="$IMAGE:$TAG" \
+  --tag registry.heroku.com/$APP/$PROCESS_TYPE \
+  --build-arg NEXT_PUBLIC_API_URL=https://sequence-prod.herokuapp.com \
+  --file Dockerfile.ui \
+  .
+
+docker push registry.heroku.com/$APP/$PROCESS_TYPE
+
+heroku container:release -a $APP web
