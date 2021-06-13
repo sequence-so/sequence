@@ -7,6 +7,10 @@ module.exports = {
   entry: "./src/server.ts",
   devtool: "inline-source-map",
   externals: [nodeExternals()],
+  // See https://github.com/sequence-so/sequence/issues/16
+  optimization: {
+    minimize: false,
+  },
   module: {
     rules: [
       {

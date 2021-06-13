@@ -111,7 +111,7 @@ class SequenceProcessor {
           context: event.context,
           messageId: event.messageId,
           receivedAt: new Date(),
-          sentAt: moment(event.sentAt).toDate(),
+          sentAt: moment(event.sentAt || new Date()).toDate(),
           timestamp: moment(event.timestamp).toDate(),
         },
         {
@@ -128,7 +128,7 @@ class SequenceProcessor {
           messageId: event.messageId,
           properties: event.properties,
           receivedAt: new Date(),
-          sentAt: moment(event.sentAt).toDate(),
+          sentAt: moment(event.sentAt || new Date()).toDate(),
           timestamp: moment(event.timestamp).toDate(),
         },
         {

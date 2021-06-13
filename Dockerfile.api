@@ -3,24 +3,23 @@ FROM node:alpine AS base
 WORKDIR /app
 # Install 'libc6-compat'
 RUN apk add --no-cache libc6-compat
-# Install lerna
-RUN yarn global add lerna
-# Root package.json for all modules
-COPY package.json yarn.lock ./
+WORKDIR /app/packages/api
+# Install dependencies
+COPY packages/api/package.json packages/api/yarn.lock ./
 RUN yarn install --frozen-lockfile
-COPY packages/common ./packages/common
-COPY packages/api ./packages/api
-COPY lerna.json tsconfig.json ./
-RUN yarn run bootstrap
-
+WORKDIR /app/packages/common
+# Install dependencies
+COPY packages/common/package.json packages/common/yarn.lock ./
+RUN yarn install --frozen-lockfile
 
 # Build API
 FROM node:alpine AS api-builder
-WORKDIR /app
-COPY --from=base /app/ .
 WORKDIR /app/packages/api
+COPY /packages/api /app/packages/api
+COPY /packages/common /app/packages/common
+COPY --from=base /app/packages/api/node_modules ./node_modules
+COPY --from=base /app/packages/common/node_modules /app/packages/common/node_modules
 RUN yarn build && yarn install --production --ignore-scripts --prefer-offline
-
 
 # Production image, copy all the files and run next
 FROM node:alpine AS runner
