@@ -6,7 +6,7 @@ description: Running Sequence.
 
 ### Sequence
 
-[Sequence](https://github.com/sequence-so/sequence) is an open source email marketing automation tool. 
+[Sequence](https://github.com/sequence-so/sequence) is an open core email marketing automation tool. 
 
 ![](.gitbook/assets/my-movie-4%20%281%29.gif)
 
