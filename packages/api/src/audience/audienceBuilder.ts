@@ -126,6 +126,7 @@ export class AudienceBuilder implements NodeVisitor {
         include: [
           {
             model: Event,
+            //@ts-ignore
             as: "events",
             attributes: [],
             required: true,
