@@ -1,16 +1,63 @@
-import CampaignGraph from "./CampaignGraph";
+import CampaignGraph from "./campaignGraph";
+import { Edge } from "./nodes";
 import AbstractCampaignNode from "./nodes/abstractCampaignNode";
-import { CampaignGraphEdges } from "./types";
+import { CampaignGraphEdges, CampaignNodeKind, CustomEdge } from "./types";
 
-export const buildCampaign = (
-  nodes: AbstractCampaignNode[],
-  edges: CampaignGraphEdges
+export const validateEdge = (
+  from: AbstractCampaignNode,
+  to: AbstractCampaignNode
 ) => {
+  if (
+    to.kind === CampaignNodeKind.Audience ||
+    to.kind === CampaignNodeKind.Trigger
+  ) {
+    return false;
+  }
+  return true;
+};
+
+export const buildCampaign = ({
+  nodes,
+  edges,
+}: {
+  nodes: AbstractCampaignNode[];
+  edges: Edge[];
+}) => {
   const graph = new CampaignGraph();
+  let errors: string[] = [];
+  let cycles: string[][] = [];
   nodes.forEach((node) => graph.addNode(node));
-  Object.keys(edges).forEach((source) => {
-    const destination = edges[source];
-    graph.addEdge(source, destination);
+
+  edges.forEach((edge) => {
+    const fromId = edge.getFromId()!;
+    const toId = edge.getToId()!;
+    const from = graph.getNodeById(fromId);
+    const to = graph.getNodeById(toId);
+
+    if (!to) {
+      errors.push("No `to` node found for this edge: " + edge.getId());
+      return;
+    }
+    if ((to as AbstractCampaignNode).kind) {
+      if (!validateEdge(from, to)) {
+        errors.push(
+          `Campaign Node of type "${from.kind}" cannot connect to a "${to.kind}"`
+        );
+      }
+      graph.addEdge(
+        fromId,
+        to as AbstractCampaignNode,
+        edge.getEdgeKind(),
+        edge.getId()
+      );
+    }
   });
-  return graph;
+
+  if ((cycles = graph.getCycles())) {
+    errors = errors.concat(
+      ...cycles.map((elem) => `Detected cycle from ${elem[0]} to ${elem[1]}`)
+    );
+  }
+
+  return { graph, errors };
 };

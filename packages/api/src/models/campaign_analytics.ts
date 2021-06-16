@@ -9,7 +9,7 @@ import {
 } from "sequelize";
 import sequelize from "../database";
 import { v4 as uuidv4 } from "uuid";
-import User from "./user";
+import User from "./user.model";
 
 const config: InitOptions = {
   tableName: "campaigns",
@@ -29,11 +29,10 @@ export interface CampaignAnalyticsAttributes {
   updatedAt: Date;
 }
 
-export interface CampaignAnalyticsCreationAttributes
-  extends Omit<
-    CampaignAnalyticsAttributes,
-    "createdAt" | "updatedAt" | "id" | "launchedAt" | "stoppedAt"
-  > {}
+export type CampaignAnalyticsCreationAttributes = Omit<
+  CampaignAnalyticsAttributes,
+  "createdAt" | "updatedAt" | "id" | "launchedAt" | "stoppedAt"
+>;
 
 class CampaignAnalytics extends Model<
   CampaignAnalyticsAttributes,

@@ -2,7 +2,7 @@ import { EventPayload } from "sequence-node";
 import ProductUser, {
   ProductUserCreationAttributes,
   VALID_KEYS,
-} from "src/models/product_user";
+} from "../models/productUser.model";
 import merge from "lodash/merge";
 
 export const getCustomTraits = (traits: Record<string, any>) => {
@@ -39,7 +39,7 @@ export const identify = async (
     );
   }
 
-  let productUser = await ProductUser.findOne({
+  const productUser = await ProductUser.findOne({
     where: {
       externalId: event.userId,
       userId: meta.userId,

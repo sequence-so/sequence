@@ -1,3 +1,4 @@
+import { EmailCampaignNodeJson } from "campaign/deserialize";
 import { CampaignEmailScheduling, CampaignNodeKind } from "../types";
 import AbstractCampaignNode from "./abstractCampaignNode";
 
@@ -6,9 +7,10 @@ import AbstractCampaignNode from "./abstractCampaignNode";
  */
 class EmailCampaignNode extends AbstractCampaignNode {
   kind = CampaignNodeKind.Email;
-  #emailId: string;
-  #originalTemplateId: string;
-  #scheduling: CampaignEmailScheduling;
+  #emailId?: string;
+  #originalTemplateId?: string;
+  #scheduling?: CampaignEmailScheduling;
+  json?: EmailCampaignNodeJson;
   private constructor(emailId?: string) {
     super();
     this.#emailId = emailId;
@@ -22,21 +24,21 @@ class EmailCampaignNode extends AbstractCampaignNode {
   static new(emailId?: string) {
     return new EmailCampaignNode(emailId);
   }
-  setEmailId(value: string) {
+  setEmailId(value?: string) {
     this.#emailId = value;
     return this;
   }
   getEmailId() {
     return this.#emailId;
   }
-  setOriginalTemplateId(value: string) {
+  setOriginalTemplateId(value?: string) {
     this.#originalTemplateId = value;
     return this;
   }
   getOriginalTemplateId() {
     return this.#originalTemplateId;
   }
-  setScheduling(value: CampaignEmailScheduling) {
+  setScheduling(value?: CampaignEmailScheduling) {
     this.#scheduling = value;
     return this;
   }

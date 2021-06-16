@@ -9,26 +9,25 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.literal("uuid_generate_v4()"),
       },
-      from: {
+      fromId: {
         type: Sequelize.UUID,
         references: {
-          model: "campaign_node",
+          model: "campaign_nodes",
           key: "id",
         },
         allowNull: false,
       },
-      to: {
+      toId: {
         type: Sequelize.UUID,
         references: {
-          model: "campaign_node",
+          model: "campaign_nodes",
           key: "id",
         },
         allowNull: false,
       },
       edgeKind: {
         allowNull: false,
-        defaultValue: 0,
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
@@ -44,6 +43,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("campaign_node_edge");
+    await queryInterface.dropTable("campaign_node_edges");
   },
 };

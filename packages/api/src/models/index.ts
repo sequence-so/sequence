@@ -1,21 +1,29 @@
-import Audience from "./audience";
-import AudienceProductUser from "./audience_product_user";
-import AuthIntercom from "./auth_intercom";
-import Blast from "./blast";
-import CustomProperty from "./custom_property";
-import Email from "./emails";
-import Event from "./event";
-import ProductUser from "./product_user";
-import SegmentWebhook from "./segment_webhook";
-import SequenceWebhook from "./sequence_webhook";
-import User from "./user";
-import WebhookExecution from "./webhook_execution";
+import Audience from "./audience.model";
+import AudienceProductUser from "./audienceProductUser.model";
+import AuthIntercom from "./authIntercom.model";
+import Blast from "./blast.model";
+import Campaign from "./campaign.model";
+import CampaignNode from "./campaignNode.model";
+import CampaignNodeEdge from "./campaignNodeEdge.model";
+import CampaignNodeState from "./campaignNodeState.model";
+import CustomProperty from "./customProperty.model";
+import Email from "./email.model";
+import Event from "./event.model";
+import ProductUser from "./productUser.model";
+import SegmentWebhook from "./segmentWebhook.model";
+import SequenceWebhook from "./sequenceWebhook.model";
+import User from "./user.model";
+import WebhookExecution from "./webhookExecution.model";
 
-export default {
+const Models = {
   Audience,
   AudienceProductUser,
   AuthIntercom,
   Blast,
+  Campaign,
+  CampaignNode,
+  CampaignNodeEdge,
+  CampaignNodeState,
   CustomProperty,
   Email,
   Event,
@@ -25,3 +33,7 @@ export default {
   User,
   WebhookExecution,
 };
+
+export default Models;
+
+export type SequelizeModels = typeof Models;

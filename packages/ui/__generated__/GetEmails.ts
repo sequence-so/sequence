@@ -14,7 +14,9 @@ export interface GetEmails_emails_nodes {
   from: string | null;
   fromName: string | null;
   bodyHtml: string | null;
+  kind: string | null;
   subject: string | null;
+  localTo: string | null;
   sentCount: number | null;
   createdAt: any | null;
   updatedAt: any | null;

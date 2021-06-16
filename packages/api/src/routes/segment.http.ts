@@ -1,7 +1,7 @@
 import { Application, Request, Response } from "express";
-import SegmentWebook from "../models/segment_webhook";
+import SegmentWebook from "../models/segmentWebhook.model";
 import SegmentProcessor from "src/services/segmentProcessor";
-import SegmentWebhook from "../models/segment_webhook";
+import SegmentWebhook from "../models/segmentWebhook.model";
 import SequenceError from "src/error/sequenceError";
 
 export interface HttpResponse extends Record<string, any> {
@@ -75,7 +75,7 @@ class SegmentHttpHandler {
         return response.json(result);
       } catch (error) {
         if ((error as SequenceError).statusCode) {
-          let sequenceError = error as SequenceError;
+          const sequenceError = error as SequenceError;
           return response
             .status(sequenceError.statusCode)
             .json(sequenceError.payload);

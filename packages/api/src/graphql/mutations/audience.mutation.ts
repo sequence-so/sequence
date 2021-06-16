@@ -6,9 +6,10 @@ import {
   SerializedConditionNode,
 } from "common/filters";
 import { AudienceBuilder } from "src/audience";
-import Audience from "src/models/audience";
-import AudienceProductUser from "src/models/audience_product_user";
+import Audience from "src/models/audience.model";
+import AudienceProductUser from "../../models/audienceProductUser.model";
 import { GraphQLContextType } from "..";
+import SequenceError from "src/error/sequenceError";
 
 export const executeAudience = async (
   root: any,
@@ -37,25 +38,14 @@ export const executeAudience = async (
 
 export const createAudience = async (
   _: any,
-  args: { name: string; node: string },
+  args: { name: string; node: string; localTo: string },
   { models, user }: GraphQLContextType
 ) => {
   let audienceModel: Audience;
   let parsed: object;
   let deserializedNode: Condition;
-  let parseErrors: NodeParseError[] = [];
+  const parseErrors: NodeParseError[] = [];
   let builder: AudienceBuilder;
-
-  audienceModel = await models.Audience.findOne({
-    where: {
-      userId: user.id,
-      name: args.name,
-    },
-  });
-
-  if (audienceModel) {
-    throw new Error("An audience with this name already exists");
-  }
 
   try {
     parsed = JSON.parse(args.node);
@@ -67,40 +57,40 @@ export const createAudience = async (
   parse(deserializedNode, parseErrors);
 
   if (parseErrors.length) {
-    let error = new Error("Error parsing query node");
-    (error as any).errors = parseErrors;
-    throw error;
+    const apiError = new SequenceError("Error parsing query node", 500);
+    apiError.errors = parseErrors;
+    throw apiError;
   }
 
   audienceModel = await models.Audience.create({
     name: args.name,
     node: args.node,
+    localTo: args.localTo,
     userId: user.id,
   });
 
-  builder = new AudienceBuilder(deserializedNode, user.id);
-  const productUsers = await builder.build().execute();
-  const bulkData = productUsers
-    .map((elem) => elem.id)
-    .map((id) => ({ productUserId: id, audienceId: audienceModel.id }));
-  await AudienceProductUser.bulkCreate(bulkData);
-
-  await audienceModel.update({
-    count: productUsers.length,
-    executedAt: new Date(),
-  });
+  if (!args.localTo) {
+    builder = new AudienceBuilder(deserializedNode, user.id);
+    const productUsers = await builder.build().execute();
+    const bulkData = productUsers
+      .map((elem) => elem.id)
+      .map((id) => ({ productUserId: id, audienceId: audienceModel.id }));
+    await AudienceProductUser.bulkCreate(bulkData);
+    await audienceModel.update({
+      count: productUsers.length,
+      executedAt: new Date(),
+    });
+  }
 
   return audienceModel;
 };
 
 export const updateAudience = async (
   root: any,
-  args: { id: string; name: string; node: string },
+  args: { id: string; name: string; node: string; localTo: string },
   { models, user }: GraphQLContextType
 ) => {
-  let id = args.id;
-  let name = args.name;
-  let node = args.node;
+  const id = args.id;
   let audience: Audience;
 
   audience = await models.Audience.findOne({
@@ -111,7 +101,7 @@ export const updateAudience = async (
   });
 
   if (!audience) {
-    throw new Error("No email found");
+    throw new SequenceError("No audience found", 422);
   }
 
   const updateArgs = { ...args };

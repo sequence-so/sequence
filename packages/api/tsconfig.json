@@ -19,8 +19,12 @@
     "paths": {
       "api": ["../api"],
       "api/*": ["../api/*"],
+      "campaign": ["../common/campaign"],
+      "campaign/*": ["../common/campaign/*"],
       "common": ["../"],
       "common/*": ["../common/*"],
+      "filters/*": ["../common/filters/*"],
+      "filters": ["../common/filters"],
       "ui": ["../ui"],
       "ui/*": ["../ui/*"],
       "src/*": ["src/*"]

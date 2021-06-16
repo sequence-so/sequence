@@ -10,7 +10,14 @@
 export interface UpdateEmail_updateEmail {
   __typename: "Email";
   id: string;
+  name: string | null;
+  from: string | null;
+  fromName: string | null;
+  kind: string | null;
   bodyHtml: string | null;
+  subject: string | null;
+  sentCount: number | null;
+  createdAt: any | null;
 }
 
 export interface UpdateEmail {
@@ -25,4 +32,5 @@ export interface UpdateEmailVariables {
   subject?: string | null;
   from?: string | null;
   fromName?: string | null;
+  kind?: string | null;
 }

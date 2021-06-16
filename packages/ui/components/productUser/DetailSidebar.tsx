@@ -1,12 +1,12 @@
-import { ProductUser } from "pages/explorer/index";
 import { useMemo } from "react";
+import { GetProductUser_productUsers_nodes } from "__generated__/GetProductUser";
 import { PRODUCT_USER_COLUMN_MAPPING } from "./columnMapping";
 
 interface Props {
-  productUser: ProductUser;
+  productUser: GetProductUser_productUsers_nodes;
 }
 
-const getAttributeList = (productUser: ProductUser) => {
+const getAttributeList = (productUser: GetProductUser_productUsers_nodes) => {
   const reservedTraits = PRODUCT_USER_COLUMN_MAPPING.filter(
     ({ field }) => field !== "firstName" && field !== "lastName"
   ).map((elem) => {

@@ -1,5 +1,5 @@
 import faker from "faker";
-import Event, { EventCreationAttributes } from "src/models/event";
+import Event, { EventCreationAttributes } from "src/models/event.model";
 import { v4 as uuidv4 } from "uuid";
 import { EVENT_LIST } from "./eventList";
 

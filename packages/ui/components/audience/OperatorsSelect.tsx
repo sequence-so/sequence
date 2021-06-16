@@ -1,14 +1,17 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Select from "components/common/Select";
 import { AbstractFilterNode } from "common/filters/nodes";
 import { DEFAULT_OPERATOR_VALUE } from "./AudienceConstants";
 import CreateInput from "components/common/CreateInput";
+import { AudienceBuilderContext } from "components/AudienceBuilder";
 
 interface Props {
   node: AbstractFilterNode;
+  editable: boolean;
 }
 
-const OperatorsSelect = ({ node }: Props) => {
+const OperatorsSelect = ({ node, editable }: Props) => {
+  const audienceBuilderContext = useContext(AudienceBuilderContext);
   const [operator, setOperator] = useState<{
     label: string;
     value: string;
@@ -29,6 +32,7 @@ const OperatorsSelect = ({ node }: Props) => {
     } else {
       node[op.value]();
     }
+    audienceBuilderContext.onChange();
   };
 
   return (
@@ -37,6 +41,7 @@ const OperatorsSelect = ({ node }: Props) => {
         value={operator}
         options={node.getOperators()}
         onChange={onChange}
+        isDisabled={!editable}
       />
       {operator &&
         !!operator.args &&
@@ -45,7 +50,9 @@ const OperatorsSelect = ({ node }: Props) => {
             defaultValue={node.expected}
             onChangeText={(value) => {
               node.expected = value;
+              audienceBuilderContext.onChange();
             }}
+            disabled={!editable}
           />
         ))}
     </>

@@ -31,6 +31,14 @@ module.exports = {
         },
         allowNull: false,
       },
+      campaignId: {
+        type: Sequelize.UUID,
+        references: {
+          model: "campaigns",
+          key: "id",
+        },
+        allowNull: false,
+      },
       productUserId: {
         type: Sequelize.UUID,
         references: {
@@ -47,11 +55,14 @@ module.exports = {
         },
         allowNull: false,
       },
+      runAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
       timeoutAt: {
         type: Sequelize.DATE,
       },
       completedAt: {
-        allowNull: false,
         type: Sequelize.DATE,
       },
       createdAt: {

@@ -5,6 +5,8 @@ import CommonSelect from "../common/Select";
 import { Tooltip } from "@material-ui/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { useContext } from "react";
+import { AudienceBuilderContext } from "components/AudienceBuilder";
 
 export interface RenderNodeProps {
   node: AbstractNode;
@@ -30,7 +32,9 @@ const RemoveNode = (props: RenderNodeProps) => (
 );
 
 const RenderNode = (props: RenderNodeProps) => {
-  const onChange = ({ value }: { value: string }) => {
+  const audienceBuilderContext = useContext(AudienceBuilderContext);
+  const editable = audienceBuilderContext.editable;
+  const onChangeNodeKind = ({ value }: { value: string }) => {
     props.onChangeNodeKind(value as any);
   };
 
@@ -46,10 +50,17 @@ const RenderNode = (props: RenderNodeProps) => {
         }}
       >
         {props.node.nodeKind === NodeKind.Filter && (
-          <SelectNodeByKind {...props} node={props.node} onChange={onChange} />
+          <SelectNodeByKind
+            {...props}
+            node={props.node}
+            editable={editable}
+            onChange={onChangeNodeKind}
+          />
         )}
         <RenderNodeByKind {...props} />
-        {props.node.nodeKind === NodeKind.Filter && <RemoveNode {...props} />}
+        {props.node.nodeKind === NodeKind.Filter && editable && (
+          <RemoveNode {...props} />
+        )}
       </div>
       {error && (
         <p style={{ color: "red", marginBlockStart: 0 }}>{error.error}</p>
@@ -58,12 +69,13 @@ const RenderNode = (props: RenderNodeProps) => {
   );
 };
 
-const SelectNodeByKind = ({ node, onChange }) => {
+const SelectNodeByKind = ({ node, onChange, editable }) => {
   return (
     <CommonSelect
       value={mapNodeKindToSelectOption(node)}
       options={SELECT_OPTIONS}
       onChange={onChange}
+      isDisabled={!editable}
     />
   );
 };

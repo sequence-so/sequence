@@ -25,4 +25,5 @@ export interface CreateAudience {
 export interface CreateAudienceVariables {
   name: string;
   node: string;
+  localTo?: string | null;
 }

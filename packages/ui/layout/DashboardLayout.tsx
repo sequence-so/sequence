@@ -6,9 +6,14 @@ import classNames from "classnames";
 import { createGlobalState } from "react-hooks-global-state";
 import { useRouter } from "next/router";
 import { SIDEBAR_LIST } from "constants/page";
+import { defaultProp } from "services/defaultProp";
+import { useWindowDimensions } from "hooks/useWindowDimensions";
+
 interface Props {
   children: React.ReactElement;
   index: number;
+  fullBleed?: boolean;
+  navbar?: boolean;
 }
 
 const initialState = { navigationIndex: 0, isSidebarOpen: true };
@@ -18,19 +23,30 @@ const getSidebarIndex = (pathname: string) => {
   return SIDEBAR_LIST.findIndex((elem) => elem.route.indexOf(pathname) > -1);
 };
 
+export const DashboardContext = React.createContext({ contentPaneHeight: -1 });
+
 const DashboardLayout = (props: Props) => {
   const [index, setIndex] = useGlobalState("navigationIndex");
+  const { width, height } = useWindowDimensions();
   const [isSidebarOpen, setSidebarOpen] = useGlobalState("isSidebarOpen");
   const router = useRouter();
   const contentPaneRef = useRef<HTMLDivElement | null>(null);
-  const [contentPaneWidth, setContentPaneWidth] = useState(0);
+  const [contentPaneWidth, setContentPaneWidth] = useState(-1);
+  const fullBleed = defaultProp(props.fullBleed, false);
+  const navbar = defaultProp(props.navbar, true);
+  const [contentPaneHeight, setContentPaneHeight] = useState(-1);
 
   // if sidebar minimized/maximize, update content pane width
   useEffect(() => {
     if (contentPaneRef.current?.clientWidth) {
       setContentPaneWidth(contentPaneRef.current?.clientWidth);
     }
+    setContentPaneHeight;
   }, [isSidebarOpen]);
+
+  useEffect(() => {
+    setContentPaneHeight(height - 71);
+  }, [height]);
 
   // once we get a ref for the content pane, update content pane width
   useEffect(() => {
@@ -59,13 +75,13 @@ const DashboardLayout = (props: Props) => {
             }}
           />
           <div className={styles.container}>
-            <Navbar />
+            {navbar && <Navbar />}
             <div
               className={styles.container_content}
               style={{
-                paddingLeft: 40,
-                paddingRight: 40,
-                paddingBottom: 40,
+                paddingLeft: !fullBleed ? 40 : 0,
+                paddingRight: !fullBleed ? 40 : 0,
+                paddingBottom: !fullBleed ? 40 : 0,
                 width: "100%",
                 height: "auto",
               }}
@@ -73,7 +89,9 @@ const DashboardLayout = (props: Props) => {
                 contentPaneRef.current = ref;
               }}
             >
-              {props.children}
+              <DashboardContext.Provider value={{ contentPaneHeight }}>
+                {props.children}
+              </DashboardContext.Provider>
             </div>
           </div>
         </div>

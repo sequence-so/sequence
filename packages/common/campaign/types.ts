@@ -1,6 +1,9 @@
+import { Condition } from "filters";
+import { Edge } from "./nodes";
 import AbstractCampaignNode from "./nodes/abstractCampaignNode";
 
 type CampaignNodeID = string;
+type CampaignNodeEdgeId = string;
 
 export enum CampaignNodeKind {
   Trigger = "Trigger",
@@ -22,9 +25,34 @@ export enum CampaignEmailScheduling {
   SpecificTime = "SpecificTime",
 }
 
-export enum EdgeType {
-  DEFAULT = 0,
-  TIMEOUT = 1,
+export enum EdgeKind {
+  Default = "Default",
+  Timeout = "Timeout",
 }
 
-export type CampaignGraphEdges = Record<CampaignNodeID, AbstractCampaignNode>;
+export enum WaitType {
+  Relative = "Relative",
+  Specific = "Specific",
+}
+
+export type WaitValueType = WaitValueRelativeDuration | WaitValueSpecificTime;
+
+export interface WaitValueRelativeDuration {
+  kind: WaitType.Relative;
+  days?: number;
+  hours?: number;
+  minutes?: number;
+}
+
+export interface WaitValueSpecificTime {
+  kind: WaitType.Specific;
+  hour: number;
+  minute: number;
+}
+
+export type CustomEdge = {
+  edgeKind: EdgeKind;
+  node: AbstractCampaignNode;
+};
+
+export type CampaignGraphEdges = Record<CampaignNodeEdgeId, Edge>;

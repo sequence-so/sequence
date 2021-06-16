@@ -19,9 +19,17 @@
     "rootDir": ".",
     "composite": true,
     "strict": true,
-    "noEmit": false
+    "noEmit": false,
+    "baseUrl": ".",
+    "paths": {
+      "filters": ["./filters"],
+      "filters/*": ["./filters/*"],
+      "campaign": ["./campaign"],
+      "campaign/*": ["./campaign/*"]
+    },
+    "plugins": [{ "transform": "transformer-module" }]
   },
-  "include": ["./filters", "./node_modules/@types"],
+  "include": ["./filters", "./campaign", "./node_modules/@types"],
   "exclude": [
     "node_modules",
     "./node_modules",

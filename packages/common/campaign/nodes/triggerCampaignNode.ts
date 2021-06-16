@@ -1,4 +1,6 @@
-import { CampaignAudienceRules, CampaignNodeKind } from "../types";
+import { TriggerCampaignNodeJson } from "campaign/deserialize";
+import { Condition } from "filters";
+import { CampaignNodeKind } from "../types";
 import BaseAudienceCampaignNode from "./baseAudienceCampaignNode";
 
 /**
@@ -6,10 +8,10 @@ import BaseAudienceCampaignNode from "./baseAudienceCampaignNode";
  */
 class TriggerCampaignNode extends BaseAudienceCampaignNode {
   kind = CampaignNodeKind.Trigger;
-  #audienceRules: CampaignAudienceRules;
-  private constructor(audienceId?: string) {
+  json?: TriggerCampaignNodeJson;
+  private constructor(filter?: Condition) {
     super();
-    this.audienceId = audienceId;
+    this.filter = filter;
     Object.defineProperty(this, "kind", {
       configurable: false,
       enumerable: true,
@@ -17,15 +19,8 @@ class TriggerCampaignNode extends BaseAudienceCampaignNode {
       writable: false,
     });
   }
-  static new(audienceId?: string) {
-    return new TriggerCampaignNode(audienceId);
-  }
-  setAudienceRules(audienceRules: CampaignAudienceRules) {
-    this.#audienceRules = audienceRules;
-    return this.#audienceRules;
-  }
-  getAudienceRules() {
-    return this.#audienceRules;
+  static new(filter?: Condition) {
+    return new TriggerCampaignNode(filter);
   }
 }
 

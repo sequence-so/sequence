@@ -1,6 +1,6 @@
-const alias = require("module-alias");
+import alias from "module-alias";
 
-export const register = () => {
+export const register = (): void => {
   if (process.env.BUILD || process.env.NODE_ENV === "production") {
     alias.addAliases({
       src: "./src/",

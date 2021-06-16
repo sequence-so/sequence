@@ -1,7 +1,7 @@
 const app = require("../src/app").default;
 import SequenceHttpHandler from "../src/routes/sequence.http";
 import { v4 as uuidv4 } from "uuid";
-import SequenceWebhook from "../src/models/sequence_webhook";
+import SequenceWebhook from "../src/models/sequenceWebhook.model";
 import moment from "moment";
 import { EventPayload } from "sequence-node";
 
@@ -18,7 +18,7 @@ const eventNames = [
 ];
 
 const runTest = async () => {
-  let route = new SequenceHttpHandler(app);
+  const route = new SequenceHttpHandler(app);
   const hook = await SequenceWebhook.findOne();
 
   const createEvent = (): EventPayload => ({

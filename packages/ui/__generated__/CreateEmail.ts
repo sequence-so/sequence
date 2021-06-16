@@ -10,7 +10,16 @@
 export interface CreateEmail_createEmail {
   __typename: "Email";
   id: string;
+  name: string | null;
+  from: string | null;
+  fromName: string | null;
   bodyHtml: string | null;
+  kind: string | null;
+  subject: string | null;
+  localTo: string | null;
+  sentCount: number | null;
+  createdAt: any | null;
+  updatedAt: any | null;
 }
 
 export interface CreateEmail {
@@ -24,4 +33,5 @@ export interface CreateEmailVariables {
   subject?: string | null;
   from?: string | null;
   fromName?: string | null;
+  localTo?: string | null;
 }

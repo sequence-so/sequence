@@ -8,6 +8,13 @@ body {
   --big-box-shadow: 0px 0px 0px 1px rgba(15, 15, 15, 0.05), 0px 3px 6px rgba(15, 15, 15, 0.1), 0px 9px 24px rgba(15, 15, 15, 0.2);
   --subtle-shadow: 0px 0px 0px 1px rgb(15 15 15 / 2%), 0px 6px 16px rgb(15 15 15 / 6%);
   --border-grey: 1px solid rgba(224, 224, 224, 1);
+  --body-text: #4e4f55;
+  --primary-blue: #4E94E5;
+  --icon-blue: #4a7da7;
+  --body-text: #4E4F55;
+  --title-input-placeholder: #7d7d7d;
+  --spacing-sm: 0.125em;
+  --spacing-md: 0.5em;
 }
 
 a {
@@ -53,4 +60,105 @@ hr {
   width: 100%;
   border-style: hidden;
   border-top: 1px solid #F3F3F3;
+}
+
+.react-flow__pane {
+  /* cursor: not-allowed; */
+}
+
+.react-flow__edge-path {
+  stroke: #7E7E7E;
+  stroke-width: 2px;
+}
+
+.react-flow__handle {
+  width: 12px !important;
+  height: 12px !important;
+  border-radius: 6px !important;
+  border-color: #7E7E7E !important;
+  background: white !important;
+  border-width: 2px !important;
+  margin-left: 5px;
+}
+
+.react-flow__handle-right {
+  right: -6px !important
+}
+
+.react-flow__handle-left {
+  left: -12px !important
+}
+
+.hide_handle {
+  visibility: hidden;
+}
+
+
+.edgebutton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: #9FA1A4;
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.edgebutton:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.08);
+}
+
+.edgebutton-foreignobject body {
+  background: transparent;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 40px;
+}
+
+.grabber-hover > img:hover {
+  cursor: grab !important;
+}
+
+.smaller_icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px !important;
+}
+
+.smaller_icon > svg {
+  margin-left: 0px !important;
+}
+
+.block_row {
+  display: flex;
+  padding-left: var(--spacing-sm);
+  padding-right: var(--spacing-sm);
+}
+.block_row > * + * {
+  margin-left: var(---spacing-sm);
+}
+
+.block_button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  height: 27px;
+  color: var(--title-input-placeholder);
+}
+
+.block_button:hover {
+  cursor: var(--cursor);
+  color: var(--body-text);
+  background: #eeeeee;
+  border-radius: 4px;
 }

@@ -1,4 +1,3 @@
-import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
 import { CircularProgress } from "@material-ui/core";
 import { useRouter } from "next/router";
@@ -11,62 +10,18 @@ import DefaultViewLayout from "layout/DefaultViewLayout";
 import { useEffect, useState } from "react";
 import { PAGE_DEFAULTS } from "constants/page";
 import GQLErrorMessage from "components/GQLErrorMessage";
-
-export const GET_EMAIL_BY_ID = gql`
-  query GetEmailsById($id: ID) {
-    emails(id: $id) {
-      page
-      rows
-      nodes {
-        id
-        name
-        from
-        fromName
-        bodyHtml
-        subject
-        sentCount
-        createdAt
-        updatedAt
-        deletedAt
-      }
-    }
-  }
-`;
-
-export type EmailType = {
-  id: string;
-  name: string;
-  from: string;
-  fromName: string | null;
-  bodyHtml: string;
-  subject: string;
-  sentCount: number;
-  userId: string;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date;
-};
-
-type EmailListContentProps = {
-  emails: {
-    page: number;
-    rows: number;
-    nodes: EmailType[];
-  };
-};
+import { GET_EMAIL_BY_ID } from "components/email/EmailQueries";
+import { GetEmailsById } from "__generated__/GetEmailsById";
 
 const EmailsByIdPage = () => {
   const router = useRouter();
   const id = router.query.id;
-  const { data, loading, error } = useQuery<EmailListContentProps>(
-    GET_EMAIL_BY_ID,
-    {
-      variables: {
-        id,
-      },
-      fetchPolicy: "no-cache",
-    }
-  );
+  const { data, loading, error } = useQuery<GetEmailsById>(GET_EMAIL_BY_ID, {
+    variables: {
+      id,
+    },
+    fetchPolicy: "no-cache",
+  });
   const [title, setTitle] = useState("");
 
   const onChangeTitleText = (text: string) => {

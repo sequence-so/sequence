@@ -15,6 +15,12 @@ const theme = createMuiTheme({
         fontFamily: "IBM Plex Sans",
       },
     },
+    // @ts-ignore
+    MuiAlert: {
+      root: {
+        fontFamily: "IBM Plex Sans",
+      },
+    },
     MuiSelect: {
       select: {
         fontFamily: "IBM Plex Sans",

@@ -1,8 +1,8 @@
 import { expect } from "chai";
-import Event from "src/models/event";
-import ProductUser from "src/models/product_user";
-import SegmentWebhook from "src/models/segment_webhook";
-import User from "src/models/user";
+import Event from "src/models/event.model";
+import ProductUser from "src/models/productUser.model";
+import SegmentWebhook from "src/models/segmentWebhook.model";
+import User from "src/models/user.model";
 import SegmentProcessor from "src/services/segmentProcessor";
 import segmentWebhookSeed from "tests/seeds/segmentWebhook.seed";
 import userSeed from "tests/seeds/user.seed";

@@ -10,20 +10,24 @@ services:
     depends_on:
       - postgres
     networks:
-      - api-postgres
-      - ui-api
+      - backend
+      - frontend
   postgres:
     image: postgres
-    environment:
-      POSTGRES_USER: docker
-      POSTGRES_PASSWORD: docker
-      POSTGRES_DB: sequence
     networks:
-      - api-postgres
+      - backend
     ports:
       - "5432:5432"
     expose:
       - 5432
+  redis:
+    image: redis
+    networks:
+      - backend
+    ports:
+      - "6379:6379"
+    expose:
+      - 6379
   ui:
     build:
       context: .
@@ -32,12 +36,11 @@ services:
       - "8000:8000"
     container_name: sequence-ui
     networks:
-      - ui-api
+      - frontend
     environment:
       PORT: 8000
-      NEXT_PUBLIC_API_URL: http://0.0.0.0:3000
     expose:
       - 8000
 networks:
-  ui-api:
-  api-postgres:
+  frontend:
+  backend:

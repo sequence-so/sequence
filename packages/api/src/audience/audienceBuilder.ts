@@ -1,5 +1,4 @@
-import Event from "src/models/event";
-import ProductUser, { VALID_KEYS } from "src/models/product_user";
+import ProductUser from "../models/productUser.model";
 import {
   AbstractNode,
   AttributeFilter,
@@ -11,23 +10,36 @@ import {
   visit,
   NodeVisitor,
 } from "common/filters";
-import { comparatorToQuery } from "./comparatorToQuery";
 import AbstractComparatorNode from "common/filters/comparators/abstractComparatorNode";
 import QueryResult from "./queryResult";
+import AbstractQueryGenerator, { QueryOptions } from "./abstractQueryGenerator";
+import QueryGenerator from "./queryGenerator";
+import { FindOptions } from "sequelize/types";
+import logger from "src/utils/logger";
 
 /**
- * Execute your filter nodes through this call.
+ * AudienceBuilder takes your Filters, parses them, and converts them into
+ * a tree structure backed by SQL statements. The statements are evaluated
+ * according the Conditions provided and merged.
+ *
+ * Example:
+ *
+ * const rootNode = Condition.and(...);
+ * const builder = new AudienceBuilder(rootNode, userId)
+ * const productUsers = builder.build().execute();
  *
  */
 export class AudienceBuilder implements NodeVisitor {
   queryResult: QueryResult<ProductUser>;
   queryParents: QueryResult<ProductUser>[] = [];
+  queryGenerator: AbstractQueryGenerator;
   root: AbstractNode;
   buildCalled = false;
   userId: string;
-  constructor(node: AbstractNode, userId: string) {
+  constructor(node: AbstractNode, userId: string, queryOptions?: QueryOptions) {
     this.root = node;
     this.userId = userId;
+    this.queryGenerator = new QueryGenerator(this.userId, queryOptions);
   }
   /**
    * Visits all the nodes in your filters and constructs a query from it.
@@ -51,10 +63,12 @@ export class AudienceBuilder implements NodeVisitor {
     if (!this.buildCalled) {
       throw new Error("AudienceBuilder.build() not called");
     }
-    let queryResult = await this.queryResult.children[0].execute();
+    const queryResult = await this.queryResult.children[0].execute();
     return queryResult.result;
   }
-  addMatch(promise: Promise<ProductUser[]>) {
+  addMatch(query: FindOptions<ProductUser>) {
+    logger.info(`[AudienceBuilder:addMatch] Query: ${query}`);
+    const promise = ProductUser.findAll(query);
     const match = new QueryResult(promise);
     this.queryResult.children.push(match);
   }
@@ -68,110 +82,17 @@ export class AudienceBuilder implements NodeVisitor {
   onEndCondition(node: Condition) {
     this.queryResult = this.queryParents.pop();
   }
-  async onEventNode(node?: EventFilter) {
-    let matching: Promise<ProductUser[]>;
-    if (typeof node.performed !== "undefined") {
-      if (node.performed) {
-        matching = ProductUser.findAll({
-          where: {
-            //@ts-ignore
-            "$events.name$": comparatorToQuery(
-              node.comparator,
-              node.expected,
-              node
-            ),
-            "$events.userId$": this.userId,
-            userId: this.userId,
-          },
-          include: [
-            {
-              model: Event,
-              as: "events",
-              attributes: [],
-            },
-          ],
-          group: "ProductUser.id",
-        });
-      } else {
-        matching = ProductUser.findAll({
-          where: {
-            //@ts-ignore
-            "$events.id$": null,
-            userId: this.userId,
-          },
-          include: [
-            {
-              model: Event,
-              as: "events",
-              attributes: ["id"],
-              required: false,
-              //@ts-ignore
-              where: {
-                name: comparatorToQuery(node.comparator, node.expected, node),
-                userId: this.userId,
-              },
-            },
-          ],
-        });
-      }
-    }
-    this.addMatch(matching);
+  onEventNode(node?: EventFilter) {
+    const findQuery = this.queryGenerator.onEventNode(node);
+    this.addMatch(findQuery);
   }
   onEventAttributeNode(node: EventAttribute) {
-    this.addMatch(
-      ProductUser.findAll({
-        where: {
-          userId: this.userId,
-        },
-        include: [
-          {
-            model: Event,
-            //@ts-ignore
-            as: "events",
-            attributes: [],
-            required: true,
-            where: {
-              [`properties.${node.attribute}`]: comparatorToQuery(
-                node.comparator,
-                node.expected,
-                node
-              ),
-            },
-          },
-        ],
-        group: "ProductUser.id",
-      })
-    );
+    const findQuery = this.queryGenerator.onEventAttributeNode(node);
+    this.addMatch(findQuery);
   }
   onUserAttributeNode(node: AttributeFilter) {
-    const isValid = (VALID_KEYS as any)[node.attribute];
-    if (isValid) {
-      this.addMatch(
-        ProductUser.findAll({
-          where: {
-            [node.attribute]: comparatorToQuery(
-              node.comparator,
-              node.expected,
-              node
-            ),
-            userId: this.userId,
-          },
-        })
-      );
-    } else {
-      this.addMatch(
-        ProductUser.findAll({
-          where: {
-            [`traits.${node.attribute}`]: comparatorToQuery(
-              node.comparator,
-              node.expected,
-              node
-            ),
-            userId: this.userId,
-          },
-        })
-      );
-    }
+    const findQuery = this.queryGenerator.onUserAttributeNode(node);
+    this.addMatch(findQuery);
   }
   onEndOperand() {}
   onEmailNode(node: EmailFilter) {}

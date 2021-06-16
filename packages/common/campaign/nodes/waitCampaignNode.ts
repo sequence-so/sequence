@@ -1,3 +1,4 @@
+import { WaitCampaignNodeJson } from "campaign/deserialize";
 import { CampaignNodeKind } from "../types";
 import AbstractCampaignNode from "./abstractCampaignNode";
 
@@ -7,7 +8,8 @@ import AbstractCampaignNode from "./abstractCampaignNode";
  */
 class WaitCampaignNode extends AbstractCampaignNode {
   kind = CampaignNodeKind.Wait;
-  #days: number;
+  #days?: number;
+  json?: WaitCampaignNodeJson;
   private constructor(days?: number) {
     super();
     this.#days = days;

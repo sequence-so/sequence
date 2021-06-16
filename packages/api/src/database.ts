@@ -1,5 +1,5 @@
 import { Sequelize, SequelizeOptions } from "sequelize-typescript";
-const SequelizeConfig = require("./config/config.js");
+import SequelizeConfig from "./config/config";
 
 declare type ENVIRONMENT = "test" | "development" | "production";
 
@@ -26,7 +26,7 @@ const createSequelize = (...args: any[]) => {
   instance
     .authenticate()
     .then(() => console.log("Sequence: database connection succesful"))
-    .catch((error) => {
+    .catch(() => {
       console.log(
         `Environment variable DB_SSL=true required to connect to this database.`
       );

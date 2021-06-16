@@ -1,3 +1,4 @@
+.env*
 
 # OS Specific
 .DS_Store

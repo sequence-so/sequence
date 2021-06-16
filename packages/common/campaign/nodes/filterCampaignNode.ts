@@ -1,4 +1,6 @@
-import { CampaignNodeKind } from "../types";
+import { FilterCampaignNodeJson } from "campaign/deserialize";
+import { Condition } from "filters";
+import { CampaignNodeKind, WaitType } from "../types";
 import BaseAudienceCampaignNode from "./baseAudienceCampaignNode";
 
 /**
@@ -6,9 +8,12 @@ import BaseAudienceCampaignNode from "./baseAudienceCampaignNode";
  */
 class FilterCampaignNode extends BaseAudienceCampaignNode {
   kind = CampaignNodeKind.Filter;
-  private constructor(audienceId?: string) {
+  #waitType?: WaitType;
+  #waitValue?: number;
+  json?: FilterCampaignNodeJson;
+  private constructor(filter?: Condition) {
     super();
-    this.audienceId = audienceId;
+    this.filter = filter;
     Object.defineProperty(this, "kind", {
       configurable: false,
       enumerable: true,
@@ -16,8 +21,22 @@ class FilterCampaignNode extends BaseAudienceCampaignNode {
       writable: false,
     });
   }
-  static new(audienceId?: string) {
-    return new FilterCampaignNode(audienceId);
+  static new(filter?: Condition) {
+    return new FilterCampaignNode(filter);
+  }
+  setWaitType(waitType: WaitType) {
+    this.#waitType = waitType;
+    return this;
+  }
+  getWaitType() {
+    return this.#waitType;
+  }
+  setWaitValue(waitValue: number) {
+    this.#waitValue = waitValue;
+    return this;
+  }
+  getWaitValue() {
+    return this.#waitValue;
   }
 }
 

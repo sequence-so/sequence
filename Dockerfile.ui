@@ -22,8 +22,10 @@ COPY /packages/common /app/packages/common
 COPY --from=base /app/packages/ui/node_modules /app/packages/ui/node_modules
 COPY --from=base /app/packages/common/node_modules /app/packages/common/node_modules
 # Envs are required at build time
-ARG NEXT_PUBLIC_API_URL=http://0.0.0.0:3000/graphql
+ARG NEXT_PUBLIC_API_URL=http://0.0.0.0:3000
+ARG NEXT_PRIVATE_API_URL=http://api:3000/graphql
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV NEXT_PRIVATE_API_URL=$NEXT_PRIVATE_API_URL
 RUN yarn build && yarn install --production --ignore-scripts --prefer-offline
 
 

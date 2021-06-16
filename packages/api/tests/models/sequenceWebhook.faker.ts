@@ -1,6 +1,6 @@
 import SequenceWebook, {
   SequenceWebhookAttributes,
-} from "../../src/models/sequence_webhook";
+} from "../../src/models/sequenceWebhook.model";
 import { randomBytes } from "crypto";
 
 export default async (opts: SequenceWebhookAttributes) => {

@@ -1,7 +1,7 @@
 const isPromise = (value: any) => "then" in value;
 
 async function resolveArray<T>(array: T[]): Promise<T[]> {
-  let promises: (any | Promise<any> | Promise<any[]>)[] = [];
+  const promises: (any | Promise<any> | Promise<any[]>)[] = [];
   for (let idx = 0, len = array.length; idx < len; idx++) {
     const element = array[idx];
     if (!element) {
@@ -22,7 +22,7 @@ async function resolveArray<T>(array: T[]): Promise<T[]> {
 async function resolveObject(
   element: Record<string, any>
 ): Promise<typeof element> {
-  let result: typeof element = {};
+  const result: typeof element = {};
   const keys = Object.keys(element);
   for (let idx = 0, len = keys.length; idx < len; idx++) {
     const key: keyof typeof element = keys[idx];

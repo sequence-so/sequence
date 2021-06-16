@@ -1,5 +1,4 @@
-import { EdgeType } from "../types";
-import AbstractCampaignNode from "./abstractCampaignNode";
+import { EdgeKind } from "../types";
 import { v4 as uuidv4 } from "uuid";
 
 /**
@@ -7,25 +6,17 @@ import { v4 as uuidv4 } from "uuid";
  */
 class CampaignNodeEdge {
   #id: string;
-  #from: AbstractCampaignNode;
-  #to: AbstractCampaignNode;
-  #edgeType: EdgeType;
-  private constructor(
-    from?: AbstractCampaignNode,
-    to?: AbstractCampaignNode,
-    edgeType?: EdgeType
-  ) {
+  #fromId?: string;
+  #toId?: string;
+  #edgeKind?: EdgeKind;
+  private constructor(from?: string, to?: string, edgeKind?: EdgeKind) {
     this.#id = uuidv4();
-    this.#from = from;
-    this.#to = to;
-    this.#edgeType = edgeType;
+    this.#fromId = from;
+    this.#toId = to;
+    this.#edgeKind = edgeKind || EdgeKind.Default;
   }
-  static new(
-    from?: AbstractCampaignNode,
-    to?: AbstractCampaignNode,
-    edgeType?: EdgeType
-  ) {
-    return new CampaignNodeEdge(from, to, edgeType);
+  static new(fromId?: string, toId?: string, edgeKind?: EdgeKind) {
+    return new CampaignNodeEdge(fromId, toId, edgeKind);
   }
   getId() {
     return this.#id;
@@ -34,25 +25,25 @@ class CampaignNodeEdge {
     this.#id = value;
     return this;
   }
-  getFrom() {
-    return this.#from;
+  getFromId() {
+    return this.#fromId;
   }
-  setFrom(value: AbstractCampaignNode) {
-    this.#from = value;
+  setFromId(value: string) {
+    this.#fromId = value;
     return this;
   }
-  getTo() {
-    return this.#to;
+  getToId() {
+    return this.#toId;
   }
-  setTo(value: AbstractCampaignNode) {
-    this.#to = value;
+  setToId(value: string) {
+    this.#toId = value;
     return this;
   }
-  getEdgeType() {
-    return this.#edgeType;
+  getEdgeKind() {
+    return this.#edgeKind;
   }
-  setEdgeType(edgeType: EdgeType) {
-    this.#edgeType = edgeType;
+  setEdgeKind(edgeKind: EdgeKind) {
+    this.#edgeKind = edgeKind;
     return this;
   }
 }

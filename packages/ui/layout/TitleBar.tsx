@@ -8,6 +8,7 @@ interface Props {
   subtitle: string;
   showAction?: boolean;
   actionText?: string;
+  icon?: string | JSX.Element;
   actionDisabled?: boolean;
   // actionTooltip?: JSX.Element;
   actionUrl?: string;
@@ -24,10 +25,21 @@ const TitleBar = (props: Props) => {
     <div className={styles.title_bar_container}>
       <div className={styles.title_text}>
         {/* <p className={styles.title_back}>
-          {props.hierarchy.map(e => e.name)}
-          Emails / <span className={styles.title_back_current}>Builder</span> 
-        </p>*/}
-        <h1>{props.title}</h1>
+          {props.hierarchy.map((e) => e.name)}
+          Emails / <span className={styles.title_back_current}>Builder</span>
+        </p> */}
+        <h1>
+          {props.icon ? (
+            typeof props.icon === "string" ? (
+              <span className={styles.title_icon}>
+                <img src={props.icon} />
+              </span>
+            ) : (
+              <span className={styles.title_icon}>{props.icon}</span>
+            )
+          ) : null}
+          {props.title}
+        </h1>
         <p>{props.subtitle}</p>
       </div>
       {showAction && (

@@ -1,8 +1,6 @@
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { CircularProgress } from "@material-ui/core";
 import DashboardLayout from "layout/DashboardLayout";
-import TitleBar from "layout/TitleBar";
-import ProductUserTable from "components/UserTable";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import DynamicTitleBar from "components/DynamicTitleBar";
@@ -16,37 +14,8 @@ import GQLErrorMessage from "components/GQLErrorMessage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { PAGE_DEFAULTS } from "constants/page";
-
-const DynamicReactJson = dynamic(import("react-json-view"), { ssr: false });
-
-export const GET_BLAST = gql`
-  query GetBlast($id: ID) {
-    blasts(id: $id) {
-      page
-      rows
-      nodes {
-        id
-        name
-        sentAt
-        userId
-        emailId
-        audience {
-          productUsers {
-            id
-            firstName
-            lastName
-            email
-            createdAt
-            lastSeenAt
-          }
-        }
-        audienceId
-        createdAt
-        updatedAt
-      }
-    }
-  }
-`;
+import { GET_BLAST } from "components/blast/BlastQueries";
+import { GetBlast, GetBlastVariables } from "__generated__/GetBlast";
 
 export const columns = [
   {
@@ -88,11 +57,14 @@ export const columns = [
 
 const BlastByIdPage = () => {
   const router = useRouter();
-  const { data, loading, error } = useQuery(GET_BLAST, {
-    variables: {
-      id: router.query.id,
-    },
-  });
+  const { data, loading, error } = useQuery<GetBlast, GetBlastVariables>(
+    GET_BLAST,
+    {
+      variables: {
+        id: router.query.id as string,
+      },
+    }
+  );
   const content = loading ? (
     <CircularProgress />
   ) : error ? (
@@ -100,7 +72,7 @@ const BlastByIdPage = () => {
   ) : (
     <>
       <div className="relations">
-        <Link href={`/emails/${data.campaigns.nodes[0].emailId}`}>
+        <Link href={`/emails/${data.blasts.nodes[0].emailId}`}>
           <a>
             <div className="relation">
               <FontAwesomeIcon icon={faArrowRight}></FontAwesomeIcon>
@@ -108,7 +80,7 @@ const BlastByIdPage = () => {
             </div>
           </a>
         </Link>
-        <Link href={`/audiences/${data.campaigns.nodes[0].audienceId}`}>
+        <Link href={`/audiences/${data.blasts.nodes[0].audienceId}`}>
           <a>
             <div className="relation">
               <FontAwesomeIcon icon={faArrowRight}></FontAwesomeIcon>
@@ -118,11 +90,11 @@ const BlastByIdPage = () => {
         </Link>
       </div>
       <h4>SENT TO:</h4>
-      <ServerPaginatedTable
+      <ServerPaginatedTable<GetBlast>
         variables={{ id: router.query.id }}
         gql={GET_BLAST}
         columns={columns}
-        getRows={(data) => data.campaigns.nodes[0].audience.productUsers}
+        getRows={(data) => data.blasts.nodes[0].audience.productUsers}
       />
       <style jsx>{`
         h4 {
@@ -166,7 +138,8 @@ const BlastByIdPage = () => {
       <DefaultViewLayout>
         <>
           <DynamicTitleBar
-            title={data?.campaigns?.nodes[0].name}
+            icon={PAGE_DEFAULTS.blasts.icon}
+            title={data?.blasts?.nodes[0].name}
             onChangeTitleText={(text: string) => {}}
             subtitle={PAGE_DEFAULTS.blasts.id.subtitle}
             showAction={false}

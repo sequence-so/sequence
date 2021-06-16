@@ -1,5 +1,5 @@
 import { GraphQLContextType } from "..";
-import { UserCreationAttributes } from "src/models/user";
+import { UserCreationAttributes } from "src/models/user.model";
 
 export const updateUser = async (
   root: any,

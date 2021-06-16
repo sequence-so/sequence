@@ -1,7 +1,7 @@
-var passport = require("passport");
-var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 import AuthGoogle from "../models/auth_google";
-import User from "../models/user";
+import User from "../models/user.model";
 import Organization from "../models/organization";
 
 interface GoogleProfile {
@@ -34,7 +34,7 @@ if (process.env.ENABLE_GOOGLE_LOGIN) {
         const photo = profile.photos ? profile.photos[0].value : null;
         const email = profile.emails ? profile.emails[0].value : null;
 
-        let authGoogle = await AuthGoogle.findOne({
+        const authGoogle = await AuthGoogle.findOne({
           where: {
             googleId: profile.id,
           },

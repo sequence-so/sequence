@@ -14,7 +14,9 @@ export interface GetEmailsById_emails_nodes {
   from: string | null;
   fromName: string | null;
   bodyHtml: string | null;
+  kind: string | null;
   subject: string | null;
+  localTo: string | null;
   sentCount: number | null;
   createdAt: any | null;
   updatedAt: any | null;
@@ -34,4 +36,5 @@ export interface GetEmailsById {
 
 export interface GetEmailsByIdVariables {
   id?: string | null;
+  localTo?: string | null;
 }

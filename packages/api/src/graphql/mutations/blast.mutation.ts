@@ -1,12 +1,12 @@
 import { GraphQLContextType } from "..";
-import Blast, { BlastCreationAttributes } from "src/models/blast";
+import Blast, { BlastCreationAttributes } from "src/models/blast.model";
 import Sendgrid from "@sendgrid/mail";
 import mustache from "mustache";
 import { Condition } from "common/filters";
 import { AudienceBuilder } from "src/audience";
-import ProductUser from "src/models/product_user";
-import Audience from "src/models/audience";
-import Email from "src/models/emails";
+import ProductUser from "src/models/productUser.model";
+import Audience from "src/models/audience.model";
+import Email from "src/models/email.model";
 Sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
 
 type CreateBlastInputArgs = Omit<BlastCreationAttributes, "userId">;
@@ -36,7 +36,7 @@ export const updateBlast = async (
   args: UpdateBlastInputArgs,
   { models, user }: GraphQLContextType
 ) => {
-  let id = args.id;
+  const id = args.id;
   let blast: Blast;
 
   blast = await models.Blast.findOne({
@@ -97,7 +97,7 @@ const executeBlast = async (blast: Blast, { models }: any) => {
       .map((person) => {
         const renderedHtml = mustache.render(emailModel.bodyHtml, person);
         const renderedSubject = mustache.render(emailModel.subject, person);
-        console.log({ renderedHtml, renderedSubject });
+        // console.log({ renderedHtml, renderedSubject });
         return {
           from: "helson@sequence.so",
           html: renderedHtml,

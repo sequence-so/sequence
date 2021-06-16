@@ -1,5 +1,5 @@
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { useDidIntegrate } from "../hooks/useDidIntegrate";
+import { useDidIntegrate } from "hooks/useDidIntegrate";
 import styles from "../styles/Home.module.css";
 import IntegrationBox from "./IntegrationBox";
 

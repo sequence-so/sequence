@@ -2,7 +2,7 @@ import { deserialize, SerializedConditionNode } from "common/filters";
 import { WhereOptions } from "sequelize/types";
 import { AudienceBuilder } from "src/audience";
 import { GraphQLContextType } from "..";
-import { ProductUserAttributes } from "src/models/product_user";
+import { ProductUserAttributes } from "../../models/productUser.model";
 
 export const productUsers = async (
   root: any,

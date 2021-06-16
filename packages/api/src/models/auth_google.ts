@@ -2,7 +2,7 @@ import { InitOptions, STRING, UUID } from "sequelize";
 import { Model } from "sequelize-typescript";
 import sequelize from "../database";
 import { v4 as uuidv4 } from "uuid";
-import User from "./user";
+import User from "./user.model";
 
 const config: InitOptions = {
   tableName: "auth_googles",

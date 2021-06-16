@@ -1,10 +1,13 @@
-import { FindOptions } from "sequelize/types";
-import { EmailAttributes } from "src/models/emails";
 import { GraphQLContextType } from "..";
 
 export const emails = async (
   root: any,
-  { id, page, limit }: { id: string; page: number; limit: number },
+  {
+    id,
+    page,
+    limit,
+    localTo,
+  }: { id: string; localTo: string; page: number; limit: number },
   { models, user }: GraphQLContextType
 ) => {
   page = page || 0;
@@ -16,7 +19,13 @@ export const emails = async (
   if (id) {
     whereQuery.id = id;
   }
-  const events = await models.Email.findAll({
+  if (localTo) {
+    whereQuery.localTo = localTo;
+  } else {
+    whereQuery.localTo = null;
+  }
+
+  const emails = await models.Email.findAll({
     where: whereQuery,
     limit,
     offset: page * limit,
@@ -29,7 +38,7 @@ export const emails = async (
   });
 
   return {
-    nodes: events,
+    nodes: emails,
     page,
     rows: count,
   };

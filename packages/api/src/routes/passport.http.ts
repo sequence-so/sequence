@@ -5,7 +5,7 @@ require("../auth/google");
 require("../auth/jwt");
 require("../auth/email");
 import JwtConfig from "../config/jwt";
-import User from "src/models/user";
+import User from "src/models/user.model";
 
 interface SignupBody {
   email: string;

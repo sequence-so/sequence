@@ -43,7 +43,7 @@ module.exports = {
       campaignNodeStateId: {
         type: Sequelize.UUID,
         references: {
-          model: "campaign_node_state",
+          model: "campaign_node_states",
           key: "id",
         },
         allowNull: false,

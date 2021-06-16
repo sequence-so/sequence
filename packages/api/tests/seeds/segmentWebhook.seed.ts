@@ -1,12 +1,12 @@
 import faker from "faker";
 import SegmentWebhook, {
   SegmentWebhookCreationAttributes,
-} from "src/models/segment_webhook";
+} from "../../src/models/segmentWebhook.model";
 
 export const build = (
   opts?: Partial<SegmentWebhookCreationAttributes>
 ): SegmentWebhookCreationAttributes => {
-  let token = opts?.token || faker.random.alphaNumeric(20);
+  const token = opts?.token || faker.random.alphaNumeric(20);
 
   return {
     ...opts,

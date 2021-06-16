@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { Condition } from "common/filters";
+import { Condition, EventFilter } from "common/filters";
 import {
   Campaign as CampaignNode,
   CampaignAudienceRules,
@@ -9,11 +9,12 @@ import {
 
 describe("Campaign Nodes", () => {
   it("should create an AudienceCampaignNode", () => {
-    const emptyCondition = Condition.and([]);
-    const node = CampaignNode.Audience.new("my-audienceId")
+    const emptyCondition = Condition.and();
+    const node = CampaignNode.Audience.new()
       .setAudienceRules(CampaignAudienceRules.Existing)
       .setFilter(emptyCondition)
       .setId("123")
+      .setAudienceId("my-audienceId")
       .setAudienceName("My Audience Name");
 
     expect(node.kind).to.eq(CampaignNodeKind.Audience);
@@ -25,12 +26,14 @@ describe("Campaign Nodes", () => {
   });
 
   it("should create an FilterCampaignNode", () => {
-    const node = CampaignNode.Filter.new("my-audienceId");
+    const node = CampaignNode.Filter.new().setAudienceId("my-audienceId");
     expect(node.kind).to.eq(CampaignNodeKind.Filter);
   });
 
   it("should create an TriggerCampaignNode", () => {
-    const node = CampaignNode.Trigger.new("my-audienceId");
+    const node = CampaignNode.Trigger.new(
+      Condition.and(EventFilter.new("Alert Fired").hasBeenPerformed())
+    );
     node.setAudienceRules(CampaignAudienceRules.Both);
     expect(node.kind).to.eq(CampaignNodeKind.Trigger);
     expect(node.getAudienceRules()).to.eq(CampaignAudienceRules.Both);

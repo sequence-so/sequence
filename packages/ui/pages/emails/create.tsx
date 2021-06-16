@@ -24,10 +24,6 @@ export type EmailType = {
   deletedAt: Date;
 };
 
-type EmailListContentProps = {
-  emails: EmailType[];
-};
-
 const CreateEmailPage = () => {
   const router = useRouter();
   const id = router.query.id;

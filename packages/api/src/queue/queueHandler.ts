@@ -1,7 +1,8 @@
-import BeeQueue from "bee-queue";
+import QueueJob from "./queueJob";
 
-abstract class QueueHandler {
-  abstract process(job: BeeQueue.Job<any>): Promise<void>;
+abstract class QueueHandler<T extends QueueJob> {
+  name: string;
+  abstract process(job: T): Promise<any>;
 }
 
 export default QueueHandler;
