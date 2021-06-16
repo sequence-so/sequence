@@ -7,12 +7,12 @@ import Email from "./emails";
 import Audience from "./audience";
 
 const config: InitOptions = {
-  tableName: "campaigns",
+  tableName: "blasts",
   sequelize,
   paranoid: true,
 };
 
-export interface CampaignAttributes {
+export interface BlastAttributes {
   id: string;
   name: string;
   sentAt: Date;
@@ -23,10 +23,10 @@ export interface CampaignAttributes {
   updatedAt: Date;
 }
 
-export interface CampaignCreationAttributes
-  extends Omit<CampaignAttributes, "createdAt" | "updatedAt" | "id"> {}
+export interface BlastCreationAttributes
+  extends Omit<BlastAttributes, "createdAt" | "updatedAt" | "id"> {}
 
-class Campaign extends Model<CampaignAttributes, CampaignCreationAttributes> {
+class Blast extends Model<BlastAttributes, BlastCreationAttributes> {
   public id!: string;
   public name: string;
   public sentAt: Date;
@@ -37,7 +37,7 @@ class Campaign extends Model<CampaignAttributes, CampaignCreationAttributes> {
   public readonly updatedAt!: Date;
 }
 
-Campaign.init(
+Blast.init(
   {
     id: {
       primaryKey: true,
@@ -85,16 +85,16 @@ Campaign.init(
   config
 );
 
-Campaign.belongsTo(User, {
+Blast.belongsTo(User, {
   as: "user",
 });
 
-Campaign.belongsTo(Email, {
+Blast.belongsTo(Email, {
   as: "email",
 });
 
-Campaign.belongsTo(Audience, {
+Blast.belongsTo(Audience, {
   as: "audience",
 });
 
-export default Campaign;
+export default Blast;

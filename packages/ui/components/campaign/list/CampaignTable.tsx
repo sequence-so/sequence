@@ -4,9 +4,9 @@ import { useRouter } from "next/router";
 import { GridRowParams } from "@material-ui/data-grid";
 import ServerPaginatedTable from "components/ServerPaginatedTable";
 
-const GET_CAMPAIGNS = gql`
-  query GetCampaigns {
-    campaigns {
+const GET_BLASTS = gql`
+  query GetBlasts {
+    blasts {
       page
       rows
       nodes {
@@ -69,7 +69,7 @@ const BlastsTable = () => {
 
   return (
     <ServerPaginatedTable
-      gql={GET_CAMPAIGNS}
+      gql={GET_BLASTS}
       getRows={(data) => data.campaigns.nodes}
       onRowClick={onClick}
       columns={columns}

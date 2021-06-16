@@ -1,48 +1,28 @@
 import { GraphQLScalarType, Kind } from "graphql";
 import { GraphQLJSONObject } from "graphql-type-json";
 import { isNull } from "lodash";
-import * as AudienceResolvers from "./resolvers/audience.resolver";
-import * as CampaignResolvers from "./resolvers/campaign.resolver";
-import * as CustomPropertyResolvers from "./resolvers/customProperty.resolver";
-import * as EmailResolvers from "./resolvers/email.resolver";
-import * as EventResolvers from "./resolvers/event.resolver";
-import * as IntercomResolvers from "./resolvers/intercom.resolver";
-import * as ProductUserResolvers from "./resolvers/productUser.resolver";
-import * as SegmentResolvers from "./resolvers/segment.resolver";
-import * as UserResolvers from "./resolvers/user.resolver";
-
-import * as AudienceMutations from "./mutations/audience.mutation";
-import * as CampaignMutations from "./mutations/campaign.mutation";
-import * as EmailMutations from "./mutations/email.mutation";
-import * as IntercomMutations from "./mutations/intercom.mutation";
-import * as SegmentMutations from "./mutations/segment.mutation";
-import * as WebhookMutations from "./mutations/webhook.mutation";
-import * as UserMutations from "./mutations/user.mutation";
 import { GraphQLContextType } from ".";
 import Audience from "src/models/audience";
 import ProductUser from "src/models/product_user";
+import { readFilesSync } from "src/utils/readFilesSync";
+import path from "path";
+
+const readFromDirectory = (pathname: string) => {
+  let cache = {};
+  const resolverFiles = readFilesSync(path.join(__dirname, pathname));
+  resolverFiles.map((elem) => {
+    const module = require(elem.filepath);
+    cache = { ...module, ...cache };
+  });
+  return cache;
+};
+
+const getQueries = () => readFromDirectory("resolvers");
+const getMutations = () => readFromDirectory("mutations");
 
 const resolvers = {
-  Query: {
-    ...AudienceResolvers,
-    ...CampaignResolvers,
-    ...CustomPropertyResolvers,
-    ...EmailResolvers,
-    ...EventResolvers,
-    ...IntercomResolvers,
-    ...ProductUserResolvers,
-    ...SegmentResolvers,
-    ...UserResolvers,
-  },
-  Mutation: {
-    ...AudienceMutations,
-    ...CampaignMutations,
-    ...EmailMutations,
-    ...IntercomMutations,
-    ...SegmentMutations,
-    ...WebhookMutations,
-    ...UserMutations,
-  },
+  Query: getQueries(),
+  Mutation: getMutations(),
   JSONObject: GraphQLJSONObject,
   Date: new GraphQLScalarType({
     name: "Date",

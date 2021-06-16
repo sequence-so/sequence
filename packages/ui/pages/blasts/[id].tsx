@@ -19,9 +19,9 @@ import { PAGE_DEFAULTS } from "constants/page";
 
 const DynamicReactJson = dynamic(import("react-json-view"), { ssr: false });
 
-export const GET_CAMPAIGN = gql`
-  query GetCampaign($id: ID) {
-    campaigns(id: $id) {
+export const GET_BLAST = gql`
+  query GetBlast($id: ID) {
+    blasts(id: $id) {
       page
       rows
       nodes {
@@ -88,7 +88,7 @@ export const columns = [
 
 const BlastByIdPage = () => {
   const router = useRouter();
-  const { data, loading, error } = useQuery(GET_CAMPAIGN, {
+  const { data, loading, error } = useQuery(GET_BLAST, {
     variables: {
       id: router.query.id,
     },
@@ -120,7 +120,7 @@ const BlastByIdPage = () => {
       <h4>SENT TO:</h4>
       <ServerPaginatedTable
         variables={{ id: router.query.id }}
-        gql={GET_CAMPAIGN}
+        gql={GET_BLAST}
         columns={columns}
         getRows={(data) => data.campaigns.nodes[0].audience.productUsers}
       />

@@ -12,8 +12,8 @@ import { useEffect, useState } from "react";
 import { PAGE_DEFAULTS } from "constants/page";
 import GQLErrorMessage from "components/GQLErrorMessage";
 
-const GET_EMAIL_BY_ID = gql`
-  query GetEmails($id: ID) {
+export const GET_EMAIL_BY_ID = gql`
+  query GetEmailsById($id: ID) {
     emails(id: $id) {
       page
       rows

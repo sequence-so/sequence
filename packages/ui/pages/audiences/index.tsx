@@ -4,12 +4,7 @@ import TitleBar from "layout/TitleBar";
 import AudienceTable from "components/audience/list/AudienceTable";
 import DefaultViewLayout from "layout/DefaultViewLayout";
 import { PAGE_DEFAULTS } from "constants/page";
-
-export const GET_UNIQUE_EVENTS = gql`
-  query UniqueEvents {
-    uniqueEventNames
-  }
-`;
+import { GET_UNIQUE_EVENTS } from "./create";
 
 const AudiencesListContent = () => {
   return (

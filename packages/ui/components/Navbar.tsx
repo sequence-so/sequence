@@ -25,17 +25,6 @@ const iconStyle: React.CSSProperties = {
   marginRight: 8,
   color: "#4E4F55",
 };
-const GET_USER = gql`
-  {
-    getUser {
-      id
-      firstName
-      lastName
-      email
-      photo
-    }
-  }
-`;
 
 const useStyles = makeStyles((theme) => ({
   root: {

@@ -1,7 +1,7 @@
 import Audience from "./audience";
 import AudienceProductUser from "./audience_product_user";
 import AuthIntercom from "./auth_intercom";
-import Campaign from "./campaigns";
+import Blast from "./blasts";
 import CustomProperty from "./custom_property";
 import Email from "./emails";
 import Event from "./event";
@@ -15,7 +15,7 @@ export default {
   Audience,
   AudienceProductUser,
   AuthIntercom,
-  Campaign,
+  Blast,
   CustomProperty,
   Email,
   Event,

@@ -1,6 +1,6 @@
 import { GraphQLContextType } from "..";
 
-export const campaigns = async (
+export const blasts = async (
   root: any,
   {
     id,
@@ -18,7 +18,7 @@ export const campaigns = async (
   if (id) {
     whereQuery.id = id;
   }
-  const events = await models.Campaign.findAll({
+  const events = await models.Blast.findAll({
     where: whereQuery,
     limit,
     offset: page * limit,
@@ -26,7 +26,7 @@ export const campaigns = async (
     include: ["audience", "email"],
   });
 
-  const count = await models.Campaign.count({
+  const count = await models.Blast.count({
     where: whereQuery,
   });
 

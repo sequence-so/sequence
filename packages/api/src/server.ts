@@ -1,10 +1,14 @@
-import app from "./app";
+import App from "./app";
 
-app.get("/", (req, res) => res.json({ success: true }));
+let app = new App();
 
-const server = app.listen(process.env.PORT, () =>
-  console.log(`Sequence API listening on port ${process.env.PORT}`)
-);
+app.getExpressApplication().get("/", (req, res) => res.json({ success: true }));
+
+const server = app
+  .getExpressApplication()
+  .listen(process.env.PORT, () =>
+    console.log(`Sequence API listening on port ${process.env.PORT}`)
+  );
 
 function exitHandler(options: any, exitCode: number) {
   if (options.cleanup) {

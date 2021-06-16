@@ -27,6 +27,7 @@ class App {
     this.configureExpress();
     this.bootRoutes();
     this.bootCron();
+    this.bootApolloServer();
   }
   /**
    * Formats the error returned via the API
@@ -36,7 +37,7 @@ class App {
   graphQLErrorFormatter(
     error: GraphQLError
   ): GraphQLFormattedError<Record<string, any>> {
-    logger.error("Error occured processing request:", error);
+    logger.error("[App] Error occured processing GraphQL request:", error);
     return {
       message: error.message,
       // code: err.originalError && err.originalError.code,
@@ -48,6 +49,8 @@ class App {
     this.apolloServer = new ApolloServer({
       typeDefs: schema,
       resolvers: resolvers,
+      debug: true,
+      introspection: true,
       context: ({ req }) => {
         const token = req.headers.authorization;
         const result = jwt.verify(token, JwtConfig.jwt.secret);

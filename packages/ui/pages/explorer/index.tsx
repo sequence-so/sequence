@@ -42,7 +42,7 @@ export const GET_PRODUCT_USERS = gql`
 `;
 
 export const GET_PRODUCT_USER = gql`
-  query GetProductUsers($id: String) {
+  query GetProductUser($id: String) {
     productUsers(id: $id) {
       nodes {
         id

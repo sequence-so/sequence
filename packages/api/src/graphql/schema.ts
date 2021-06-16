@@ -21,7 +21,7 @@ const typeDefs = gql`
     createdAt: Date
     updatedAt: Date
   }
-  type Campaign {
+  type Blast {
     id: ID!
     name: String
     sentAt: Date
@@ -77,8 +77,8 @@ const typeDefs = gql`
     page: Int
     rows: Int
   }
-  type PaginatedCampaign {
-    nodes: [Campaign]
+  type PaginatedBlast {
+    nodes: [Blast]
     page: Int
     rows: Int
   }
@@ -151,7 +151,7 @@ const typeDefs = gql`
   }
   type Query {
     audiences(id: ID, page: Int, limit: Int): PaginatedAudience
-    campaigns(id: ID, page: Int, limit: Int): PaginatedCampaign
+    blasts(id: ID, page: Int, limit: Int): PaginatedBlast
     customProperties: [CustomProperty]
     emails(id: ID, page: Int, limit: Int): PaginatedEmails
     events(id: ID, page: Int, limit: Int, personId: ID): PaginatedEvent
@@ -164,7 +164,7 @@ const typeDefs = gql`
   }
   type Mutation {
     createAudience(name: String!, node: String!): Audience
-    createCampaign(name: String, emailId: ID, audienceId: ID): Campaign
+    createBlast(name: String, emailId: ID, audienceId: ID): Blast
     createEmail(
       name: String
       bodyHtml: String
@@ -179,7 +179,7 @@ const typeDefs = gql`
     executeAudience(audience: String): PaginatedProductUser
     saveIntercomCode(code: String!): AuthIntercom
     updateAudience(id: ID!, name: String, node: String): Audience
-    updateCampaign(name: String, emailId: ID, audienceId: ID): Campaign
+    updateBlast(name: String, emailId: ID, audienceId: ID): Blast
     updateEmail(
       id: ID!
       name: String

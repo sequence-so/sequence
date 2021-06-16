@@ -28,9 +28,9 @@ export interface CampaignType {
   updatedAt: Date;
 }
 
-const CREATE_CAMPAIGN = gql`
-  mutation CreateCampaign($name: String, $emailId: ID, $audienceId: ID) {
-    createCampaign(name: $name, emailId: $emailId, audienceId: $audienceId) {
+const CREATE_BLAST = gql`
+  mutation CreateBlast($name: String, $emailId: ID, $audienceId: ID) {
+    createBlast(name: $name, emailId: $emailId, audienceId: $audienceId) {
       id
       name
       sentAt
@@ -56,7 +56,7 @@ const CampaignBuilderContent = (props: CampaignBuilderContentProps) => {
   const [audience, setAudience] = useState<Audience>();
   const [email, setEmail] = useState<EmailType>();
   const router = useRouter();
-  const [createCampaign] = useMutation<CreateCampaignQuery>(CREATE_CAMPAIGN, {
+  const [createCampaign] = useMutation<CreateCampaignQuery>(CREATE_BLAST, {
     onCompleted(data) {
       setTimeout(() => {
         router.push(`/blasts/${data.createCampaign.id}`);

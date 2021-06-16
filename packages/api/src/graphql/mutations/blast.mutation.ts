@@ -1,5 +1,5 @@
 import { GraphQLContextType } from "..";
-import Campaign, { CampaignCreationAttributes } from "src/models/campaigns";
+import Blast, { BlastCreationAttributes } from "src/models/blasts";
 import Sendgrid from "@sendgrid/mail";
 import mustache from "mustache";
 import { Condition } from "common/filters";
@@ -9,54 +9,54 @@ import Audience from "src/models/audience";
 import Email from "src/models/emails";
 Sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
 
-type CreateCampaignInputArgs = Omit<CampaignCreationAttributes, "userId">;
+type CreateBlastInputArgs = Omit<BlastCreationAttributes, "userId">;
 
-type UpdateCampaignInputArgs = CreateCampaignInputArgs & {
+type UpdateBlastInputArgs = CreateBlastInputArgs & {
   id: string;
 };
 
-export const createCampaign = async (
+export const createBlast = async (
   root: any,
-  { name, audienceId, emailId, sentAt }: CreateCampaignInputArgs,
+  { name, audienceId, emailId, sentAt }: CreateBlastInputArgs,
   { models, user }: GraphQLContextType
 ) => {
-  const campaign: Campaign = await models.Campaign.create({
+  const blast = await models.Blast.create({
     userId: user.id,
     name,
     audienceId,
     emailId,
     sentAt,
   });
-  executeCampaign(campaign, { models, user });
-  return campaign;
+  executeBlast(blast, { models, user });
+  return blast;
 };
 
-export const updateCampaign = async (
+export const updateBlast = async (
   root: any,
-  args: UpdateCampaignInputArgs,
+  args: UpdateBlastInputArgs,
   { models, user }: GraphQLContextType
 ) => {
   let id = args.id;
-  let campaign: Campaign;
+  let blast: Blast;
 
-  campaign = await models.Campaign.findOne({
+  blast = await models.Blast.findOne({
     where: {
       userId: user.id,
       id,
     },
   });
 
-  if (!campaign) {
-    throw new Error("No campaign found");
+  if (!blast) {
+    throw new Error("No blast found");
   }
 
   const updateArgs = { ...args };
   delete updateArgs.id;
-  campaign = await campaign.update(updateArgs);
-  return campaign;
+  blast = await blast.update(updateArgs);
+  return blast;
 };
 
-const executeCampaign = async (campaign: Campaign, { models }: any) => {
+const executeBlast = async (blast: Blast, { models }: any) => {
   let parsedAudience: object;
   let rootNode: Condition;
   let builder: AudienceBuilder;
@@ -67,7 +67,7 @@ const executeCampaign = async (campaign: Campaign, { models }: any) => {
 
   audience = await models.Audience.findOne({
     where: {
-      id: campaign.audienceId,
+      id: blast.audienceId,
     },
     include: ["productUsers"],
   });
@@ -76,7 +76,7 @@ const executeCampaign = async (campaign: Campaign, { models }: any) => {
   }
   const audienceProductUsers = await models.AudienceProductUser.findAll({
     where: {
-      audienceId: campaign.audienceId,
+      audienceId: blast.audienceId,
     },
     include: ["productUser"],
   });
@@ -88,7 +88,7 @@ const executeCampaign = async (campaign: Campaign, { models }: any) => {
   emailModel = await models.Email.findOne({
     where: {
       userId: audience.userId,
-      id: campaign.emailId,
+      id: blast.emailId,
     },
   });
 
@@ -107,7 +107,7 @@ const executeCampaign = async (campaign: Campaign, { models }: any) => {
       })
       .map((payload) => Sendgrid.send(payload));
     await Promise.all(sendEmailPromises);
-    await campaign.update({
+    await blast.update({
       sentAt: new Date(),
     });
   } catch (error) {
