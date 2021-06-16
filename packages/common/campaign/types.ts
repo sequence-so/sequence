@@ -22,4 +22,9 @@ export enum CampaignEmailScheduling {
   SpecificTime = "SpecificTime",
 }
 
+export enum EdgeType {
+  DEFAULT = 0,
+  TIMEOUT = 1,
+}
+
 export type CampaignGraphEdges = Record<CampaignNodeID, AbstractCampaignNode>;

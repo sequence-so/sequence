@@ -13,12 +13,6 @@ abstract class BaseAudienceCampaignNode extends AbstractCampaignNode {
   constructor(audienceId?: string) {
     super();
     this.audienceId = audienceId;
-    Object.defineProperty(this, "kind", {
-      configurable: false,
-      enumerable: true,
-      value: this.kind,
-      writable: false,
-    });
   }
   setAudienceId(audienceId: string) {
     this.audienceId = audienceId;

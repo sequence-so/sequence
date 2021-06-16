@@ -22,7 +22,7 @@ class AudienceCampaignNode extends BaseAudienceCampaignNode {
   }
   setAudienceRules(audienceRules: CampaignAudienceRules) {
     this.#audienceRules = audienceRules;
-    return this.#audienceRules;
+    return this;
   }
   getAudienceRules() {
     return this.#audienceRules;
