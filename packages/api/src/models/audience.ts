@@ -25,6 +25,7 @@ export interface AudienceAttributes {
   name: string;
   node: string;
   count: number;
+  localTo: string | null;
   userId: string;
   executedAt: Date;
   createdAt: Date;
@@ -34,7 +35,13 @@ export interface AudienceAttributes {
 export interface AudienceCreationAttributes
   extends Optional<
     AudienceAttributes,
-    "id" | "node" | "count" | "createdAt" | "updatedAt" | "executedAt"
+    | "id"
+    | "node"
+    | "count"
+    | "localTo"
+    | "createdAt"
+    | "updatedAt"
+    | "executedAt"
   > {}
 
 class Audience extends Model<AudienceAttributes, AudienceCreationAttributes> {
@@ -42,6 +49,7 @@ class Audience extends Model<AudienceAttributes, AudienceCreationAttributes> {
   public name: string;
   public node: string;
   public count: number;
+  public localTo: string;
   public userId: string;
   public executedAt: Date;
   public readonly createdAt!: Date;
@@ -69,6 +77,7 @@ Audience.init(
     count: {
       type: INTEGER,
     },
+    localTo: STRING,
     userId: {
       type: UUID,
       references: {

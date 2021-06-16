@@ -1,5 +1,5 @@
 import { GraphQLContextType } from "..";
-import Blast, { BlastCreationAttributes } from "src/models/blasts";
+import Blast, { BlastCreationAttributes } from "src/models/blast";
 import Sendgrid from "@sendgrid/mail";
 import mustache from "mustache";
 import { Condition } from "common/filters";

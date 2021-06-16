@@ -1,7 +1,7 @@
 "use strict";
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("campaign_node_edge", {
+    await queryInterface.createTable("campaign_node_edges", {
       id: {
         primaryKey: true,
         allowNull: false,

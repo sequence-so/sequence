@@ -18,6 +18,7 @@ export interface EmailAttributes {
   bodyHtml: string;
   subject: string;
   sentCount: number;
+  localTo: string | null;
   userId: string;
   createdAt: Date;
   updatedAt: Date;
@@ -27,7 +28,13 @@ export interface EmailAttributes {
 export interface EmailCreationAttributes
   extends Optional<
     EmailAttributes,
-    "id" | "fromName" | "sentCount" | "createdAt" | "updatedAt" | "deletedAt"
+    | "id"
+    | "fromName"
+    | "sentCount"
+    | "localTo"
+    | "createdAt"
+    | "updatedAt"
+    | "deletedAt"
   > {}
 
 class Email extends Model<EmailAttributes, EmailCreationAttributes> {
@@ -37,6 +44,7 @@ class Email extends Model<EmailAttributes, EmailCreationAttributes> {
   public fromName: string | null;
   public bodyHtml: string;
   public subject: string;
+  public localTo: string;
   public sentCount: number;
   public userId: string;
   public deletedAt: Date;
@@ -68,6 +76,7 @@ Email.init(
     subject: {
       type: Sequelize.STRING,
     },
+    localTo: Sequelize.STRING,
     sentCount: Sequelize.NUMBER,
     userId: {
       type: Sequelize.UUID,

@@ -24,6 +24,14 @@ module.exports = {
       timeoutAfter: {
         type: Sequelize.INTEGER,
       },
+      campaignId: {
+        type: Sequelize.UUID,
+        references: {
+          model: "campaigns",
+          key: "id",
+        },
+        allowNull: false,
+      },
       userId: {
         type: Sequelize.UUID,
         references: {
