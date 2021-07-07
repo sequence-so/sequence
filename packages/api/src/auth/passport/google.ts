@@ -1,8 +1,8 @@
-const passport = require("passport");
+import passport from "passport";
 const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
-import AuthGoogle from "../models/auth_google";
-import User from "../models/user.model";
-import Organization from "../models/organization";
+import AuthGoogle from "src/models/auth_google";
+import User from "src/models/user.model";
+import Organization from "src/models/organization";
 
 interface GoogleProfile {
   id: string;

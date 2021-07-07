@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`jwt authentication should accept a JWT 1`] = `
+Object {
+  "data": Object {
+    "getUser": Object {
+      "firstName": "Test",
+      "lastName": "User",
+    },
+  },
+}
+`;
+
+exports[`jwt authentication should reject bad token provided 1`] = `
+[HttpQueryError: {"errors":[{"message":"Context creation failed: You are not authorized to perform this request.","errors":null}]}
+]
+`;
+
+exports[`jwt authentication should reject no token provided 1`] = `
+[HttpQueryError: {"errors":[{"message":"Context creation failed: Authentication not supported","errors":null}]}
+]
+`;

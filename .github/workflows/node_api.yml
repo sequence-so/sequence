@@ -6,6 +6,8 @@ env:
   DB_TEST_USERNAME: postgres
   DB_TEST_PASSWORD: postgres
   DB_TEST_DATABASE: sequence_test
+  JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+  JWT_AUDIENCE: ${{ secrets.JWT_AUDIENCE }}
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -69,6 +71,9 @@ jobs:
       - name: Run API Tests
         working-directory: ./packages/api
         run: yarn migrate && yarn test
+        env:
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          JWT_AUDIENCE: ${{ secrets.JWT_AUDIENCE }}
   push-image:
     needs: build-and-test
     runs-on: ubuntu-latest
