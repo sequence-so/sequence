@@ -10,6 +10,7 @@ export const GET_EVENTS = gql`
         source
         personId
         properties
+        timestamp
         productUser {
           firstName
           lastName

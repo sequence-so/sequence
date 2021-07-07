@@ -73,7 +73,7 @@ export const EVENTS_TABLE_COLUMNS = [
     type: "string",
     width: 180,
     valueGetter: (params) =>
-      moment(params.row.createdAt).format("MMMM DD, YYYY"),
+      moment(params.row.timestamp).format("MMMM DD, YYYY"),
   },
 ];
 

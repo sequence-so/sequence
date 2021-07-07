@@ -3,6 +3,9 @@ TAG=$(git log --pretty=format:'%h' -n 1)
 APP=$HEROKU_APP
 PROCESS_TYPE="web"
 
+echo "Pushing $HEROKU_APP"
+sleep 2
+
 docker build --tag="$IMAGE:$TAG" \
   --tag registry.heroku.com/$APP/$PROCESS_TYPE \
   --file Dockerfile.api \

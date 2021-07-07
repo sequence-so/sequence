@@ -25,7 +25,7 @@ const createSequelize = (...args: any[]) => {
   const instance = new Sequelize(...args);
   instance
     .authenticate()
-    .then(() => console.log("Sequence: database connection succesful"))
+    .then(() => console.log("Sequence: database connection successful"))
     .catch(() => {
       console.log(
         `Environment variable DB_SSL=true required to connect to this database.`

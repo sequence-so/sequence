@@ -120,6 +120,11 @@ const typeDefs = gql`
     personId: String
     properties: JSONObject
     productUser: ProductUser
+    messageId: String
+    timestamp: Date
+    sentAt: Date
+    context: JSONObject
+    receivedAt: Date
     createdAt: Date
     updatedAt: Date
   }
