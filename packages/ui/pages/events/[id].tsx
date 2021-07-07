@@ -20,6 +20,11 @@ const GET_EVENT = gql`
         source
         personId
         properties
+        timestamp
+        messageId
+        sentAt
+        receivedAt
+        context
         productUser {
           firstName
           lastName
@@ -57,6 +62,7 @@ const EventPage = () => {
         <TitleBar
           title={data?.events?.nodes[0].name}
           subtitle={PAGE_DEFAULTS.events.id.title}
+          showAction={false}
         ></TitleBar>
         <DefaultViewLayout>{RenderContent}</DefaultViewLayout>
       </>

@@ -4,6 +4,8 @@ import sequelize from "../database";
 import User from "./user.model";
 import { v4 as uuidv4 } from "uuid";
 import { EventContext } from "sequence-node";
+import ProductUser from "./productUser.model";
+import { productUserSaved } from "src/events/productUserSaved.event";
 
 const config: InitOptions = {
   tableName: "events",
@@ -89,8 +91,27 @@ Event.init(
   config
 );
 
-Event.belongsTo(User, {
-  as: "user",
+// After event has been saved, see if we can add the ProductUser associated
+// with this Event to a campaign
+Event.addHook("afterSave", async (model: Event) => {
+  if (model.isSoftDeleted()) {
+    return;
+  }
+  const productUser = await ProductUser.findOne({
+    where: {
+      externalId: model.personId,
+    },
+  });
+  if (productUser) {
+    productUserSaved(productUser);
+  }
 });
+
+//@ts-ignore
+Event.associate = () => {
+  Event.belongsTo(User, {
+    as: "user",
+  });
+};
 
 export default Event;

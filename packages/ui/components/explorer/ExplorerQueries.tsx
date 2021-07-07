@@ -27,15 +27,28 @@ export const GET_PRODUCT_USER = gql`
     productUsers(id: $id) {
       nodes {
         id
-        firstName
-        lastName
-        email
-        lastSeenAt
-        signedUpAt
-        photo
-        traits
         browser
+        browserLanguage
+        browserVersion
+        city
+        companyName
+        country
+        email
         externalId
+        firstName
+        industry
+        intercomId
+        lastName
+        lastSeenAt
+        os
+        phone
+        photo
+        region
+        signedUpAt
+        traits
+        title
+        userId
+        websiteUrl
         createdAt
         updatedAt
       }

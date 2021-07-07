@@ -1,4 +1,3 @@
-import { Condition } from "filters";
 import AbstractCampaignNode from "./nodes/abstractCampaignNode";
 import AudienceCampaignNode from "./nodes/audienceCampaignNode";
 import EmailCampaignNode from "./nodes/emailCampaignNode";

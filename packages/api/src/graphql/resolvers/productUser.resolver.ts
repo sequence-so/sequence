@@ -1,12 +1,15 @@
-import { deserialize, SerializedConditionNode } from "common/filters";
 import { WhereOptions } from "sequelize/types";
-import { AudienceBuilder } from "src/audience";
 import { GraphQLContextType } from "..";
 import { ProductUserAttributes } from "../../models/productUser.model";
 
 export const productUsers = async (
   root: any,
-  { id, page, limit }: { id: string; page: number; limit: number },
+  {
+    id,
+    customerId,
+    page,
+    limit,
+  }: { id: string; customerId: string; page: number; limit: number },
   { models, user }: GraphQLContextType
 ) => {
   page = page || 0;
@@ -16,6 +19,9 @@ export const productUsers = async (
   };
   if (id) {
     where.id = id;
+  }
+  if (customerId) {
+    where.externalId = customerId;
   }
   try {
     const productUsers = await models.ProductUser.findAll({

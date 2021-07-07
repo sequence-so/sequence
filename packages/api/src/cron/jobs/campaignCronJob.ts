@@ -24,6 +24,9 @@ class CampaignCronJob extends CronJob {
       useClones: false,
     });
   }
+  /**
+   * Performs this every minute. Processes the campaignNodeStates
+   */
   async tick() {
     const repository = this.app.getRepositories().campaignNodeRepository;
     await this.processNodeList(await repository.getNextCampaignNodeStates());
@@ -43,6 +46,11 @@ class CampaignCronJob extends CronJob {
     });
     return Promise.all(promises);
   }
+  /**
+   * Instantiate the CampaignNodeEvalutors if they don't already exist and cache them.
+   *
+   * @param nodes
+   */
   populateCampaignNodeEvaluators(nodes: CampaignNodeState[]) {
     nodes.forEach((state) => {
       const campaignId = state.campaignId;
@@ -57,6 +65,13 @@ class CampaignCronJob extends CronJob {
       );
     });
   }
+  /**
+   * Each Campaign will have its own CampaignNodeEvaluator. We cache them
+   * so we don't need to rebuild them on every tick. This can definitely
+   * be improved!
+   *
+   * @returns
+   */
   async buildCampaignNodeEvaluators() {
     const promises = this.evaluatorCache
       .keys()

@@ -21,9 +21,18 @@ class SequenceHttpHandler {
   }
   async getSequenceWebhookForAuthToken(req: Request): Promise<SequenceWebhook> {
     const authorization = req.headers.authorization;
+    const string = authorization.split("Bearer ");
+    let token: string;
+    if (string.length === 2) {
+      token = string[1];
+    } else {
+      throw new Error(
+        "Invalid authorization header provided, expected `Authorization: Bearer [token]`"
+      );
+    }
     return SequenceWebhook.findOne({
       where: {
-        token: authorization,
+        token,
       },
     });
   }
@@ -45,6 +54,7 @@ class SequenceHttpHandler {
           .json({ success: false, error: "No webhook found for this token" });
       }
       try {
+        console.log("handling batch import");
         const result = await handler(webhook, request.body);
         return response.json(result);
       } catch (error) {

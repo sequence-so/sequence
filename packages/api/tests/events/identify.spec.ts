@@ -42,6 +42,12 @@ describe("identify", () => {
       },
       force: true,
     });
+    await ProductUser.destroy({
+      where: {
+        externalId: "367146",
+      },
+      force: true,
+    });
   });
 
   it("should throw on invalid calls", async () => {
@@ -186,5 +192,97 @@ describe("identify", () => {
     expect(updatedMark.firstName).to.eq("Thomas");
     expect(updatedMark.traits.numberOfCars).to.eq(15);
     expect(updatedMark.traits.brothers).to.deep.eq(BROTHERS);
+  });
+  it("should unset attributes", async () => {
+    await identify(
+      {
+        type: "identify",
+        traits: {
+          firstName: null,
+          numberOfCars: null,
+          brothers: null,
+        } as IdentifyReservedTraits,
+        context: {},
+        sentAt: new Date(),
+        timestamp: new Date(),
+        receivedAt: new Date(),
+        messageId: v4(),
+        userId: mark.externalId,
+      },
+      {
+        userId: user.id,
+      }
+    );
+    const updatedMark = await ProductUser.findOne({
+      where: {
+        email: mark.email,
+      },
+    });
+    expect(updatedMark.firstName).to.eq(null);
+    expect(updatedMark.traits.numberOfCars).to.be.undefined;
+    expect(updatedMark.traits.brothers).to.be.undefined;
+  });
+  it("should accept and convert snake_case_attributes for new users", async () => {
+    await identify(
+      {
+        userId: "367146",
+        traits: {
+          created_at: 1619723330,
+          email: "alex@tester.com",
+          first_name: "Alex",
+          last_name: "Dunham",
+        },
+        _metadata: { nodeVersion: "14.17.0" },
+        type: "identify",
+        timestamp: "2021-07-16T01:47:27.109Z",
+        messageId: "14oxugf8kr5olfyd",
+        context: { library: { sdk: "sequence-node", version: "0.2.8" } },
+        sentAt: new Date(),
+        receivedAt: new Date(),
+      },
+      {
+        userId: user.id,
+      }
+    );
+    const testUser = await ProductUser.findOne({
+      where: {
+        externalId: "367146",
+      },
+    });
+    expect(testUser.firstName).to.eq("Alex");
+    expect(testUser.lastName).to.eq("Dunham");
+    expect(testUser.email).to.eq("alex@tester.com");
+    expect(testUser.signedUpAt).to.deep.eq(new Date(1619723330 * 1000));
+  });
+  it("should accept and convert snake_case_attributes", async () => {
+    await identify(
+      {
+        type: "identify",
+        traits: {
+          first_name: "First",
+          number_of_people: 3,
+          browser_version: "12",
+        } as IdentifyReservedTraits,
+        context: {},
+        sentAt: new Date(),
+        timestamp: new Date(),
+        receivedAt: new Date(),
+        messageId: v4(),
+        userId: mark.externalId,
+      },
+      {
+        userId: user.id,
+      }
+    );
+    const updatedMark = await ProductUser.findOne({
+      where: {
+        email: mark.email,
+      },
+    });
+    expect(updatedMark.firstName).to.eq("First");
+    expect(updatedMark.browserVersion).to.eq("12");
+    expect(updatedMark.traits.number_of_people).to.eq(3);
+    expect(updatedMark.traits.firstName).to.be.undefined;
+    expect(updatedMark.traits.first_name).to.be.undefined;
   });
 });

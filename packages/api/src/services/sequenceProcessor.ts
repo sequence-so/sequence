@@ -30,6 +30,12 @@ class SequenceProcessor {
    */
   async process(webhook: SequenceWebhook, body: WebhookPayload) {
     let execution: WebhookExecution;
+    if (!body.batch || !Array.isArray(body.batch)) {
+      throw new SequenceError(
+        "Request body must specify property `batch` with an array of objects",
+        400
+      );
+    }
     try {
       execution = await this.logWebhookEvent(webhook, body);
       for (let idx = 0, len = body.batch.length; idx < len; idx++) {
@@ -103,6 +109,7 @@ class SequenceProcessor {
     }
 
     if (event.type === "identify") {
+      console.log("identifying", event);
       await identify(
         {
           type: "identify",
