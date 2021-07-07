@@ -3,7 +3,8 @@ import Campaign, {
   CampaignStateEnum,
 } from "src/models/campaign.model";
 
-type WithOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+export type WithOptional<T, K extends keyof T> = Omit<T, K> &
+  Partial<Pick<T, K>>;
 
 type SeedCreationAttributes = WithOptional<
   CampaignCreationAttributes,
