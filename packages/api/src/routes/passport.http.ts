@@ -1,11 +1,11 @@
 import { Application } from "express";
 import passport from "passport";
-import jwt from "jsonwebtoken";
-require("../auth/google");
-require("../auth/jwt");
-require("../auth/email");
+import "src/auth/passport/email";
+import "src/auth/passport/google";
+import "src/auth/passport/jwt";
 import JwtConfig from "../config/jwt";
 import User from "src/models/user.model";
+import { signJwt } from "src/utils/signJwt";
 
 interface SignupBody {
   email: string;
@@ -50,21 +50,18 @@ class PassportRoutes {
       app.get(
         "/auth/google/callback",
         passport.authenticate("google", { failureRedirect: "/login/failed" }),
-        function (req, res) {
-          jwt.sign(
-            {
-              user: req.user,
-            },
-            JwtConfig.jwt.secret,
-            JwtConfig.jwt.options,
-            (err: any, token: string) => {
-              if (err) return res.status(500).json(err);
-
-              // Send the Set-Cookie header with the jwt to the client
-              res.cookie("jwt", token, JwtConfig.jwt.cookie);
-              res.redirect(`${process.env.LOGIN_REDIRECT}?token=${token}`);
-            }
-          );
+        async function (req, res) {
+          try {
+            const token = await signJwt(req.user as any);
+            // Send the Set-Cookie header with the jwt to the client
+            res.cookie("jwt", token, JwtConfig.jwt.cookie);
+            res.send({
+              token,
+              url: `${process.env.LOGIN_REDIRECT}?token=${token}`,
+            });
+          } catch (error) {
+            return res.status(500).json(error);
+          }
         }
       );
     }
@@ -72,26 +69,21 @@ class PassportRoutes {
     app.post(
       "/login",
       passport.authenticate("local", { failWithError: true }),
-      function (req, res) {
-        jwt.sign(
-          {
-            user: req.user,
-          },
-          JwtConfig.jwt.secret,
-          JwtConfig.jwt.options,
-          (err: any, token: string) => {
-            if (err) {
-              return res.status(500).json(err);
-            }
-
-            // Send the Set-Cookie header with the jwt to the client
-            res.cookie("jwt", token, JwtConfig.jwt.cookie);
-            res.send({
-              token,
-              url: `${process.env.LOGIN_REDIRECT}?token=${token}`,
-            });
-          }
-        );
+      async function (req, res) {
+        try {
+          const token = await signJwt(req.user as any);
+          // Send the Set-Cookie header with the jwt to the client
+          res.cookie("jwt", token, JwtConfig.jwt.cookie);
+          res.send({
+            token,
+            url: `${process.env.LOGIN_REDIRECT}?token=${token}`,
+          });
+        } catch (error) {
+          return res.status(401).json({
+            error: "Unauthorized",
+            success: false,
+          });
+        }
       },
       function (err: any, req: any, res: any) {
         // handle error
@@ -136,26 +128,17 @@ class PassportRoutes {
         password: body.password,
       });
 
-      jwt.sign(
-        {
-          user,
-        },
-        JwtConfig.jwt.secret,
-        JwtConfig.jwt.options,
-        (err: any, token: string) => {
-          if (err) {
-            return res.status(500).json(err);
-          }
-
-          // Send the Set-Cookie header with the jwt to the client
-          res.cookie("jwt", token, JwtConfig.jwt.cookie);
-          res.send({
-            data: user,
-            token,
-            url: `${process.env.LOGIN_REDIRECT}?token=${token}`,
-          });
-        }
-      );
+      try {
+        const token = await signJwt(user);
+        // Send the Set-Cookie header with the jwt to the client
+        res.cookie("jwt", token, JwtConfig.jwt.cookie);
+        res.send({
+          token,
+          url: `${process.env.LOGIN_REDIRECT}?token=${token}`,
+        });
+      } catch (error) {
+        return res.status(500).json(error);
+      }
     });
   }
 }

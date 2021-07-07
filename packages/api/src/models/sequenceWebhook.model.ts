@@ -36,6 +36,7 @@ class SequenceWebhook extends Model<
   public userId: string;
   public executions: number;
   public lastExecutionAt: Date;
+  public user?: User;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }

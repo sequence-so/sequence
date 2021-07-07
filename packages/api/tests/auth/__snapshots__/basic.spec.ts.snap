@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`basic authentication should accept a token 1`] = `
+Object {
+  "data": Object {
+    "getUser": Object {
+      "firstName": "Test",
+      "lastName": "User",
+    },
+  },
+}
+`;
+
+exports[`basic authentication should reject bad API token provided 1`] = `
+[HttpQueryError: {"errors":[{"message":"Context creation failed: You are not authorized to perform this request.","errors":null}]}
+]
+`;

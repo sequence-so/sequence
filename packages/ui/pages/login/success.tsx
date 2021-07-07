@@ -27,7 +27,7 @@ export async function getServerSideProps(context) {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      Authorization: token,
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ query: GET_USER_WITH_ONBOARDING }),
   }).then((r) => r.json());

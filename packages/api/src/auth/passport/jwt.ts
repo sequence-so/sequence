@@ -1,7 +1,7 @@
 import passport from "passport";
 // @ts-ignore
 import JwtCookieComboStrategy from "passport-jwt-cookiecombo";
-import JwtConfig from "../config/jwt";
+import JwtConfig from "src/config/jwt";
 
 if (process.env.ENABLE_GOOGLE_LOGIN) {
   passport.use(

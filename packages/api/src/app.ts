@@ -6,12 +6,10 @@ import http from "http";
 import express, { Application as ExpressApplication } from "express";
 import cookieParser from "cookie-parser";
 import { ApolloServer } from "apollo-server-express";
-import { GraphQLRequestContext } from "apollo-server-plugin-base";
-import jwt from "jsonwebtoken";
+import { jwt as jwtAuth } from "src/auth/jwt.auth";
 import cors from "cors";
 import session from "express-session";
 import enforce from "express-sslify";
-import JwtConfig from "./config/jwt";
 import schema from "./graphql/schema";
 import Models, { SequelizeModels } from "./models/index";
 import database from "./database";
@@ -24,8 +22,9 @@ import QueueService, { QueueServiceOptions } from "./queue/queueService";
 import { createNamespace, Namespace } from "continuation-local-storage";
 import Repositories from "./repositories";
 import EmailService from "./services/email/emailService";
-import { isIntrospectionRequest } from "./utils/isIntrospectionRequest";
 import SequenceError, { HTTP_UNAUTHORIZED } from "./error/sequenceError";
+import { basicAuthentication } from "./auth/basic.auth";
+import { GraphQLContextType } from "./graphql";
 
 export interface AppOptions {
   /**
@@ -48,6 +47,14 @@ export interface AppOptions {
     };
   };
 }
+
+type ExpressHandler = {
+  req: express.Request;
+  res: express.Response;
+};
+type ContextFunction = {
+  (context: ExpressHandler): Promise<GraphQLContextType>;
+};
 
 class App {
   expressApplication: ExpressApplication;
@@ -123,54 +130,44 @@ class App {
       () => console.log(`Sequence API listening on port ${process.env.PORT}`)
     ));
   }
+  async context(context: ExpressHandler) {
+    const req = context.req;
+    const tokenHeader = req.headers.authorization;
+    let user: any;
+    if (!tokenHeader || tokenHeader.trim() === "") {
+      throw new SequenceError(
+        "Authentication not supported",
+        HTTP_UNAUTHORIZED
+      );
+    } else if (tokenHeader.startsWith("Bearer")) {
+      user = jwtAuth(tokenHeader, req);
+    } else if (tokenHeader.startsWith("Basic")) {
+      user = await basicAuthentication(tokenHeader);
+    } else {
+      throw new SequenceError(
+        "Authentication not supported",
+        HTTP_UNAUTHORIZED
+      );
+    }
+
+    return {
+      models: Models,
+      user,
+      app: this,
+      repositories: this.repositories,
+      dataLoaders: {},
+    };
+  }
   bootApolloServer() {
     this.expressApplication.use("/graphql", (req, res, next) => {
       this.cls(next);
     });
-    const context = (context: {
-      req: express.Request;
-      _: express.Response;
-    }) => {
-      const req = context.req;
-      const token = req.headers.authorization;
-      let jwtVerifyResult: any;
-      // Admit introspection queries if we're in development mode
-      if (isIntrospectionRequest(req)) {
-        if (
-          token === "INTROSPECTION" &&
-          process.env.NODE_ENV !== "production"
-        ) {
-          jwtVerifyResult = { user: { firstName: "Admin" } };
-        } else {
-          throw new SequenceError(
-            "You are not authorized to perform this request.",
-            HTTP_UNAUTHORIZED
-          );
-        }
-      } else {
-        try {
-          jwtVerifyResult = jwt.verify(token, JwtConfig.jwt.secret);
-        } catch (error) {
-          throw new SequenceError(
-            "You are not authorized to perform this request.",
-            HTTP_UNAUTHORIZED
-          );
-        }
-      }
-      const user = (jwtVerifyResult as any).user;
 
-      return {
-        models: Models,
-        user,
-        app: this,
-        repositories: this.repositories,
-      };
-    };
     this.apolloServer = new ApolloServer({
       typeDefs: schema,
       resolvers: resolvers,
       introspection: true,
-      context: context,
+      context: this.context.bind(this),
       formatError: this.graphQLErrorFormatter,
     });
 
@@ -186,6 +183,7 @@ class App {
         credentials: true,
       },
     });
+    return this.apolloServer;
   }
   configureExpress() {
     const app = this.expressApplication;

@@ -30,7 +30,7 @@ const LoginForm = (props: Props) => {
         setNetworkError("");
         setSubmitting(true);
         props.perform(values.email, values.password).catch((error) => {
-          setNetworkError(error.message);
+          setNetworkError("Invalid credentials provided");
           setSubmitting(false);
         });
       }}

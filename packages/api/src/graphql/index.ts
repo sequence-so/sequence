@@ -6,9 +6,6 @@ import Repositories from "src/repositories";
 export type GraphQLContextType = {
   models: typeof Models;
   user: User;
-  dataLoaders: {
-    productUserLoader: any;
-  };
   app: App;
   repositories: Repositories;
 };
