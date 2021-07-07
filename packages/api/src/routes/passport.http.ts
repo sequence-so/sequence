@@ -79,7 +79,10 @@ class PassportRoutes {
             url: `${process.env.LOGIN_REDIRECT}?token=${token}`,
           });
         } catch (error) {
-          return res.status(500).json(error);
+          return res.status(401).json({
+            error: "Unauthorized",
+            success: false,
+          });
         }
       },
       function (err: any, req: any, res: any) {

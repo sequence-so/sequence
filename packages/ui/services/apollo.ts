@@ -27,21 +27,24 @@ const logout = () => {
 
 const errorLink = onError(({ networkError }) => {
   if (networkError && (networkError as ServerParseError).statusCode) {
-    const error = networkError as ServerParseError;
+    const serverError = networkError as ServerParseError;
     if ((networkError as any).result?.errors) {
       let error = (networkError as any).result?.errors[0];
       if (
-        error?.message === "You are not authorized to perform this request."
+        error?.message.includes(
+          "You are not authorized to perform this request."
+        )
       ) {
         logout();
       }
     }
-    if (error.statusCode === 401) {
+    if (serverError.statusCode === 401) {
       logout();
     }
     if (
-      error.message.indexOf("You are not authorized to perform this request.") >
-      -1
+      serverError.message.indexOf(
+        "You are not authorized to perform this request."
+      ) > -1
     ) {
       logout();
     }
@@ -63,7 +66,7 @@ const authLink = new ApolloLink((operation, forward) => {
     return {
       headers: {
         ...headers,
-        authorization: token ?? token,
+        authorization: token ? `Bearer ${token}` : "",
       },
     };
   });
