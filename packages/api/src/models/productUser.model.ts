@@ -224,11 +224,4 @@ Event.belongsTo(ProductUser, {
 
 export default ProductUser;
 
-export type ProductUserStatic = typeof ProductUser & {
-  new (
-    values?: Record<string, unknown>,
-    options?: ProductUserAttributes
-  ): ProductUser;
-};
-
 export type ProductUserInstance = ProductUser;

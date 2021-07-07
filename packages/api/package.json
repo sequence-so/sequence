@@ -15,6 +15,7 @@
     "migrate:undo": "npx sequelize-cli db:migrate:undo --debug",
     "migrate": "npx sequelize-cli db:migrate --debug",
     "migration:generate": "yarn run migrate:generate",
+    "script": "ts-node-dev --respawn -r tsconfig-paths/register ./scripts/track.ts",
     "serve": "node dist/bundle.js",
     "start": "npm run serve",
     "test:coverage": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' nyc --reporter=html ts-mocha --exit --paths 'tests/**/*.spec.ts'",

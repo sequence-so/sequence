@@ -16,6 +16,23 @@ export const getCustomTraits = (traits: Record<string, any>) => {
 
   return customTraits;
 };
+/**
+ * Merges old and new traits. If new traits provides a null/undefined value,
+ * we delete the key from the traits object, as a way to unset a value.
+ *
+ * @param a Original traits
+ * @param b New traits
+ * @returns Traits object
+ */
+export const customMerge = (a: Record<string, any>, b: Record<string, any>) => {
+  const newTraits = merge(a, b);
+  Object.keys(b).forEach((key) => {
+    if (b[key] === undefined || b[key] === null) {
+      delete newTraits[key];
+    }
+  });
+  return newTraits;
+};
 
 /**
  * Saves the `identify` event type to the database.
@@ -82,68 +99,69 @@ export const identify = async (
   };
   const traits = event.traits;
   const customTraits = getCustomTraits(event.traits);
-
-  if (traits.email) {
+  debugger;
+  if (typeof traits.email !== "undefined") {
     upsertAttrs.email = traits.email;
   }
-  if (traits.firstName) {
+  if (typeof traits.firstName !== "undefined") {
     upsertAttrs.firstName = traits.firstName;
   }
-  if (traits.lastName) {
+  if (typeof traits.lastName !== "undefined") {
     upsertAttrs.lastName = traits.lastName;
   }
-  if (traits.photo) {
+  if (typeof traits.photo !== "undefined") {
     upsertAttrs.photo = traits.photo;
   }
-  if (traits.phone) {
+  if (typeof traits.phone !== "undefined") {
     upsertAttrs.phone = traits.phone;
   }
-  if (traits.createdAt) {
+  if (typeof traits.createdAt !== "undefined") {
     upsertAttrs.signedUpAt = traits.signedUpAt;
   }
-  if (traits.intercomId) {
+  if (typeof traits.intercomId !== "undefined") {
     upsertAttrs.intercomId = traits.intercomId;
   }
-  if (traits.city) {
+  if (typeof traits.city !== "undefined") {
     upsertAttrs.city = traits.city;
   }
-  if (traits.companyName) {
+  if (typeof traits.companyName !== "undefined") {
     upsertAttrs.companyName = traits.companyName;
   }
-  if (traits.country) {
+  if (typeof traits.country !== "undefined") {
     upsertAttrs.country = traits.country;
   }
-  if (traits.industry) {
+  if (typeof traits.industry !== "undefined") {
     upsertAttrs.industry = traits.industry;
   }
-  if (traits.title) {
+  if (typeof traits.title !== "undefined") {
     upsertAttrs.title = traits.title;
   }
-  if (traits.websiteUrl) {
+  if (typeof traits.websiteUrl !== "undefined") {
     upsertAttrs.websiteUrl = traits.websiteUrl;
   }
-  if (traits.region) {
+  if (typeof traits.region !== "undefined") {
     upsertAttrs.region = traits.region;
   }
-  if (traits.region) {
+  if (typeof traits.region !== "undefined") {
     upsertAttrs.region = traits.region;
   }
   if (Object.keys(customTraits).length > 0) {
     // https://github.com/sequelize/sequelize/issues/2862#issuecomment-108677901
     // I love this ORM!
-    productUser.set("traits", merge(productUser.traits, customTraits));
+    const newTraits = customMerge(productUser.traits, customTraits);
+    productUser.set("traits", newTraits);
     productUser.changed("traits", true);
   }
   if (event.context) {
     upsertAttrs.context = event.context;
   }
-  if (traits.browser) {
+  if (typeof traits.browser !== "undefined") {
     upsertAttrs.browser = traits.browser;
   }
-  if (traits.browserVersion) {
+  if (typeof traits.browserVersion !== "undefined") {
     upsertAttrs.browserVersion = traits.browserVersion;
   }
-  if (traits.browserLanguage) {
+  if (typeof traits.browserLanguage !== "undefined") {
     upsertAttrs.browserLanguage = traits.browserLanguage;
   }
   productUser.set(upsertAttrs);
