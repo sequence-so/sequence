@@ -3,7 +3,7 @@ TAG=$(git log --pretty=format:'%h' -n 1)
 APP=$HEROKU_UI_APP
 PROCESS_TYPE="web"
 
-echo "Pushing $HEROKU_APP"
+echo "Pushing $HEROKU_UI_APP"
 sleep 2
 
 docker build --tag="$IMAGE:$TAG" \
