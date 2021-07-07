@@ -25,6 +25,7 @@ import * as CampaignMutation from "./mutations/campaign.mutation";
 import * as CampaignNodeMutation from "./mutations/campaignNode.mutation";
 import * as CampaignNodeEdgeMutation from "./mutations/campaignNodeEdge.mutation";
 import * as EmailMutation from "./mutations/email.mutation";
+import * as ProductUserMutation from "./mutations/productUser.mutation";
 import * as SegmentMutation from "./mutations/segment.mutation";
 import * as UserMutation from "./mutations/user.mutation";
 import * as WebhookMutation from "./mutations/webhook.mutation";
@@ -47,6 +48,7 @@ const Mutation = {
   ...CampaignNodeMutation,
   ...CampaignNodeEdgeMutation,
   ...EmailMutation,
+  ...ProductUserMutation,
   ...SegmentMutation,
   ...UserMutation,
   ...WebhookMutation,
