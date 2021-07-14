@@ -94,7 +94,7 @@ const typeDefs = gql`
     propertyType: String
   }
   type DeleteResult {
-    success: String
+    success: Boolean
   }
   type Email {
     id: ID!
@@ -266,7 +266,12 @@ const typeDefs = gql`
     # id: ID of a specific ProductUser
     # page: Page number
     # limit: Total page size
-    productUsers(id: String, page: Int, limit: Int): PaginatedProductUser
+    productUsers(
+      id: String
+      customerId: String
+      page: Int
+      limit: Int
+    ): PaginatedProductUser
     # Get all unique event names for the authenticated User account.
     uniqueEventNames: [String]
   }
@@ -305,6 +310,7 @@ const typeDefs = gql`
     deleteCampaignNode(id: ID!): DeleteResult
     deleteCampaignNodeEdge(id: ID!): DeleteResult
     deleteEmail(id: ID!): DeleteResult
+    deleteProductUser(customerId: String, id: ID): DeleteResult
     executeAudience(audience: String): PaginatedProductUser
     launchCampaign(id: ID!): Campaign
     sendTestEmail(emailId: ID!, to: String!): OperationResult

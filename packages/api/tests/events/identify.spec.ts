@@ -187,4 +187,33 @@ describe("identify", () => {
     expect(updatedMark.traits.numberOfCars).to.eq(15);
     expect(updatedMark.traits.brothers).to.deep.eq(BROTHERS);
   });
+  it("should unset attributes", async () => {
+    await identify(
+      {
+        type: "identify",
+        traits: {
+          firstName: null,
+          numberOfCars: null,
+          brothers: null,
+        } as IdentifyReservedTraits,
+        context: {},
+        sentAt: new Date(),
+        timestamp: new Date(),
+        receivedAt: new Date(),
+        messageId: v4(),
+        userId: mark.externalId,
+      },
+      {
+        userId: user.id,
+      }
+    );
+    const updatedMark = await ProductUser.findOne({
+      where: {
+        email: mark.email,
+      },
+    });
+    expect(updatedMark.firstName).to.eq(null);
+    expect(updatedMark.traits.numberOfCars).to.be.undefined;
+    expect(updatedMark.traits.brothers).to.be.undefined;
+  });
 });

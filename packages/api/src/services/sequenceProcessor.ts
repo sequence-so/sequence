@@ -103,6 +103,7 @@ class SequenceProcessor {
     }
 
     if (event.type === "identify") {
+      console.log("identifying", event);
       await identify(
         {
           type: "identify",

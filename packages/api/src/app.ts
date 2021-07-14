@@ -130,6 +130,9 @@ class App {
       () => console.log(`Sequence API listening on port ${process.env.PORT}`)
     ));
   }
+  getModels() {
+    return Models;
+  }
   async context(context: ExpressHandler) {
     const req = context.req;
     const tokenHeader = req.headers.authorization;
