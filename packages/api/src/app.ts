@@ -11,8 +11,8 @@ import cors from "cors";
 import session from "express-session";
 import enforce from "express-sslify";
 import schema from "./graphql/schema";
-import Models, { SequelizeModels } from "./models/index";
 import database from "./database";
+import Models, { SequelizeModels } from "./models/index";
 import Routes from "./routes";
 import resolvers from "./graphql/resolvers";
 import logger from "./utils/logger";
@@ -77,6 +77,8 @@ class App {
     this.bootApolloServer();
     // this.bootQueue(options?.queue);
     this.bootEmail(options?.email);
+    // @ts-ignore
+    database.app = this;
   }
   /**
    * Formats the error returned via the API

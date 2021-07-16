@@ -21,8 +21,10 @@ const httpLink = createHttpLink({
 });
 
 const logout = () => {
-  localStorage.clear();
-  window.location.pathname = "/";
+  if (typeof window !== "undefined" && window.localStorage) {
+    localStorage.clear();
+    window.location.pathname = "/";
+  }
 };
 
 const errorLink = onError(({ networkError }) => {

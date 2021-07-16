@@ -25,9 +25,9 @@ export interface UserAttributes {
 }
 
 export type UserCreationAttributes = Optional<
-    UserAttributes,
-    "id" | "firstName" | "lastName" | "photo" | "password" | "onboardedAt"
-  >
+  UserAttributes,
+  "id" | "firstName" | "lastName" | "photo" | "password" | "onboardedAt"
+>;
 
 class User extends Model<UserAttributes, UserCreationAttributes> {
   public id!: string;

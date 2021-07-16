@@ -34,6 +34,12 @@ const Models = {
   WebhookExecution,
 };
 
+Object.values(Models).map((m) => {
+  if (typeof (m as any).associate !== "undefined") {
+    ((m as any).associate as any)();
+  }
+});
+
 export default Models;
 
 export type SequelizeModels = typeof Models;

@@ -1,4 +1,4 @@
-import ProductUser from "../models/productUser.model";
+import ProductUser from "src/models/productUser.model";
 import {
   AbstractNode,
   AttributeFilter,
