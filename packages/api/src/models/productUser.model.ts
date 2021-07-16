@@ -5,6 +5,8 @@ import sequelize from "../database";
 import Event from "./event.model";
 import User from "./user.model";
 import { EventContext } from "sequence-node";
+import { productUserSaved } from "src/events/productUserSaved.event";
+import CampaignNodeState from "./campaignNodeState.model";
 
 const config: InitOptions = {
   tableName: "product_users",
@@ -206,21 +208,36 @@ ProductUser.init(
   config
 );
 
-ProductUser.belongsTo(User, {
-  as: "user",
+ProductUser.addHook("afterSave", async (model) => {
+  if (model.isSoftDeleted()) {
+    return;
+  }
+  // check if we should be added to a campaign
+  await productUserSaved(model as ProductUser);
 });
 
-ProductUser.hasMany(Event, {
-  as: "events",
-  foreignKey: "personId",
-  sourceKey: "externalId",
-});
+//@ts-ignore
+ProductUser.associate = () => {
+  ProductUser.belongsTo(User, {
+    as: "user",
+  });
 
-Event.belongsTo(ProductUser, {
-  as: "productUser",
-  foreignKey: "personId",
-  targetKey: "externalId",
-});
+  ProductUser.hasMany(Event, {
+    as: "events",
+    foreignKey: "personId",
+    sourceKey: "externalId",
+  });
+
+  Event.belongsTo(ProductUser, {
+    as: "productUser",
+    foreignKey: "personId",
+    targetKey: "externalId",
+  });
+
+  CampaignNodeState.belongsTo(ProductUser, {
+    as: "productUser",
+  });
+};
 
 export default ProductUser;
 

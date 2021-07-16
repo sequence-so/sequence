@@ -145,20 +145,19 @@ CampaignNodeState.init(
   config
 );
 
-CampaignNodeState.belongsTo(Campaign, {
-  as: "campaign",
-});
+//@ts-ignore
+CampaignNodeState.associate = () => {
+  CampaignNodeState.belongsTo(Campaign, {
+    as: "campaign",
+  });
 
-CampaignNodeState.belongsTo(CampaignNode, {
-  as: "campaignNode",
-});
+  CampaignNodeState.belongsTo(CampaignNode, {
+    as: "campaignNode",
+  });
 
-CampaignNodeState.belongsTo(ProductUser, {
-  as: "productUser",
-});
-
-CampaignNodeState.belongsTo(User, {
-  as: "user",
-});
+  CampaignNodeState.belongsTo(User, {
+    as: "user",
+  });
+};
 
 export default CampaignNodeState;

@@ -2,7 +2,7 @@ import faker from "faker";
 import moment from "moment";
 import ProductUser, {
   ProductUserCreationAttributes,
-} from "../../src/models/productUser.model";
+} from "src/models/productUser.model";
 import { v4 as uuid } from "uuid";
 
 export const build = (

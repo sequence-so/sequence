@@ -1,6 +1,7 @@
-import { Condition } from "filters";
 import { Edge } from "./nodes";
 import AbstractCampaignNode from "./nodes/abstractCampaignNode";
+import AudienceCampaignNode from "./nodes/audienceCampaignNode";
+import TriggerCampaignNode from "./nodes/triggerCampaignNode";
 
 type CampaignNodeID = string;
 type CampaignNodeEdgeId = string;
@@ -12,6 +13,8 @@ export enum CampaignNodeKind {
   Wait = "Wait",
   Email = "Email",
 }
+
+export type EntryNodeKinds = TriggerCampaignNode | AudienceCampaignNode;
 
 export enum CampaignAudienceRules {
   Existing = "Existing",

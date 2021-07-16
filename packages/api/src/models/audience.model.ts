@@ -83,24 +83,26 @@ Audience.init(
   config
 );
 
-Audience.belongsTo(User, {
-  as: "user",
-});
+// @ts-ignore
+Audience.associate = () => {
+  Audience.belongsTo(User, {
+    as: "user",
+  });
+  Audience.belongsToMany(ProductUser, {
+    through: AudienceProductUser,
+    foreignKey: "audienceId",
+    as: "productUsers",
+  });
 
-Audience.belongsToMany(ProductUser, {
-  through: AudienceProductUser,
-  foreignKey: "audienceId",
-  as: "productUsers",
-});
+  ProductUser.belongsToMany(Audience, {
+    through: AudienceProductUser,
+    foreignKey: "productUserId",
+    as: "audiences",
+  });
 
-ProductUser.belongsToMany(Audience, {
-  through: AudienceProductUser,
-  foreignKey: "productUserId",
-  as: "audiences",
-});
-
-AudienceProductUser.belongsTo(ProductUser, {
-  as: "productUser",
-});
+  AudienceProductUser.belongsTo(ProductUser, {
+    as: "productUser",
+  });
+};
 
 export default Audience;

@@ -52,11 +52,10 @@ function ServerPaginatedTable<T>(props: ServerPaginateTableProps<T>) {
   if (error) {
     return <p>An error occured loading this table: {error.message}</p>;
   }
-  if (loading || rowCount === -1) {
+  if (rowCount === -1) {
     return <CircularProgress />;
   }
 
-  console.log({ rows });
   return (
     <Table
       loading={loading}

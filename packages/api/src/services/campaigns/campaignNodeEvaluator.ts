@@ -1,10 +1,12 @@
 import invariant from "invariant";
 import moment from "moment";
 import {
+  CampaignAudienceRules,
   CampaignEmailScheduling,
   CampaignGraph,
   CampaignNodeKind,
   EdgeKind,
+  EntryNodeKinds,
 } from "common/campaign";
 import AbstractCampaignNode from "common/campaign/nodes/abstractCampaignNode";
 import AudienceCampaignNode from "common/campaign/nodes/audienceCampaignNode";
@@ -27,6 +29,7 @@ import WaitNodeExecutor from "./nodes/waitNodeExecutor";
 import FilterNodeExecutor from "./nodes/filterNodeExecutor";
 import FilterCampaignNode from "common/campaign/nodes/filterCampaignNode";
 import ExecutionResult, { ExecutionResultEnum } from "./executionResult";
+import ProductUser from "src/models/productUser.model";
 
 type EntryNode = AudienceCampaignNode | TriggerCampaignNode;
 
@@ -110,6 +113,21 @@ class CampaignNodeEvaluator {
     // Get product users from executing the associate Audience node
     const productUsers = await this.executeAudience(node);
 
+    // Mark first campaign node as completed for these users, and queue up the next campaign node if it exists
+    return this.evaluateEntryNodeForProductUsers(node, productUsers);
+  }
+  /**
+   * Marks the list of product users as matching the EntryNode's filter, and initializes the next
+   * step for the campaign.
+   *
+   * @param node EntryNode Audience or Trigger Node
+   * @param productUsers List of product users
+   * @returns
+   */
+  async evaluateEntryNodeForProductUsers(
+    node: EntryNode,
+    productUsers: ProductUser[]
+  ) {
     // mark these ProductUsers as having completed the first step
     const initCampaignNodePromises = productUsers.map((p) =>
       CampaignNodeState.create({
@@ -160,6 +178,31 @@ class CampaignNodeEvaluator {
       nodeStatePromises = nodeStatePromises.concat(nextCampaignNodeStates);
     });
     return await CampaignNodeState.bulkCreate(nodeStatePromises);
+  }
+  /**
+   * Adds the product user to the campaign if it matches a trigger node.
+   */
+  async evaluateProductUserSaved(productUser: ProductUser) {
+    const entryNodes = this.getEntryNodes();
+    const processableEntryNodes = entryNodes.filter(
+      (campaignNode) =>
+        campaignNode.getAudienceRules() === CampaignAudienceRules.New ||
+        campaignNode.getAudienceRules() === CampaignAudienceRules.Both
+    );
+    const promises = processableEntryNodes.map(async (node) => {
+      const matchedProductUsers = await this.executeAudienceForProductUser(
+        node,
+        productUser
+      );
+
+      // If the AudienceBuilder returns a match for this node, then the ProductUser
+      // continues the campaign
+      if (matchedProductUsers.length === 1) {
+        // Mark first campaign node as completed for this product user, and queue up the next campaign node if it exists
+        return this.evaluateEntryNodeForProductUsers(node, matchedProductUsers);
+      }
+    });
+    return Promise.all(promises);
   }
   /**
    * Evaluates the given node for the campaign.
@@ -330,6 +373,21 @@ class CampaignNodeEvaluator {
     // Build and execute
     return new AudienceBuilder(audienceNode, this.userId).build().execute();
   }
+  async executeAudienceForProductUser(
+    entryNode: EntryNode,
+    productUser: ProductUser
+  ) {
+    // get Audience ID from CampaignAudienceNode
+    const audience = await this.getAudience(entryNode.getAudienceId());
+    // Parse Audience JSON
+    const audienceNode = deserialize(JSON.parse(audience.node));
+    // Build and execute
+    return new AudienceBuilder(audienceNode, this.userId, {
+      productUserId: productUser.id,
+    })
+      .build()
+      .execute();
+  }
   /**
    * When the next node should be executed. Immediately for all nodes, except for the Wait node.
    *
@@ -406,7 +464,7 @@ class CampaignNodeEvaluator {
    *
    * @returns A list of AudienceNode and/or TriggerNodes.
    */
-  getEntryNodes(): AbstractCampaignNode[] {
+  getEntryNodes(): EntryNodeKinds[] {
     invariant(
       this.calledBuild,
       "Need to call CampaignNodeEvaluator.build() first"
@@ -415,7 +473,7 @@ class CampaignNodeEvaluator {
       (node) =>
         node.kind === CampaignNodeKind.Audience ||
         node.kind === CampaignNodeKind.Trigger
-    );
+    ) as EntryNodeKinds[];
   }
   /**
    * Returns a list of CampaignNodes that should execute next if the current node is marked as COMPLETED.

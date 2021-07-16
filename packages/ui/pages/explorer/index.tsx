@@ -131,7 +131,6 @@ const UserExplorerPage = () => {
   );
 
   const onRowClick = (param: GridRowParams) => {
-    console.log(param.row);
     router.push(`/explorer/${param.row.id}`);
   };
 
@@ -147,6 +146,7 @@ const UserExplorerPage = () => {
         <DefaultViewLayout>
           <ServerPaginatedTable<GetProductUsers>
             gql={GET_PRODUCT_USERS}
+            queryOptions={{ fetchPolicy: "no-cache" }}
             shadow={true}
             getRows={(data) => data.productUsers.nodes}
             onRowClick={onRowClick}
