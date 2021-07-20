@@ -51,6 +51,21 @@ export const getAttribute = (obj: Record<string, any>, key: string) => {
   return undefined;
 };
 
+export const parseNameAttribute = (
+  obj: Record<string, any>
+): { firstName: string; lastName: string } => {
+  if (obj.name) {
+    const name = obj.name as string;
+    const split = name.split(" ");
+    if (split.length > 1) {
+      const index = name.indexOf(" ");
+      const rest = name.substr(index + 1, name.length - index).trim();
+      const lastName = rest;
+      return { firstName: split[0], lastName };
+    }
+    return { firstName: name, lastName: "" };
+  }
+};
 /**
  * Saves the `identify` event type to the database.
  *
@@ -118,6 +133,11 @@ export const identify = async (
 
   if (typeof getAttribute(traits, "email") !== "undefined") {
     upsertAttrs.email = getAttribute(traits, "email");
+  }
+  if (typeof getAttribute(traits, "name") !== "undefined") {
+    const { firstName, lastName } = parseNameAttribute(traits);
+    upsertAttrs.firstName = firstName;
+    upsertAttrs.lastName = lastName;
   }
   if (typeof getAttribute(traits, "firstName") !== "undefined") {
     upsertAttrs.firstName = getAttribute(traits, "firstName");

@@ -285,4 +285,56 @@ describe("identify", () => {
     expect(updatedMark.traits.firstName).to.be.undefined;
     expect(updatedMark.traits.first_name).to.be.undefined;
   });
+  it("should accept the name attribute with only the first name", async () => {
+    await identify(
+      {
+        type: "identify",
+        traits: {
+          name: "Testname",
+        } as IdentifyReservedTraits,
+        context: {},
+        sentAt: new Date(),
+        timestamp: new Date(),
+        receivedAt: new Date(),
+        messageId: v4(),
+        userId: mark.externalId,
+      },
+      {
+        userId: user.id,
+      }
+    );
+    const identifyUser = await ProductUser.findOne({
+      where: {
+        email: mark.email,
+      },
+    });
+    expect(identifyUser.firstName).to.eq("Testname");
+    expect(identifyUser.lastName).to.eq("");
+  });
+  it("should accept the name attribute with both first and last name", async () => {
+    await identify(
+      {
+        type: "identify",
+        traits: {
+          name: "Testname     Lastname",
+        } as IdentifyReservedTraits,
+        context: {},
+        sentAt: new Date(),
+        timestamp: new Date(),
+        receivedAt: new Date(),
+        messageId: v4(),
+        userId: mark.externalId,
+      },
+      {
+        userId: user.id,
+      }
+    );
+    const identifyUser = await ProductUser.findOne({
+      where: {
+        email: mark.email,
+      },
+    });
+    expect(identifyUser.firstName).to.eq("Testname");
+    expect(identifyUser.lastName).to.eq("Lastname");
+  });
 });

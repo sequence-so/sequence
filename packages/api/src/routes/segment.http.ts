@@ -6,6 +6,7 @@ import SequenceError from "src/error/sequenceError";
 
 export interface HttpResponse extends Record<string, any> {
   success: boolean;
+  processed: number;
 }
 
 /**
@@ -22,7 +23,7 @@ class SegmentHttpHandler {
    *
    * @param app Application
    */
-  registerRoutes(app: Application) {
+  registerRoutes(app: Application): void {
     app.post(
       "/event/segment/subscription",
       this.withAuthentication(this.processor.process.bind(this.processor))
@@ -40,7 +41,7 @@ class SegmentHttpHandler {
       },
     });
   }
-  async authenticate(req: Request) {
+  async authenticate(req: Request): Promise<SegmentWebhook> {
     const authorization = req.headers.authorization;
     const passwordString = authorization.split("Basic ")[1];
 

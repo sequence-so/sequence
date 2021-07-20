@@ -29,5 +29,5 @@ export const basicAuthentication = async (tokenHeader: string) => {
     );
   }
 
-  return token.user;
+  return { token, user: token.user };
 };
