@@ -1,0 +1,110 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`sequence webhook identify Identify 1 1`] = `
+Object {
+  "batch": Array [
+    Object {
+      "messageId": "AcxAMBYg5x",
+      "processed": true,
+      "success": true,
+    },
+  ],
+  "errors": 0,
+  "processed": 1,
+  "success": true,
+  "total": 1,
+}
+`;
+
+exports[`sequence webhook mixed batch import many with idempotency 1`] = `
+Object {
+  "batch": Array [
+    Object {
+      "messageId": "z9WKlllaNM",
+      "processed": true,
+      "success": true,
+    },
+    Object {
+      "messageId": "rQeUO6L9yV",
+      "processed": true,
+      "success": true,
+    },
+    Object {
+      "messageId": "kfzKyjdURh",
+      "processed": true,
+      "success": true,
+    },
+    Object {
+      "messageId": "ILuRjMsgnJ",
+      "processed": true,
+      "success": true,
+    },
+  ],
+  "errors": 0,
+  "processed": 4,
+  "success": true,
+  "total": 4,
+}
+`;
+
+exports[`sequence webhook mixed batch import many with idempotency 2`] = `
+Object {
+  "batch": Array [
+    Object {
+      "messageId": "z9WKlllaNM",
+      "processed": false,
+      "success": true,
+    },
+    Object {
+      "messageId": "rQeUO6L9yV",
+      "processed": false,
+      "success": true,
+    },
+    Object {
+      "messageId": "kfzKyjdURh",
+      "processed": true,
+      "success": true,
+    },
+    Object {
+      "messageId": "ILuRjMsgnJ",
+      "processed": true,
+      "success": true,
+    },
+  ],
+  "errors": 0,
+  "processed": 2,
+  "success": true,
+  "total": 4,
+}
+`;
+
+exports[`sequence webhook sequence import Course Clicked- Intro to Analytics 1`] = `
+Object {
+  "batch": Array [
+    Object {
+      "messageId": "DjqvhmyoSH",
+      "processed": true,
+      "success": true,
+    },
+  ],
+  "errors": 0,
+  "processed": 1,
+  "success": true,
+  "total": 1,
+}
+`;
+
+exports[`sequence webhook should create a user 1`] = `
+Object {
+  "batch": Array [
+    Object {
+      "processed": true,
+      "success": true,
+    },
+  ],
+  "errors": 0,
+  "processed": 1,
+  "success": true,
+  "total": 1,
+}
+`;

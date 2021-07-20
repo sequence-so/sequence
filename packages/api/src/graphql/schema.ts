@@ -4,44 +4,120 @@ const typeDefs = gql`
   scalar Date
   scalar JSONObject
 
+  """
+  An Audience is a set of Users defined by a series of filters.
+  """
   type Audience {
+    """
+    ID of the Audience.
+    """
     id: ID!
+    """
+    Name of the Audience.
+    """
     name: String
+    """
+    A JSON string that contains the filters required to execute the query.
+    """
     node: String
+    """
+    Number of Users in this Audience.
+    """
     count: Int
     localTo: String
+    """
+    List of Users in this Audience
+    """
     productUsers: [ProductUser]
+    """
+    Last time this Audience was evaluated
+    """
+    executedAt: Date
     createdAt: Date
     updatedAt: Date
-    executedAt: Date
   }
+  """
+  A Blast is a one time email blast to an Audience.
+  """
   type Blast {
     id: ID!
+    """
+    Name of Blast
+    """
     name: String
+    """
+    When the Blast was launched
+    """
     sentAt: Date
+    """
+    Owner ID of the Blast
+    """
     userId: ID!
+    """
+    The Email associated with the Blast
+    """
     emailId: ID
+    """
+    The Audience associated with the Blast
+    """
     audienceId: ID
+    """
+    The owner of the Blast
+    """
     user: User
+    """
+    The Email associated with the Blast
+    """
     email: Email
+    """
+    The Audience associated with the Blast
+    """
     audience: Audience
     createdAt: Date
     updatedAt: Date
   }
+  """
+  A Campaign is a multi-step communication flow with a set of Users
+  """
   type Campaign {
     id: ID!
+    """
+    Name of the Campaign
+    """
     name: String
+    """
+    State of the Campaign ("PENDING", "RUNNING", "COMPLETED", "STOPPED", "ERROR")
+    """
     state: String
+    """
+    Whether the Campaign is in a state (unpublished)
+    """
     isDraft: Boolean
     userId: ID
     user: User
+    """
+    The set of CampaignNodes contained in this Campaign
+    """
     campaignNodes: [CampaignNode]
+    """
+    The set of CampaignNodeEdges (connections between CampaignNodes) contained in this Campaign
+    """
     campaignNodeEdges: [CampaignNodeEdge]
+    """
+    Campaign launched date
+    """
     launchedAt: Date
+    """
+    Campaign stopped by User
+    """
     stoppedAt: Date
     createdAt: Date
     updatedAt: Date
   }
+  """
+  A CampaignNode is a step within a Campaign, which maps to a Block element in the
+  Campaign Builder UI.
+  """
   type CampaignNode {
     id: ID!
     name: String
@@ -58,6 +134,9 @@ const typeDefs = gql`
     createdAt: Date
     updatedAt: Date
   }
+  """
+  A CampaignNodeEdge is a connection between two CampaignNodes.
+  """
   type CampaignNodeEdge {
     id: ID!
     edgeKind: String
@@ -68,6 +147,9 @@ const typeDefs = gql`
     createdAt: Date
     updatedAt: Date
   }
+  """
+  A CampaignNodeState represents an individual ProductUser's execution of a CampaignNode.
+  """
   type CampaignNodeState {
     id: ID!
     state: String
@@ -86,12 +168,6 @@ const typeDefs = gql`
     campaignNode: CampaignNode
     createdAt: Date
     updatedAt: Date
-  }
-  type CustomProperty {
-    id: ID
-    key: String
-    label: String
-    propertyType: String
   }
   type DeleteResult {
     success: Boolean
@@ -223,61 +299,91 @@ const typeDefs = gql`
     updatedAt: Date
   }
   type Query {
-    # Fetch all Blasts, or Blasts with a specific ID.
-    # Arguments:
-    # id: ID of a specific Audience
-    # localTo: "campaigns" if requesting Audiences created inside of a Campaign or blank for default Audiences
-    # page: Page number
-    # limit: Total page size
+    """
+    Fetch all Blasts, or Blasts with a specific ID.
+    Arguments:
+    id: ID of a specific Audience
+    localTo: "campaigns" if requesting Audiences created inside of a Campaign or blank for default Audiences
+    page: Page number
+    limit: Total page size
+    """
     audiences(id: ID, localTo: String, page: Int, limit: Int): PaginatedAudience
-    # Fetch all Blasts, or Blasts with a specific ID.
-    # Arguments:
-    # id: ID of a Blast
-    # page: Page number
-    # limit: Total page size
+    """
+    Fetch all Blasts, or Blasts with a specific ID.
+    Arguments:
+    id: ID of a Blast
+    page: Page number
+    limit: Total page size
+    """
     blasts(id: ID, page: Int, limit: Int): PaginatedBlast
-    # Fetch all Campaigns, or Campaigns with a specific ID.
-    # Arguments:
-    # id: ID of a Campaign
-    # page: Page number
-    # limit: Total page size
+    """
+    Fetch all Campaigns, or Campaigns with a specific ID.
+    Arguments:
+    id: ID of a Campaign
+    page: Page number
+    limit: Total page size
+    """
     campaigns(id: ID, page: Int, limit: Int): PaginatedCampaigns
-    # CampaignNodes is a Block in a Campaign. Fetch all CampaignNodes, or CampaignNodes with a specific ID.
-    # Arguments:
-    # id: ID of a CampaignNode
-    # page: Page number
-    # limit: Total page size
+    """
+    CampaignNodes is a Block in a Campaign. Fetch all CampaignNodes, or CampaignNodes with a specific ID.
+    Arguments:
+    id: ID of a CampaignNode
+    page: Page number
+    limit: Total page size
+    """
     campaignNodes(id: ID, page: Int, limit: Int): PaginatedCampaignNodes
-    # Fetch all Emails, or Emails with a specific ID.
-    # Arguments:
-    # id: ID of a specific Audience
-    # localTo: "campaigns" if requesting Emails created inside of a Campaign or blank for default Emails
-    # page: Page number
-    # limit: Total page size
-    emails(id: ID, page: Int, limit: Int, localTo: String): PaginatedEmails
-    # Fetch all Events, or Events with a specific ID.
-    # Arguments:
-    # id: ID of a specific Event
-    # personId: Match on associated personId (external UUID provided by user)
-    # page: Page number
-    # limit: Total page size
+    """
+    Fetch all Emails, or Emails with a specific ID.
+    """
+    emails(
+      """
+      ID of the Email
+      """
+      id: ID
+      """
+      Page number
+      """
+      page: Int
+      """
+      Total page size
+      """
+      limit: Int
+      """
+      Use "campaigns" if requesting Emails created inside of a Campaign or leave blank to access all email templates
+      """
+      localTo: String
+    ): PaginatedEmails
+    """
+    Fetch all Events, or Events with a specific ID.
+    Arguments:
+    id: ID of a specific Event
+    personId: Match on associated personId (external UUID provided by user)
+    page: Page number
+    limit: Total page size
+    """
     events(id: ID, personId: ID, page: Int, limit: Int): PaginatedEvent
     getSegmentWebhook: SegmentWebhook
-    # Gets the current authenticated user
+    """
+    Gets the current authenticated user
+    """
     getUser: User
     integrations: Integrations
-    # Fetch all ProductUsers, or ProductUsers with a specific ID.
-    # Arguments:
-    # id: ID of a specific ProductUser
-    # page: Page number
-    # limit: Total page size
+    """
+    Fetch all ProductUsers, or ProductUsers with a specific ID.
+    Arguments:
+    id: ID of a specific ProductUser
+    page: Page number
+    limit: Total page size
+    """
     productUsers(
       id: String
       customerId: String
       page: Int
       limit: Int
     ): PaginatedProductUser
-    # Get all unique event names for the authenticated User account.
+    """
+    Get all unique event names for the authenticated User account.
+    """
     uniqueEventNames: [String]
   }
   type Mutation {

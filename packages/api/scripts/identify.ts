@@ -11,7 +11,7 @@ const eventNames = [
   "Song Deleted",
   "Friend Added",
   "Song Shared",
-  " Song Favorited",
+  "Song Favorited",
   "Radio Played",
   "Playlist Shared",
   "Playlist Created",

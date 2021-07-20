@@ -31,7 +31,7 @@
     },
     "plugins": [{ "transform": "transformer-module" }]
   },
-  "files": ["modules.d.ts"],
+  "files": [],
   "include": [
     "modules.d.ts",
     "src/**/*",

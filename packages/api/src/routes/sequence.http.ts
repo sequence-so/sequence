@@ -3,6 +3,8 @@ import SequenceWebhook from "../models/sequenceWebhook.model";
 import { HttpResponse } from "./segment.http";
 import SequenceProcessor from "src/services/sequenceProcessor";
 import SequenceError from "src/error/sequenceError";
+import logger from "src/utils/logger";
+import { basicAuthentication } from "src/auth/basic.auth";
 
 /**
  * Handles events coming from a Sequence client library or direct API integration.
@@ -18,23 +20,36 @@ class SequenceHttpHandler {
       "/event/batch",
       this.withAuthentication(this.processor.process.bind(this.processor))
     );
+    app.post(
+      "/user",
+      this.withAuthentication(
+        this.processor.processIdentify.bind(this.processor)
+      )
+    );
   }
   async getSequenceWebhookForAuthToken(req: Request): Promise<SequenceWebhook> {
-    const authorization = req.headers.authorization;
-    const string = authorization.split("Bearer ");
-    let token: string;
-    if (string.length === 2) {
-      token = string[1];
-    } else {
-      throw new Error(
-        "Invalid authorization header provided, expected `Authorization: Bearer [token]`"
-      );
+    let sequenceWebhook: SequenceWebhook;
+    try {
+      const payload = await basicAuthentication(req.headers.authorization);
+      sequenceWebhook = payload.token;
+    } catch (error) {
+      const authorization = req.headers.authorization;
+      const string = authorization.split("Bearer ");
+      let token: string;
+      if (string.length === 2) {
+        token = string[1];
+      } else {
+        throw new Error(
+          "Invalid authorization header provided, expected `Authorization: Basic [token]`"
+        );
+      }
+      sequenceWebhook = await SequenceWebhook.findOne({
+        where: {
+          token,
+        },
+      });
     }
-    return SequenceWebhook.findOne({
-      where: {
-        token,
-      },
-    });
+    return sequenceWebhook;
   }
   /**
    * Wraps the route handler in a middleware that authenticates the SegmentWebhook and if successful,
@@ -54,7 +69,7 @@ class SequenceHttpHandler {
           .json({ success: false, error: "No webhook found for this token" });
       }
       try {
-        console.log("handling batch import");
+        logger.info("[Sequence:HTTP] Handling batch import");
         const result = await handler(webhook, request.body);
         return response.json(result);
       } catch (error) {

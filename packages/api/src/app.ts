@@ -25,8 +25,11 @@ import EmailService from "./services/email/emailService";
 import SequenceError, { HTTP_UNAUTHORIZED } from "./error/sequenceError";
 import { basicAuthentication } from "./auth/basic.auth";
 import { GraphQLContextType } from "./graphql";
+import depthLimit from "graphql-depth-limit";
+import { getServers } from "dns";
 
 export interface AppOptions {
+  port?: number;
   /**
    * Continuation local storage namespace identifier.
    */
@@ -66,9 +69,11 @@ class App {
   #queueService: QueueService;
   repositories: Repositories;
   #emailService: EmailService;
+  #port: number;
   constructor(options?: AppOptions) {
     this.ns = createNamespace(options?.namespace || "sequence");
     this.expressApplication = express();
+    this.#port = options?.port || parseInt(process.env.PORT);
     this.configureExpress();
     this.models = Models;
     this.bootRepositories();
@@ -117,22 +122,27 @@ class App {
    *
    * @param fn Function to execute
    */
-  cls(fn: () => void) {
+  cls(fn: () => void): void {
     this.ns.run(() => {
       this.ns.set("app", this);
       fn();
     });
   }
-  listen() {
+  listen(): Promise<http.Server> {
     this.getExpressApplication().get("/", (req, res) =>
       res.json({ success: true })
     );
-    return (this.#server = this.getExpressApplication().listen(
-      process.env.PORT,
-      () => console.log(`Sequence API listening on port ${process.env.PORT}`)
-    ));
+    return new Promise((resolve) => {
+      this.#server = this.getExpressApplication().listen(this.#port, () => {
+        console.log(`Sequence API listening on port ${this.#port}`);
+        resolve(this.#server);
+      });
+    });
   }
-  getModels() {
+  getServer(): http.Server {
+    return this.#server;
+  }
+  getModels(): typeof Models {
     return Models;
   }
   async context(context: ExpressHandler) {
@@ -147,7 +157,7 @@ class App {
     } else if (tokenHeader.startsWith("Bearer")) {
       user = jwtAuth(tokenHeader, req);
     } else if (tokenHeader.startsWith("Basic")) {
-      user = await basicAuthentication(tokenHeader);
+      user = (await basicAuthentication(tokenHeader)).user;
     } else {
       throw new SequenceError(
         "Authentication not supported",
@@ -172,8 +182,10 @@ class App {
       typeDefs: schema,
       resolvers: resolvers,
       introspection: true,
+      playground: true,
       context: this.context.bind(this),
       formatError: this.graphQLErrorFormatter,
+      validationRules: [depthLimit(10)],
     });
 
     this.apolloServer.applyMiddleware({

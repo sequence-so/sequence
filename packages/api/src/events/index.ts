@@ -11,13 +11,13 @@ export type SegmentEventTypes =
 export type SegmentBase = {
   type: SegmentEventTypes;
   anonymousId: string;
-  context: SegmentContext;
+  context?: SegmentContext;
   userId?: string;
   receivedAt: string;
   timestamp: string;
   sentAt: string;
   messageId: string;
-  integrations: Record<string, boolean>;
+  integrations?: Record<string, boolean>;
 };
 
 interface SegmentContext {
@@ -40,13 +40,13 @@ interface SegmentContext {
 export interface SegmentTrack extends SegmentBase {
   type: "track";
   event: string;
-  originalTimestamp: string;
+  originalTimestamp?: string;
   properties: Record<string, any>;
 }
 
 export interface SegmentIdentify extends SegmentBase {
   type: "identify";
-  channel: string;
+  channel?: string;
   traits: Record<string, any>;
 }
 

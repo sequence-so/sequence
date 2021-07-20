@@ -12,12 +12,30 @@ import WebhookExecution from "../models/webhookExecution.model";
 import Event from "../models/event.model";
 import SequenceError from "src/error/sequenceError";
 import logger from "src/utils/logger";
-import { HttpResponse } from "src/routes/segment.http";
 
 /**
  * Segment events are saved in the Events table under columns (source, sourceId) = (SEGMENT_WEBHOOK_ID, webhookExecution.id)
  */
 export const SEGMENT_WEBHOOK_ID = "segment_webhook";
+
+type RequestBody = Record<string, unknown>;
+type ProcessedEvent = {
+  success: boolean;
+  processed: boolean;
+};
+type HttpBatchEventResponse = {
+  success: boolean;
+  total: number;
+  errors: number;
+  processed: number;
+  error?: string;
+  batch: {
+    messageId: string;
+    success: boolean;
+    error?: string;
+    processed: boolean;
+  }[];
+};
 
 /**
  * Process events coming from Segment.
@@ -30,18 +48,42 @@ class SegmentProcessor {
    * @param body Event body
    * @returns
    */
-  async process(webhook: SegmentWebhook, body: any) {
+  async process(
+    webhook: SegmentWebhook,
+    body: RequestBody
+  ): Promise<HttpBatchEventResponse> {
     let execution: WebhookExecution;
+    const returnResult: HttpBatchEventResponse = {
+      success: true,
+      total: 0,
+      errors: 0,
+      processed: 0,
+      batch: [],
+    };
+    const curr = {
+      messageId: body.messageId as string,
+      success: true,
+      processed: false,
+    };
     try {
       execution = await this.logWebhookEvent(webhook, body);
-      await this.handleEvent(body, execution);
+      const result = await this.handleEvent(body as any, execution);
+      returnResult.total++;
+
+      if (result.processed) {
+        returnResult.processed++;
+        curr.processed = result.processed;
+      }
+      if (!result.success) {
+        returnResult.errors++;
+        curr.success = result.success;
+      }
+      returnResult.batch.push(curr);
     } catch (error) {
       logger.error("SegmentProcess.process:" + error.stack);
       throw new SequenceError("An error occured processing the event", 500);
     }
-    return {
-      success: true,
-    };
+    return returnResult;
   }
   /**
    * Logs the execution of webhook.
@@ -75,7 +117,7 @@ class SegmentProcessor {
   async handleEvent(
     event: SegmentIdentify | SegmentTrack | SegmentPage,
     webhook: WebhookExecution
-  ): Promise<HttpResponse> {
+  ): Promise<ProcessedEvent> {
     if (!event.messageId) {
       logger.info(
         "SegmentProcessor.handleEvent No messageId receieved, skipping"
@@ -125,8 +167,8 @@ class SegmentProcessor {
           context: event.context,
           messageId: event.messageId,
           receivedAt: new Date(),
-          sentAt: moment(event.sentAt).toDate(),
-          timestamp: moment(event.timestamp).toDate(),
+          sentAt: moment(event.sentAt || new Date()).toDate(),
+          timestamp: moment(event.timestamp || new Date()).toDate(),
         },
         {
           userId: webhook.userId,
@@ -142,8 +184,8 @@ class SegmentProcessor {
           messageId: event.messageId,
           properties: event.properties,
           receivedAt: new Date(),
-          sentAt: moment(event.sentAt).toDate(),
-          timestamp: moment(event.timestamp).toDate(),
+          sentAt: moment(event.sentAt || new Date()).toDate(),
+          timestamp: moment(event.timestamp || new Date()).toDate(),
         },
         {
           userId: webhook.userId,
