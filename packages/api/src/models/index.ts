@@ -9,6 +9,7 @@ import CampaignNodeState from "./campaignNodeState.model";
 import CustomProperty from "./customProperty.model";
 import Email from "./email.model";
 import Event from "./event.model";
+import EventImport from "./eventImport.model";
 import ProductUser from "./productUser.model";
 import SegmentWebhook from "./segmentWebhook.model";
 import SequenceWebhook from "./sequenceWebhook.model";
@@ -27,6 +28,7 @@ const Models = {
   CustomProperty,
   Email,
   Event,
+  EventImport,
   ProductUser,
   SegmentWebhook,
   SequenceWebhook,
