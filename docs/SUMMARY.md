@@ -18,14 +18,17 @@
 * [Audience](audience/audience.md)
 * [Creating an Audience](audience/creating-an-audience.md)
 
-## Person Explorer
+## Blasts <a id="campaign"></a>
 
-* [Person Explorer](person-explorer/person-explorer.md)
-* [Person Page](person-explorer/person-page.md)
+* [Blasts](campaign/blasts.md)
+* [Sending a Blast](campaign/sending-a-blast.md)
 
-## Event Explorer
+## Campaigns
 
-* [Event Explorer](event-explorer/event-explorer.md)
+* [Campaigns](campaigns/campaigns.md)
+* [Creating a Campaign](campaigns/creating-a-campaign.md)
+* [Campaign Blocks](campaigns/campaign-blocks.md)
+* [Campaign Controls](campaigns/campaign-controls.md)
 
 ## Emails
 
@@ -33,16 +36,20 @@
 * [Creating an Email](emails/creating-an-email.md)
 * [Deleting an Email](emails/deleting-an-email.md)
 
-## Blasts <a id="campaign"></a>
+## Event Explorer
 
-* [Blasts](campaign/blasts.md)
-* [Sending a Blast](campaign/sending-a-blast.md)
-
-## Support
-
-* [Support](support/support.md)
+* [Event Explorer](event-explorer/event-explorer.md)
 
 ## Node SDK
 
 * [Node SDK](node-sdk/node-sdk.md)
+
+## Person Explorer
+
+* [Person Explorer](person-explorer/person-explorer.md)
+* [Person Page](person-explorer/person-page.md)
+
+## Support
+
+* [Support](support/support.md)
 
