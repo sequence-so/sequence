@@ -1,16 +1,15 @@
 # Table of contents
 
 * [Quick Start](README.md)
-* [Running From Source](running-from-source.md)
-* [Overview](overview.md)
 * [Importing Data](importing-data.md)
+* [Overview](overview.md)
 
 ## API Reference
 
-* [Person](api-reference/create-person.md)
-* [Event](api-reference/create-event.md)
-* [Segment](api-reference/segment.md)
-* [Identify](api-reference/identify.md)
+* [Getting Started / Authentication](api-reference/getting-started-authentication.md)
+* [Batch Import API](api-reference/segment/README.md)
+  * [Identify Specification](api-reference/segment/identify.md)
+* [User API](api-reference/create-person.md)
 * [GraphQL API](api-reference/graphql-api.md)
 
 ## Audience
@@ -44,10 +43,15 @@
 
 * [Node SDK](node-sdk/node-sdk.md)
 
-## Person Explorer
+---
 
-* [Person Explorer](person-explorer/person-explorer.md)
-* [Person Page](person-explorer/person-page.md)
+* [On Premise Deployment](on-premise-deployment/README.md)
+  * [Running From Source](on-premise-deployment/running-from-source.md)
+
+## User Explorer
+
+* [User Explorer](user-explorer/person-explorer.md)
+* [User Page](user-explorer/user-page.md)
 
 ## Support
 

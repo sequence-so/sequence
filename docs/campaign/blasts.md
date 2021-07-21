@@ -10,8 +10,8 @@ A **Blast** is a one off message sent to a list of customers.
 
 To send an email blast to your users, you'll need:
 
-1. User data to populate an **Audience**
-2. A Sendgrid API Key located in `/packages/api/.env` under `SENDGRID_API_KEY`
+1. An **Audience** to message
+2. An **Email** to send
 
 We also recommend you have **Event** data populated so you can query based on Events and Event Attributes.
 

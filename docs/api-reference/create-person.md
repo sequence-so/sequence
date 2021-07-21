@@ -1,61 +1,61 @@
 ---
-description: Person API for Sequence.
+description: Import your Users.
 ---
 
-# Person
+# User API
 
-{% api-method method="post" host="https://api.sequence.so" path="/api/v1/person" %}
+{% api-method method="post" host="https://api.sequence.so" path="/user" %}
 {% api-method-summary %}
-Create Person
+Create User
 {% endapi-method-summary %}
 
 {% api-method-description %}
-Create a new Person with specific attributes. 
+Create a new **User** with specific attributes. Equivalent to a sending an event of type **identify** \(see Batch Import API\).
 {% endapi-method-description %}
 
 {% api-method-spec %}
 {% api-method-request %}
 {% api-method-headers %}
 {% api-method-parameter name="Authentication" type="string" required=true %}
-Provide the Sequence Webhook Token in "Authorization: Bearer {token}" format.
+Base64 encoded token in "Authorization: Bearer {token}" format. See Getting Started /Authentication for more. 
 {% endapi-method-parameter %}
 {% endapi-method-headers %}
 
 {% api-method-body-parameters %}
 {% api-method-parameter name="externalId" type="string" required=true %}
-Person's ID in your app \(so you can link IDs\).
+User's ID in your app \(for ID linking\).
 {% endapi-method-parameter %}
 
 {% api-method-parameter name="intercomId" type="string" required=false %}
-The associated Intercom ID for this Person. 
+The associated Intercom ID for this User. 
 {% endapi-method-parameter %}
 
 {% api-method-parameter name="industry" type="string" required=false %}
-The Person's industry. 
+The User's industry. 
 {% endapi-method-parameter %}
 
 {% api-method-parameter name="companyName" type="string" required=false %}
-Name of the Person's company.
+Name of the User's company.
 {% endapi-method-parameter %}
 
 {% api-method-parameter name="websiteUrl" type="string" required=false %}
-URL of the Person's website. 
+URL of the User's website. 
 {% endapi-method-parameter %}
 
 {% api-method-parameter name="title" type="string" required=false %}
-Title of the person in their company.
+Title of the User in their company.
 {% endapi-method-parameter %}
 
 {% api-method-parameter name="city" type="string" required=false %}
-City of the person.
+City of the User.
 {% endapi-method-parameter %}
 
 {% api-method-parameter name="region" type="string" required=false %}
-Region \(state or province\) of the person.
+Region \(state or province\) of the User.
 {% endapi-method-parameter %}
 
 {% api-method-parameter name="country" type="string" required=false %}
-Country of the person.
+Country of the User.
 {% endapi-method-parameter %}
 
 {% api-method-parameter name="os" type="string" required=false %}
@@ -79,27 +79,27 @@ Last time the person performed an action, in ISO date format.
 {% endapi-method-parameter %}
 
 {% api-method-parameter name="signedUpAt" type="string" required=false %}
-Signed up date in ISO date format.
+Sign up date \(ISO date format\).
 {% endapi-method-parameter %}
 
 {% api-method-parameter name="phone" type="string" required=false %}
-Person phone \(no format enforced\).
+User phone \(no formatting enforced\).
 {% endapi-method-parameter %}
 
 {% api-method-parameter name="photo" type="string" required=false %}
-URL to person's photo.
+URL to User's photo.
 {% endapi-method-parameter %}
 
 {% api-method-parameter name="email" type="string" required=false %}
-Person email.
+User's email.
 {% endapi-method-parameter %}
 
 {% api-method-parameter name="firstName" type="string" required=false %}
-Person first name.
+User's first name.
 {% endapi-method-parameter %}
 
 {% api-method-parameter name="lastName" type="string" required=false %}
-Person last name.
+User's last name.
 {% endapi-method-parameter %}
 {% endapi-method-body-parameters %}
 {% endapi-method-request %}
@@ -128,5 +128,52 @@ Could not find a cake matching this query.
 {% endapi-method-spec %}
 {% endapi-method %}
 
+### Passing in Custom Attributes
 
+If you need to pass in custom attributes, simply add a key/value pair to your request body and it will automatically be saved.
+
+{% hint style="info" %}
+It's preferable to use the [Batch Import API](segment/) for large imports. 
+{% endhint %}
+
+### Examples
+
+**Create a new User**
+
+```typescript
+import fetch from "node-fetch";
+
+// 1. Get token from https://my.sequence.so/onboarding/node-sdk
+const basicUsername = "TOKEN";
+
+// 2. Base64 encode the Username:Password (password is empty)
+const token = Buffer.from(basicUsername + ":").toString("base64");
+
+const data = {
+  firstName: "Wei",
+  lastName: "James",
+  email: "pifagor@example.me",
+  plan: "premium",
+  logins: 5,
+  myCustomAttribute: "testing",
+  externalId: "kfzKyjdURh",
+};
+
+// 3. Perform request with `Authorization: Basic [token]` in the header
+fetch("https://api.sequence.so/user", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Basic ${token}`,
+  },
+  body: JSON.stringify(data),
+})
+  .then((res) => res.json())
+  .then((result) => console.log(result));
+
+```
+
+**Updating User Attributes**
+
+To update user attributes, use the [Batch Import API](segment/) and provide the user id in the `identify` call. Providing new attributes will overwrite existing ones. In order to remove a User attribute, simply pass the value `null` and it will be cleared from that User. 
 

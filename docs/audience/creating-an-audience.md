@@ -16,15 +16,15 @@ You can filter by **Event** or **User Attribute**.
 
 ### Filtering by Events
 
-Any Event can be filtered by whether it was performed by the Person or not. 
+Any Event can be filtered by whether it was performed by the User or not. 
 
-Note: to see a Person's Event stream, you can view the **User Explorer,** find the Person, and see what Events they've performed.
+Note: to see a User's Event stream, you can view the **User Explorer,** find the User, and see what Events they've performed.
 
 {% page-ref page="../event-explorer/event-explorer.md" %}
 
 ### Filtering by User Attributes
 
-You can filter by the following attributes for a Person:
+You can filter by the following attributes for a User:
 
 ```text
 Attribute Name | Attribute Type
@@ -51,7 +51,7 @@ intercomId:      string
 externalId:      string
 ```
 
-**COMING SOON:** Custom Person Attributes. Ability to create any attribute for a Person that you'd like. 
+You can also filter by any custom User attributes that you've specified.
 
-{% page-ref page="../person-explorer/person-explorer.md" %}
+{% page-ref page="../user-explorer/person-explorer.md" %}
 

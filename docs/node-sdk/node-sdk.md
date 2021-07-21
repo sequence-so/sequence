@@ -7,7 +7,8 @@ The [Node SDK](https://github.com/sequence-so/sequence-node) allows you to send 
 The NodeJS SDK offers the following method for tracking events:
 
 ```typescript
-import Analytics from 'sequence-lib';
+import Analytics from 'sequence-node';
+// Pass the API Token from your onboarding (no need to Base64 encode it)
 const analytics = new Analytics(process.env.SEQUENCE_API_KEY);
 
 interface SequenceEvent {
@@ -61,6 +62,45 @@ analytics.identify({
     email: 'snoop@dogg.com',
     firstName: 'Snoop',
     lastName: 'Lion',
+  }
+})
+```
+
+## Examples
+
+**Track Event**
+
+```typescript
+import Sequence from 'sequence-node';
+const analytics = new Sequence(process.env.SEQUENCE_API_KEY)
+analytics.track({
+  // id of user (required)
+  userId: 'my-user-id',
+  // event name (required)
+  event: 'User Registered',
+  // properties associated with event
+  properties: {
+    firstName: 'John',
+    lastName: 'Smith'
+  },
+  // original event date
+  timestamp: new Date()
+})
+```
+
+**Identify Event**
+
+```typescript
+import Sequence from 'sequence-node';
+const analytics = new Sequence(process.env.SEQUENCE_API_KEY)
+
+analytics.identify({
+  // id of user (required)
+  userId: 'my-user-id',
+  // traits associated with the user
+  traits: {
+    firstName: 'John',
+    lastName: 'Smith'
   }
 })
 ```
