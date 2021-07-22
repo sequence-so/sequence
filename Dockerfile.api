@@ -24,18 +24,17 @@ RUN yarn build && yarn install --production --ignore-scripts --prefer-offline
 # Production image, copy all the files and run next
 FROM node:alpine AS runner
 WORKDIR /app/packages/api
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nodeuser -u 1001
 # Copy only necessary files
-COPY --from=api-builder --chown=nodeuser /app/packages/api/dist ./dist
-COPY --from=api-builder /app/packages/api/.env ./.env
+COPY --from=api-builder --chown=node /app/packages/api/dist ./dist
+# COPY --from=api-builder /app/packages/api/.env ./.env
 COPY --from=api-builder /app/packages/api/src/config/config.js ./src/config/config.js
 COPY --from=api-builder /app/packages/api/src/migrations ./src/migrations
+COPY --from=api-builder /app/packages/api/scripts ./scripts
 COPY --from=api-builder /app/packages/api/package.json ./package.json
 COPY --from=api-builder /app/packages/api/tsconfig.json ./tsconfig.json
 COPY --from=api-builder /app/packages/api/.sequelizerc ./.sequelizerc
 COPY --from=api-builder /app/packages/api/node_modules ./node_modules
-USER nodeuser
+USER node
 ARG PORT=3000
 ENV NODE_ENV production
 ENV PORT $PORT

@@ -4,7 +4,10 @@ const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 
 module.exports = {
   target: "node",
-  entry: "./src/server.ts",
+  entry: {
+    app: "./src/server.ts",
+    cron: "./scripts/cronDaemon.ts",
+  },
   devtool: "inline-source-map",
   externals: [nodeExternals()],
   // See https://github.com/sequence-so/sequence/issues/16
@@ -35,7 +38,7 @@ module.exports = {
     plugins: [new TsconfigPathsPlugin()],
   },
   output: {
-    filename: "bundle.js",
+    filename: "[name].js",
     path: path.resolve(__dirname, "dist"),
   },
 };

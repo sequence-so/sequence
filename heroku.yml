@@ -1,0 +1,9 @@
+build:
+  docker:
+    web: Dockerfile.api
+run:
+  web: npm run migrate && npm run start
+  cron:
+    command:
+      - npm run migrate && npm run cron
+    image: web

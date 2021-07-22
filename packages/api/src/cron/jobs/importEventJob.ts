@@ -58,13 +58,13 @@ class ImportEventJob extends CronJob {
     if (!first.event_id) {
       throw new Error("Must have an event_id");
     }
-    rows.map((e) => {
+    const promises = rows.map((e) => {
       const dataCopy = { ...e };
       delete dataCopy.person_id;
       delete dataCopy.date_created;
       delete dataCopy.event;
       delete dataCopy.event_id;
-      this.performTrack({
+      return this.performTrack({
         event: e.event as string,
         userId: `${e.person_id}` as string,
         properties: dataCopy,
@@ -72,6 +72,7 @@ class ImportEventJob extends CronJob {
         messageId: e.event_id as string,
       });
     });
+    return Promise.all(promises);
   }
   performTrack({
     event,
@@ -85,27 +86,37 @@ class ImportEventJob extends CronJob {
     properties: Record<string, unknown>;
     timestamp: string;
     messageId: string;
-  }): void {
-    logger.info(`[ImportEventJob:tick] Performing track call`, {
-      event,
-      userId,
-      properties,
-      timestamp,
-      messageId,
-    });
-    this.sequence.track({
-      event,
-      userId,
-      properties,
-      timestamp,
-      messageId,
+  }): Promise<any> {
+    return new Promise((resolve, reject) => {
+      logger.info(`[ImportEventJob:tick] Performing track call`, {
+        event,
+        userId,
+        properties,
+        timestamp,
+        messageId,
+      });
+      this.sequence.track(
+        {
+          event,
+          userId,
+          properties,
+          timestamp,
+          messageId,
+        },
+        (err, data) => {
+          if (err) {
+            return reject(err);
+          }
+          resolve(data);
+        }
+      );
     });
   }
   async findOrCreateEventImport(): Promise<[EventImport, boolean]> {
     const eventImport = await this.app.models.EventImport.findOrCreate({
       where: {
         type: this.id,
-        userId: "d71f95a5-73bf-4bea-86b1-08c3c2db1858",
+        userId: process.env.EVENT_IMPORT_USER_ID,
       },
     });
     return eventImport;
