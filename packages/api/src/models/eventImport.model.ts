@@ -22,6 +22,7 @@ export interface EventImportAttributes {
   enabled: boolean;
   type: string;
   cursor: string;
+  cursorType: "number" | "string" | "date";
   batchSize: number;
   userId: string;
   executedAt: Date;
@@ -34,6 +35,7 @@ export type EventImportCreationAttributes = Optional<
   | "id"
   | "enabled"
   | "cursor"
+  | "cursorType"
   | "batchSize"
   | "createdAt"
   | "updatedAt"
@@ -48,6 +50,7 @@ class EventImport extends Model<
   public enabled: boolean;
   public type: string;
   public cursor: string;
+  public cursorType: "number" | "string" | "date";
   public batchSize: number;
   public userId: string;
   public executedAt: Date;
@@ -73,6 +76,9 @@ EventImport.init(
       allowNull: false,
     },
     cursor: {
+      type: STRING,
+    },
+    cursorType: {
       type: STRING,
     },
     batchSize: {

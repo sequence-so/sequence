@@ -20,6 +20,9 @@ module.exports = {
       cursor: {
         type: Sequelize.STRING,
       },
+      cursorType: {
+        type: Sequelize.STRING,
+      },
       batchSize: {
         type: Sequelize.INTEGER,
         defaultValue: 20,
